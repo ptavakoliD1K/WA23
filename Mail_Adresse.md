@@ -1,3 +1,13 @@
 # Adressen 
 1. Niclas.Crins@stud.Welfenaakdemie.de
 2. Hatim.Oeztuerk@bs-netz.de
+3. p.tavakoli@d1k.de
+4. simonpollak15@gmail.com
+5. eikefinster0205@gmail.com
+6. saturn1542@gmail.com
+7. jan.jakuboski@gmx.de
+8. luca.kuehlborn@gmail.com
+9. jenjastudi@gmail.com
+10. arber2711@gmail.com
+11. jusicamel14@gmail.com
+12. inan23engin@hotmail.com 
