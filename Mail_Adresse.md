@@ -1,5 +1,5 @@
 # Adressen 
-1. Niclas.Crins@stud.Welfenaakdemie.de
+1. Niclas.Crins@stud.Welfenakdemie.de
 2. Hatim.Oeztuerk@bs-netz.de
 3. p.tavakoli@d1k.de
 4. simonpollak15@gmail.com
