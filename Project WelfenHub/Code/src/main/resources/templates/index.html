@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<h1>Welcome to the Home Page</h1>
+
+<form id="deleteUserForm" action="/delete-user" method="post">
+    <input type="hidden" name="_method" value="delete" />
+    <button type="submit" id="deleteUserBtn">Delete Account</button>
+</form>
+
+<script>
+    console.log("JavaScript file loaded successfully");
+
+    const deleteUserBtn = document.getElementById('deleteUserBtn');
+    if (deleteUserBtn) {
+        console.log("Event listener attached to the button");
+        deleteUserBtn.addEventListener('click', function(event) {
+            console.log("Button clicked");
+            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                console.log("Confirmation dialog confirmed");
+                document.getElementById('deleteUserForm').submit();
+            } else {
+                console.log("Confirmation dialog cancelled");
+            }
+            event.preventDefault();
+        });
+    } else {
+        console.log("Button not found");
+    }
+</script>
+</body>
+</html>
