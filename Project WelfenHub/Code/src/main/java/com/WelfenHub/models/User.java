@@ -1,6 +1,11 @@
 package com.WelfenHub.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
@@ -14,12 +19,20 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "username", unique = true)
+    @NotEmpty(message = "Username is required")
     private String username;
 
     @Column(name = "password")
+    @NotEmpty(message = "Password is required")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$",
+            message = "Password must contain at least one lowercase letter, one uppercase letter, and one number")
     private String password;
 
     @Column(name = "email", unique = true)
+    @NotEmpty(message = "Email is required")
+    @Email(message = "Email should be valid")
+    @Pattern(regexp = "^[\\w-\\.]+@.*welfenakademie\\.[a-z]{2,}$", message = "Please enter Welfenakademie Email")
     private String email;
 
     @Column(name = "full_name")

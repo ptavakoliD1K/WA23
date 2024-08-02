@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 public class RegistrationController {
@@ -22,34 +24,46 @@ public class RegistrationController {
     private UserService userService;
 
     @GetMapping("/register")
-    public String showRegistrationForm() {
+    public String showRegistrationForm(Model model) {
         logger.info("Showing registration form");
+        model.addAttribute("user", new User());
         return "register";
     }
+
     @Transactional
     @PostMapping("/register")
-    public String registerUser(@RequestParam String username, @RequestParam String password, @RequestParam String confirmPassword, @RequestParam String email, @RequestParam String fullName, Model model) {
-        logger.info("Registering user with username: {}", username);
+    public String registerUser(
+            @Valid User user,
+            BindingResult bindingResult,
+            Model model,
+            @RequestParam String confirmPassword) {
 
-        if (!password.equals(confirmPassword)) {
-            logger.error("Passwords do not match for user: {}", username);
+        logger.info("Registering user with username: {}", user.getUsername());
+
+        if (bindingResult.hasErrors()) {
+            logger.error("Validation errors while registering user: {}", user.getUsername());
+            return "register";
+        }
+
+        if (!user.getPassword().equals(confirmPassword)) {
+            logger.error("Passwords do not match for user: {}", user.getUsername());
             model.addAttribute("error", "Passwords do not match. Please try again.");
             return "register";
         }
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setFullName(fullName);
+        if (!user.getEmail().contains("welfenakademie")) {
+            logger.error("Invalid Email for User: {}", user.getUsername());
+            model.addAttribute("error", "Please use a valid Welfenakademie email.");
+            return "register";
+        }
 
         try {
-            logger.info("Attempting to save user: {}", username);
+            logger.info("Attempting to save user: {}", user.getUsername());
             userService.save(user);
-            logger.info("User registered successfully: {}", username);
+            logger.info("User registered successfully: {}", user.getUsername());
             return "redirect:/login";
         } catch (Exception e) {
-            logger.error("Error registering user: {}", username, e);
+            logger.error("Error registering user: {}", user.getUsername(), e);
             model.addAttribute("error", "Username or email already exists. Please choose another one.");
             return "register";
         }
