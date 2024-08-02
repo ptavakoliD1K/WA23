@@ -5,33 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4e0737b7-8b49-49ee-8002-2491f590ab8d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/demo/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/MyprojectApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/controllers/HomeController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/controllers/RegistrationController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/controllers/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/interceptor/CacheControlInterceptor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/models/File.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/models/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/repositories/FileRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/repositories/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/security/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/services/UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/css/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/images/WelfenHUB_Logo_2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/static/images/logo_white.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/templates/error.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/templates/files.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/templates/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/templates/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/templates/register.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/demo/src/test/java/com/example/demo/DemoApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/qodana.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/qodana.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/config/WebConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/WA_logo_white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/Startseite_test.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Ereignisse.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Fileshare.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Forum.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Gruppenchat.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/fragments/footer.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/fragments/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,18 +28,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Eikmans"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Eikmans&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Eikmans/MavenServer.git",
-    "accountId": "0887fb6b-2ec1-4a88-a223-45a7f1339c8b"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ptavakoliD1K/WA23.git&quot;,
+    &quot;accountId&quot;: &quot;0887fb6b-2ec1-4a88-a223-45a7f1339c8b&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -70,9 +57,9 @@
     "JavaScript Debug.login.html.executor": "Run",
     "JavaScript Debug.register.html.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "developement",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/eikef/Desktop/maventestneu/Project WelfenHub",
+    "last_opened_file_path": "C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/Code/src/main/resources/static",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -85,11 +72,15 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub\Code\src\main\resources\static" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub\Code\src\main\resources\static\images" />
+      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub\Code\src\main\resources\static\css" />
+      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub" />
       <recent name="C:\Users\eikef\Desktop\maventestneu\demo\src\main\resources\static\images" />
       <recent name="C:\Users\eikef\Desktop\maventestneu\demo\src\main\resources\static\css" />
-      <recent name="C:\Users\eikef\Desktop\maventestneu\demo\src\main\resources\static" />
-      <recent name="C:\Users\eikef\Desktop\maventestneu\demo\src\main\resources\templates" />
     </key>
   </component>
   <component name="RunManager">

@@ -1,36 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startseite</title>
+    <link rel="stylesheet" th:href="@{/css/Startseite_test.css}" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>Welcome to the Home Page</h1>
+<header>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="name">WelfenHUB - wenn Welfen helfen</div>
+            <ul>
+                <li><a th:href="@{/}" class="active">Startseite</a></li>
+                <li><a th:href="@{/forum}">Forum</a></li>
+                <li><a th:href="@{/news}">News</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/impressum}">Impressum</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <button th:onclick="|window.location.href='@{/logout}'|">Abmelden</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 
-<form id="deleteUserForm" action="/delete-user" method="post">
-    <input type="hidden" name="_method" value="delete" />
-    <button type="submit" id="deleteUserBtn">Delete Account</button>
-</form>
+<div class="center-image">
+    <img th:src="@{/images/WelfenHUB_Logo_2.png}" alt="WelfenHUB Logo">
+</div>
 
-<script>
-    console.log("JavaScript file loaded successfully");
+<hr>
+<h1>Willkommen <span sec:authorize="isAuthenticated()" th:text="${#authentication.name}">Benutzer</span>!</h1>
+<hr>
 
-    const deleteUserBtn = document.getElementById('deleteUserBtn');
-    if (deleteUserBtn) {
-        console.log("Event listener attached to the button");
-        deleteUserBtn.addEventListener('click', function(event) {
-            console.log("Button clicked");
-            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-                console.log("Confirmation dialog confirmed");
-                document.getElementById('deleteUserForm').submit();
-            } else {
-                console.log("Confirmation dialog cancelled");
-            }
-            event.preventDefault();
-        });
-    } else {
-        console.log("Button not found");
-    }
-</script>
+<div class="card-container">
+    <div class="card">
+        <img th:src="@{/images/Gruppenchat.jpg}" alt="Gruppenchat">
+        <div class="card-content">
+            <h3>Gruppenchat</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+            <a href="#" class="btn">Anzeigen</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img th:src="@{/images/Forum.jpg}" alt="Forum">
+        <div class="card-content">
+            <h3>Forum</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+            <a href="#" class="btn">Anzeigen</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img th:src="@{/images/Fileshare.jpg}" alt="Fileshare">
+        <div class="card-content">
+            <h3>Fileshare</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+            <a href="#" class="btn">Anzeigen</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <img th:src="@{/images/Ereignisse.jpg}" alt="Ereignisse">
+        <div class="card-content">
+            <h3>Ereignisse</h3>
+            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam</p>
+            <a href="#" class="btn">Anzeigen</a>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a></p>
+    <img th:src="@{/images/WA_logo_white.png}" alt="WelfenHub Logo">
+</footer>
 </body>
 </html>

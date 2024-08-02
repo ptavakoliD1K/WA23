@@ -31,9 +31,9 @@ public class SecurityConfig {
                 .permitAll()
                 .and()
                 .logout()
-                .invalidateHttpSession(true) // Invalidate session on logout
-                .clearAuthentication(true)   // Clear authentication
-                .logoutSuccessUrl("/login?logout=true") // Redirect to login page on successful logout
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .logoutSuccessUrl("/login?logout=true")
                 .permitAll()
                 .and()
                 .exceptionHandling()
