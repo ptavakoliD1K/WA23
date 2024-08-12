@@ -19,7 +19,10 @@
                 <li><a th:href="@{/feedback}">Feedback</a></li>
                 <li><a th:href="@{/impressum}">Impressum</a></li>
                 <li sec:authorize="isAuthenticated()">
-                    <button th:onclick="|window.location.href='@{/logout}'|">Abmelden</button>
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit">Abmelden</button>
+                    </form>
                 </li>
             </ul>
         </div>
