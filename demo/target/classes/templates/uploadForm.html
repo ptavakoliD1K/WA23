@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>File Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .drop-zone {
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+        .drop-zone.dragover {
+            background-color: #e0e0e0;
+        }
+        .drop-zone p {
+            margin: 0;
+            color: #007bff;
+            font-size: 16px;
+        }
+        .file-list {
+            margin-top: 10px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+        h2 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #0056b3;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar {
+            width: 0;
+            height: 20px;
+            background-color: #007bff;
+            text-align: center;
+            color: white;
+            line-height: 20px;
+            transition: width 0.3s;
+        }
+        .icon {
+            margin-left: 8px;
+            color: #007bff;
+            cursor: pointer;
+        }
+        .icon:hover {
+            color: #0056b3;
+        }
+    </style>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb5g5r5c5Xb4pXz/LSj/4ylxFGIC4YX/e3Gqf" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1>Upload Files</h1>
+    <div class="drop-zone" id="drop-zone">
+        <p>Drag & Drop your file here or click to select a file</p>
+        <input type="file" id="file-input" name="file" accept=".jpg,.jpeg,.png,.pdf" />
+    </div>
+    <div class="file-list" id="file-list"></div>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-upload-input" style="display:none" />
+        <button type="submit">Upload</button>
+    </form>
+
+    <div class="progress-bar-container" id="progress-bar-container">
+        <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <h2>Uploaded Files</h2>
+    <ul>
+        <li th:each="file : ${files}">
+            <a th:href="${file}" th:text="${file}">Filename</a>
+            <a th:href="${file}" download>
+                <i class="fas fa-download icon"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const uploadForm = document.getElementById('upload-form');
+    const fileUploadInput = document.getElementById('file-upload-input');
+    const fileList = document.getElementById('file-list');
+    const progressBarContainer = document.getElementById('progress-bar-container');
+    const progressBar = document.getElementById('progress-bar');
+    const message = document.getElementById('message');
+
+    function updateFileList(files) {
+        fileList.innerHTML = '';
+        for (let i = 0; i < files.length; i++) {
+            const fileItem = document.createElement('p');
+            fileItem.textContent = files[i].name;
+            fileList.appendChild(fileItem);
+        }
+    }
+
+    dropZone.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length) {
+            fileUploadInput.files = fileInput.files;
+            updateFileList(fileInput.files);
+        }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+
+        if (e.dataTransfer.files.length) {
+            fileUploadInput.files = e.dataTransfer.files;
+            updateFileList(e.dataTransfer.files);
+        }
+    });
+
+    uploadForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!fileUploadInput.files.length) {
+            alert('Please select a file to upload');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileUploadInput.files[0]);
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/', true);
+
+        xhr.upload.onprogress = (event) => {
+            if (event.lengthComputable) {
+                const percentComplete = (event.loaded / event.total) * 100;
+                progressBar.style.width = percentComplete + '%';
+                progressBar.textContent = Math.round(percentComplete) + '%';
+            }
+        };
+
+        xhr.onloadstart = () => {
+            progressBarContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+        };
+
+        xhr.onload = () => {
+            if (xhr.status === 200) {
+                message.textContent = 'File uploaded successfully!';
+                message.style.color = '#28a745';
+                updateFileList([{name: fileUploadInput.files[0].name}]); // Update the file list with the new file
+            } else {
+                message.textContent = 'File upload failed!';
+                message.style.color = '#dc3545';
+            }
+            progressBarContainer.style.display = 'none';
+        };
+
+        xhr.onerror = () => {
+            message.textContent = 'File upload failed!';
+            message.style.color = '#dc3545';
+            progressBarContainer.style.display = 'none';
+        };
+
+        xhr.send(formData);
+    });
+</script>
+</body>
+</html>
