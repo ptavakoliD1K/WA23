@@ -3,9 +3,11 @@ package com.WelfenHub.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 public class SecurityConfig {
@@ -18,16 +20,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                )
                 .authorizeRequests()
                 .antMatchers("/register", "/login", "/css/**", "/images/**", "/static/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/", true)
+                .successHandler(authenticationSuccessHandler())  // Use a success handler bean
                 .permitAll()
                 .and()
                 .logout()
@@ -39,9 +39,17 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .accessDeniedPage("/access-denied");
 
-        // Disable caching
-        http.headers().cacheControl().disable();
-
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return (request, response, authentication) -> {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String redirectUrl = userDetails.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")) ?
+                    "/admin/dashboard" : "/";
+            response.sendRedirect(redirectUrl);
+        };
     }
 }

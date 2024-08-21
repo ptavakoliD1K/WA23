@@ -15,4 +15,9 @@ public class HomeController {
     public String login() {
         return "login";  // This refers to src/main/resources/templates/login.html
     }
+
+    @GetMapping("/admin")
+    public String adminDashboard() {
+        return "admin";
+    }
 }

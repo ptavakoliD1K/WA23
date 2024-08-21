@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+</head>
+<body>
+<h1>Forum</h1>
+
+<!-- Form to create a new post -->
+<form th:action="@{/posts/create}" method="post">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required /><br/>
+
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" required></textarea><br/>
+
+    <button type="submit">Create Post</button>
+</form>
+
+<hr/>
+
+<!-- List of posts -->
+<ul>
+    <li th:each="post : ${posts}">
+        <h2 th:text="${post.title}">Post Title</h2>
+        <p th:text="${post.content}">Post Content</p>
+        <p>Posted by <span th:text="${post.user.username}">User</span> on <span th:text="${post.createdAt}">Date</span></p>
+
+        <!-- Form to add a comment -->
+        <form th:action="@{/posts/comment}" method="post">
+            <input type="hidden" name="postId" th:value="${post.id}" />
+            <textarea name="content" placeholder="Add a comment" required></textarea><br/>
+            <button type="submit">Add Comment</button>
+        </form>
+
+        <!-- Display comments -->
+        <ul>
+            <li th:each="comment : ${post.comments}">
+                <p th:text="${comment.content}">Comment Content</p>
+                <p>Commented by <span th:text="${comment.user.username}">User</span> on <span th:text="${comment.createdDate}">Date</span></p>
+            </li>
+        </ul>
+    </li>
+</ul>
+</body>
+</html>

@@ -2,6 +2,8 @@ package com.WelfenHub.services;
 
 import com.WelfenHub.models.User;
 import com.WelfenHub.repositories.UserRepository;
+import com.WelfenHub.repositories.RoleRepository;
+import com.WelfenHub.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Optional;
 
 import java.util.Collections;
 
@@ -22,6 +25,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -38,6 +44,9 @@ public class UserService implements UserDetailsService {
             throw new Exception("Email already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Role userRole = roleRepository.findByName("ROLE_USER");
+        user.setRoles(Collections.singletonList(userRole));
         try {
             logger.info("Encoded password for user: {}", user.getUsername());
             userRepository.save(user);
@@ -45,6 +54,14 @@ public class UserService implements UserDetailsService {
         } catch (Exception ex) {
             logger.error("Error saving user: {}", user.getUsername(), ex);
             throw ex;
+        }
+    }
+    public User findByUsername(String username) {
+        try {
+            return userRepository.findByUsername(username);
+        } catch (Exception exception) {
+            logger.error("Username does not exist");
+            throw exception;
         }
     }
 
@@ -75,5 +92,11 @@ public class UserService implements UserDetailsService {
         logger.info("Deleting user: {}", username);
         userRepository.deleteByUsername(username);
         logger.info("User deleted successfully: {}", username);
+    }
+
+    public void assignAdminRole(User user) {
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+        user.getRoles().add(adminRole);
+        userRepository.save(user);
     }
 }
