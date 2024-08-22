@@ -3,9 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Posts</title>
+    <link rel="stylesheet" href="css/forum_styles.css" />
 </head>
 <body>
+<!-- Include Header -->
+<div th:insert="fragments/header :: header"></div>
+
 <h1>Forum</h1>
+
+<!-- Filter Form -->
+<form th:action="@{/posts}" method="get">
+    <select name="category">
+        <option value="">All Categories</option>
+        <option value="Allgemeine Frage">Allgemeine Frage</option>
+        <option value="Wirtschaftsinformatik">Wirtschaftsinformatik</option>
+        <option value="BWL">BWL</option>
+        <option value="Parkplatz">Parkplatz</option>
+        <option value="Sonstiges">Sonstiges</option>
+    </select>
+    <button type="submit">Filter</button>
+</form>
+
+<hr/>
 
 <!-- Form to create a new post -->
 <form th:action="@{/posts/create}" method="post">
@@ -14,6 +33,15 @@
 
     <label for="content">Content:</label>
     <textarea id="content" name="content" required></textarea><br/>
+
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+        <option value="Allgemeine Frage">Allgemeine Frage</option>
+        <option value="Wirtschaftsinformatik">Wirtschaftsinformatik</option>
+        <option value="BWL">BWL</option>
+        <option value="Parkplatz">Parkplatz</option>
+        <option value="Sonstiges">Sonstiges</option>
+    </select>
 
     <button type="submit">Create Post</button>
 </form>
@@ -43,5 +71,8 @@
         </ul>
     </li>
 </ul>
+
+<!-- Include Footer -->
+<div th:insert="fragments/footer :: footer"></div>
 </body>
 </html>

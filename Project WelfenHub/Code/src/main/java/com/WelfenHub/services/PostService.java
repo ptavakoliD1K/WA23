@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;  // Add this import
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -21,10 +21,11 @@ public class PostService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Post createPost(String title, String content, User user) {
+    public Post createPost(String title, String content, String category, User user) {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
+        post.setCategory(category);
         post.setUser(user);
         post.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return postRepository.save(post);
@@ -34,10 +35,14 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    public List<Post> getPostsByCategory(String category) {
+        return postRepository.findByCategoryOrderByCreatedAtDesc(category);
+    }
+
     public void addComment(Long postId, String content, User user) {
-        Optional<Post> optionalPost = postRepository.findById(postId);  // Get Optional<Post>
+        Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
-            Post post = optionalPost.get();  // Extract Post from Optional
+            Post post = optionalPost.get();
             Comment comment = new Comment();
             comment.setContent(content);
             comment.setPost(post);
