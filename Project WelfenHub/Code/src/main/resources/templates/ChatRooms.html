@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/ChatRoomStyles.css}" />
+    <meta charset="UTF-8">
+    <title>Chat Rooms</title>
+</head>
+<body>
+<h1>Chat Rooms</h1>
+<a href="/chat/create">
+    <button>Create New Chat Room</button>
+</a>
+<ul>
+    <li th:each="chatRoom : ${chatRooms}">
+        <a th:href="@{'/chat/' + ${chatRoom.id}}" th:text="${chatRoom.name}">Chat Room Name</a>
+    </li>
+</ul>
+</body>
+</html>

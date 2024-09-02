@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 
 import java.util.Collections;
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -98,5 +100,15 @@ public class UserService implements UserDetailsService {
         Role adminRole = roleRepository.findByName("ROLE_ADMIN");
         user.getRoles().add(adminRole);
         userRepository.save(user);
+    }
+
+
+    public List<User> findByUsernames(List<String> usernames) {
+        return userRepository.findByUsernameIn(usernames);
+    }
+
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 }

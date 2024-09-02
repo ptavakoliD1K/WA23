@@ -52,4 +52,22 @@ public class PostService {
             throw new IllegalArgumentException("Invalid post ID");
         }
     }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
+    }
+
+    public void save(Post post) {
+        postRepository.save(post);
+    }
+
+    public Comment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
+    }
+
+    public void saveComment(Comment comment) {
+        commentRepository.save(comment);
+    }
 }

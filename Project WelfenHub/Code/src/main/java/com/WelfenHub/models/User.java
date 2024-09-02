@@ -5,15 +5,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import com.WelfenHub.repositories.RoleRepository;
-import com.WelfenHub.models.Role;
+import java.util.Collection;
 import java.util.Set;
-
-
-
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
-import java.util.Collection;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
