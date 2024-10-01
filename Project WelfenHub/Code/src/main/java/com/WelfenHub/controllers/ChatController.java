@@ -6,12 +6,16 @@ import com.WelfenHub.models.User;
 import com.WelfenHub.services.ChatService;
 import com.WelfenHub.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +23,7 @@ import org.slf4j.LoggerFactory;
 @RequestMapping("/chat")
 public class ChatController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     @Autowired
     private ChatService chatService;
@@ -39,7 +43,6 @@ public class ChatController {
     public String createGroupChat(@ModelAttribute ChatRoom chatRoom, Principal principal) {
         logger.info("Create group request received for groupName: {}", chatRoom.getName());
         User creator = userService.findByUsername(principal.getName());
-        // Convert usernames to User objects
         List<User> users = userService.findByUsernames(chatRoom.getUsernames());
         users.add(creator);
         chatService.createGroupChat(chatRoom.getName(), users);
@@ -54,18 +57,26 @@ public class ChatController {
         return "redirect:/chat";
     }
 
-    @PostMapping("/{chatRoomId}/message")
-    public String sendMessage(@PathVariable Long chatRoomId, @RequestParam String content, Principal principal) {
-        User sender = userService.findByUsername(principal.getName());
-        chatService.sendMessage(chatRoomId, content, sender);
-        return "redirect:/chat/" + chatRoomId;
+    @GetMapping("/{chatRoomId}/messages")
+    @ResponseBody
+    public ResponseEntity<List<Message>> getChatRoomMessages(@PathVariable Long chatRoomId) {
+        List<Message> messages = chatService.getChatHistory(chatRoomId);
+        return ResponseEntity.ok(messages);
     }
 
-    @GetMapping("/{chatRoomId}")
-    public String viewChatRoom(@PathVariable Long chatRoomId, Model model, Principal principal) {
-        List<Message> messages = chatService.getChatHistory(chatRoomId);
-        model.addAttribute("messages", messages);
-        return "chat";
+    @MessageMapping("/chat/{chatRoomId}")
+    @SendTo("/topic/messages")
+    public Message sendMessage(@PathVariable Long chatRoomId, @RequestBody String content, Principal principal) {
+        User sender = userService.findByUsername(principal.getName());
+        ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
+
+        Message message = new Message();
+        message.setContent(content);
+        message.setUser(sender);
+        message.setChatRoom(chatRoom);
+        message.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        return chatService.saveMessage(message);
     }
 
     @GetMapping

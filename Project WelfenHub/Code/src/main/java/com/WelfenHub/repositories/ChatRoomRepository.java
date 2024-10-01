@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     List<ChatRoom> findByUsersContaining(User user);
+
+    // New method to check if a user is in a chat room
+    boolean existsByIdAndUsersContaining(Long id, User user);
 }

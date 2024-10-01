@@ -10,13 +10,27 @@
 </head>
 <body>
 <header>
-    <!-- Header content remains the same -->
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="name">WelfenHUB - wenn Welfen helfen</div>
+            <ul>
+                <li><a href="#" class="active">Startseite</a></li>
+                <li><a href="#">Feedback</a></li>
+                <li><a href="#">Impressum</a></li>
+                <li><button><a href="#">Abmelden</a></button></li>
+            </ul>
+        </div>
+    </nav>
 </header>
 
 <div class="main-container">
     <aside class="sidebar">
         <div th:each="chatRoom : ${chatRooms}" class="group">
-            <h2><a href="#" th:onclick="'loadChatRoom(' + ${chatRoom.id} + ', \'' + ${chatRoom.name} + '\')'" th:text="${chatRoom.name}">Gruppenname</a></h2>
+            <h2><a href="#"
+                   th:data-chat-room-id="${chatRoom.id}"
+                   th:data-chat-room-name="${chatRoom.name}"
+                   onclick="loadChatRoom(this)"
+                   th:text="${chatRoom.name}">Gruppenname</a></h2>
         </div>
         <div class="group create-group">
             <h2><a href="/chat/create">Gruppe erstellen</a></h2>
@@ -40,7 +54,8 @@
 </div>
 
 <footer>
-    <!-- Footer content remains the same -->
+    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a></p>
+    <img th:src="@{/images/WA_logo_white.png}" alt="WelfenHub Logo">
 </footer>
 
 <script th:inline="javascript">
@@ -58,17 +73,19 @@
         });
     }
 
-    function loadChatRoom(chatRoomId, chatRoomName) {
-        currentChatRoomId = chatRoomId;
-        document.getElementById('currentGroupName').textContent = chatRoomName;
-        document.getElementById('messages').innerHTML = '';
+    function loadChatRoom(element) {
+    var chatRoomId = element.getAttribute('data-chat-room-id');
+    var chatRoomName = element.getAttribute('data-chat-room-name');
 
-        // Fetch messages for the selected chat room
-        fetch('/chat/' + chatRoomId + '/messages')
-            .then(response => response.json())
-            .then(messages => {
-                messages.forEach(showMessageOutput);
-            });
+    currentChatRoomId = chatRoomId;
+    document.getElementById('currentGroupName').textContent = chatRoomName;
+    document.getElementById('messages').innerHTML = '';
+
+    fetch('/chat/' + chatRoomId + '/messages')
+        .then(response => response.json())
+        .then(messages => {
+            messages.forEach(showMessageOutput);
+        });
     }
 
     function showMessageOutput(message) {
@@ -80,12 +97,14 @@
     }
 
     function sendMessage() {
-        var messageContent = document.getElementById('messageInput').value;
+    var messageContent = document.getElementById('messageInput').value;
         if (messageContent && currentChatRoomId) {
-            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify({'content': messageContent}));
+            console.log('Sending message:', messageContent);
+            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify({content: messageContent}));
             document.getElementById('messageInput').value = '';
         }
     }
+   }
 
     connect();
 </script>
