@@ -1,19 +1,93 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="de">
 <head>
-    <link rel="stylesheet" th:href="@{/css/ChatRoomStyles.css}" />
     <meta charset="UTF-8">
-    <title>Chat Rooms</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WelfenHUB - Gruppenchat</title>
+    <link rel="stylesheet" th:href="@{/css/ChatRoomStyles.css}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.3.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </head>
 <body>
-<h1>Chat Rooms</h1>
-<a href="/chat/create">
-    <button>Create New Chat Room</button>
-</a>
-<ul>
-    <li th:each="chatRoom : ${chatRooms}">
-        <a th:href="@{'/chat/' + ${chatRoom.id}}" th:text="${chatRoom.name}">Chat Room Name</a>
-    </li>
-</ul>
+<header>
+    <!-- Header content remains the same -->
+</header>
+
+<div class="main-container">
+    <aside class="sidebar">
+        <div th:each="chatRoom : ${chatRooms}" class="group">
+            <h2><a href="#" th:onclick="'loadChatRoom(' + ${chatRoom.id} + ', \'' + ${chatRoom.name} + '\')'" th:text="${chatRoom.name}">Gruppenname</a></h2>
+        </div>
+        <div class="group create-group">
+            <h2><a href="/chat/create">Gruppe erstellen</a></h2>
+        </div>
+    </aside>
+
+    <main class="content">
+        <div class="chat-header">
+            <span id="currentGroupName">Wähle eine Gruppe</span>
+            <span>Dateien</span>
+            <span>👤</span>
+        </div>
+        <div id="messages" class="dialogue-window">
+            <!-- Messages will be dynamically loaded here -->
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="messageInput" class="text-field" placeholder="Nachricht eingeben...">
+            <button onclick="sendMessage()" class="send-button">Senden</button>
+        </div>
+    </main>
+</div>
+
+<footer>
+    <!-- Footer content remains the same -->
+</footer>
+
+<script th:inline="javascript">
+    var stompClient = null;
+    var currentChatRoomId = null;
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messages', function (messageOutput) {
+                showMessageOutput(JSON.parse(messageOutput.body));
+            });
+        });
+    }
+
+    function loadChatRoom(chatRoomId, chatRoomName) {
+        currentChatRoomId = chatRoomId;
+        document.getElementById('currentGroupName').textContent = chatRoomName;
+        document.getElementById('messages').innerHTML = '';
+
+        // Fetch messages for the selected chat room
+        fetch('/chat/' + chatRoomId + '/messages')
+            .then(response => response.json())
+            .then(messages => {
+                messages.forEach(showMessageOutput);
+            });
+    }
+
+    function showMessageOutput(message) {
+        var messagesDiv = document.getElementById('messages');
+        var p = document.createElement('p');
+        p.textContent = message.user.username + ": " + message.content;
+        messagesDiv.appendChild(p);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function sendMessage() {
+        var messageContent = document.getElementById('messageInput').value;
+        if (messageContent && currentChatRoomId) {
+            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify({'content': messageContent}));
+            document.getElementById('messageInput').value = '';
+        }
+    }
+
+    connect();
+</script>
 </body>
 </html>
