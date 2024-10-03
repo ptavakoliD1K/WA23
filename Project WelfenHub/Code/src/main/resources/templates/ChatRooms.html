@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="de">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,10 +14,16 @@
         <div class="navdiv">
             <div class="name">WelfenHUB - wenn Welfen helfen</div>
             <ul>
-                <li><a href="#" class="active">Startseite</a></li>
-                <li><a href="#">Feedback</a></li>
-                <li><a href="#">Impressum</a></li>
-                <li><button><a href="#">Abmelden</a></button></li>
+                <li><a th:href="@{/}" class="active">Startseite</a></li>
+                <li><a th:href="@{/news}">News</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/impressum}">Impressum</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit">Abmelden</button>
+                    </form>
+                </li>
             </ul>
         </div>
     </nav>
@@ -25,15 +31,16 @@
 
 <div class="main-container">
     <aside class="sidebar">
-        <div th:each="chatRoom : ${chatRooms}" class="group">
-            <h2><a href="#"
-                   th:data-chat-room-id="${chatRoom.id}"
-                   th:data-chat-room-name="${chatRoom.name}"
-                   onclick="loadChatRoom(this)"
-                   th:text="${chatRoom.name}">Gruppenname</a></h2>
-        </div>
         <div class="group create-group">
-            <h2><a href="/chat/create">Gruppe erstellen</a></h2>
+            <h2><a href="#" id="openCreateGroupModal" class="btn-create-group">Gruppe erstellen</a></h2>
+        </div>
+        <div class="chat-rooms-list">
+            <div th:each="chatRoom : ${chatRooms}" class="group">
+                <h2><a href="#"
+                       th:attr="data-chat-room-id=${chatRoom.id},data-chat-room-name=${chatRoom.name}"
+                       onclick="loadChatRoom(this.getAttribute('data-chat-room-id'), this.getAttribute('data-chat-room-name'))"
+                       th:text="${chatRoom.name}">Gruppenname</a></h2>
+            </div>
         </div>
     </aside>
 
@@ -58,6 +65,26 @@
     <img th:src="@{/images/WA_logo_white.png}" alt="WelfenHub Logo">
 </footer>
 
+<div id="createGroupModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Create New Group</h2>
+        <form id="createGroupForm">
+            <div class="form-group">
+                <label for="groupName">Group Name:</label>
+                <input type="text" id="groupName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Select Users:</label>
+                <div id="userList" class="user-list">
+                    <!-- User checkboxes will be dynamically added here -->
+                </div>
+            </div>
+            <button type="submit" class="btn-create">Create Group</button>
+        </form>
+    </div>
+</div>
+
 <script th:inline="javascript">
     var stompClient = null;
     var currentChatRoomId = null;
@@ -67,44 +94,123 @@
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/messages', function (messageOutput) {
+            subscribeToAllChatRooms();
+        }, function(error) {
+            console.error('STOMP error:', error);
+        });
+    }
+
+    function subscribeToAllChatRooms() {
+        var chatRooms = document.querySelectorAll('.group a[data-chat-room-id]');
+        chatRooms.forEach(function(chatRoom) {
+            var chatRoomId = chatRoom.getAttribute('data-chat-room-id');
+            stompClient.subscribe('/topic/messages/' + chatRoomId, function (messageOutput) {
                 showMessageOutput(JSON.parse(messageOutput.body));
             });
         });
     }
 
-    function loadChatRoom(element) {
-    var chatRoomId = element.getAttribute('data-chat-room-id');
-    var chatRoomName = element.getAttribute('data-chat-room-name');
+    function loadChatRoom(chatRoomId, chatRoomName) {
+        currentChatRoomId = chatRoomId;
+        document.getElementById('currentGroupName').textContent = chatRoomName;
+        document.getElementById('messages').innerHTML = '';
 
-    currentChatRoomId = chatRoomId;
-    document.getElementById('currentGroupName').textContent = chatRoomName;
-    document.getElementById('messages').innerHTML = '';
-
-    fetch('/chat/' + chatRoomId + '/messages')
-        .then(response => response.json())
-        .then(messages => {
-            messages.forEach(showMessageOutput);
-        });
+        fetch('/chat/' + chatRoomId + '/messages')
+            .then(response => response.json())
+            .then(messages => {
+                messages.forEach(showMessageOutput);
+            })
+            .catch(error => {
+                console.error('Error loading messages:', error);
+            });
     }
 
     function showMessageOutput(message) {
         var messagesDiv = document.getElementById('messages');
         var p = document.createElement('p');
-        p.textContent = message.user.username + ": " + message.content;
+        p.textContent = message.username + ": " + message.content;
         messagesDiv.appendChild(p);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
     function sendMessage() {
-    var messageContent = document.getElementById('messageInput').value;
+        var messageContent = document.getElementById('messageInput').value;
         if (messageContent && currentChatRoomId) {
-            console.log('Sending message:', messageContent);
-            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify({content: messageContent}));
+            var messageObject = {
+                content: messageContent
+            };
+            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify(messageObject));
             document.getElementById('messageInput').value = '';
         }
     }
-   }
+
+    var modal = document.getElementById("createGroupModal");
+    var btn = document.getElementById("openCreateGroupModal");
+    var span = document.getElementsByClassName("close")[0];
+    var currentUsername = /*[[${#authentication.name}]]*/ 'currentUser';
+
+    if (btn) {
+        btn.onclick = function() {
+            if (modal) {
+                modal.style.display = "block";
+                loadUsers();
+            }
+        }
+    }
+
+    if (span) {
+        span.onclick = function() {
+            if (modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function loadUsers() {
+        fetch('/chat/users')
+            .then(response => response.json())
+            .then(users => {
+                var userList = document.getElementById("userList");
+                if (userList) {
+                    userList.innerHTML = '';
+                    users.forEach(user => {
+                        if (user.username !== currentUsername) {
+                            var checkbox = document.createElement('div');
+                            checkbox.className = 'user-checkbox';
+                            checkbox.innerHTML = `
+                                <input type="checkbox" id="${user.username}" name="usernames" value="${user.username}">
+                                <label for="${user.username}">${user.username}</label>
+                            `;
+                            userList.appendChild(checkbox);
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error('Error loading users:', error));
+    }
+
+    var createGroupForm = document.getElementById("createGroupForm");
+    if (createGroupForm) {
+        createGroupForm.onsubmit = function(e) {
+            e.preventDefault();
+            var formData = new FormData(e.target);
+            fetch('/chat/group', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    modal.style.display = "none";
+                    location.reload(); // Reload the page to show the new group
+                }
+            }).catch(error => console.error('Error creating group:', error));
+        }
+    }
 
     connect();
 </script>

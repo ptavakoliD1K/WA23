@@ -5,17 +5,18 @@ import com.WelfenHub.models.Message;
 import com.WelfenHub.models.User;
 import com.WelfenHub.services.ChatService;
 import com.WelfenHub.services.UserService;
+import com.WelfenHub.dto.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.sql.Timestamp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +32,21 @@ public class ChatController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
     @GetMapping("/create")
     public String showCreateChatRoomForm(Model model) {
         model.addAttribute("chatRoom", new ChatRoom());
         List<User> allUsers = userService.findAllUsers();
         model.addAttribute("allUsers", allUsers);
         return "createChatRoom";
+    }
+
+    @GetMapping("/users")
+    @ResponseBody
+    public List<User> getAllUsers() {
+        return userService.findAllUsers();
     }
 
     @PostMapping("/group")
@@ -59,24 +69,17 @@ public class ChatController {
 
     @GetMapping("/{chatRoomId}/messages")
     @ResponseBody
-    public ResponseEntity<List<Message>> getChatRoomMessages(@PathVariable Long chatRoomId) {
-        List<Message> messages = chatService.getChatHistory(chatRoomId);
+    public ResponseEntity<List<MessageDTO>> getChatRoomMessages(@PathVariable Long chatRoomId) {
+        List<MessageDTO> messages = chatService.getChatHistory(chatRoomId);
         return ResponseEntity.ok(messages);
     }
 
     @MessageMapping("/chat/{chatRoomId}")
-    @SendTo("/topic/messages")
-    public Message sendMessage(@PathVariable Long chatRoomId, @RequestBody String content, Principal principal) {
+    public void sendMessage(@DestinationVariable Long chatRoomId, MessageDTO messageDTO, Principal principal) {
         User sender = userService.findByUsername(principal.getName());
         ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
-
-        Message message = new Message();
-        message.setContent(content);
-        message.setUser(sender);
-        message.setChatRoom(chatRoom);
-        message.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-
-        return chatService.saveMessage(message);
+        MessageDTO savedMessage = chatService.saveMessage(messageDTO, sender, chatRoom);
+        messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
     }
 
     @GetMapping

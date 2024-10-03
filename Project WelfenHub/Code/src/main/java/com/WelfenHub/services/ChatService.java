@@ -5,17 +5,25 @@ import com.WelfenHub.models.Message;
 import com.WelfenHub.models.User;
 import com.WelfenHub.repositories.ChatRoomRepository;
 import com.WelfenHub.repositories.MessageRepository;
+import com.WelfenHub.dto.MessageDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class ChatService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
@@ -23,6 +31,7 @@ public class ChatService {
     @Autowired
     private MessageRepository messageRepository;
 
+    @Transactional
     public void createGroupChat(String chatRoomName, List<User> users) {
         if (chatRoomName == null || chatRoomName.trim().isEmpty()) {
             throw new IllegalArgumentException("Chat room name cannot be empty");
@@ -33,70 +42,65 @@ public class ChatService {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setName(chatRoomName);
         chatRoom.setUsers(users);
-        chatRoomRepository.save(chatRoom);
+        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
+        logger.info("Created chat room with id: {} and name: {}", savedChatRoom.getId(), savedChatRoom.getName());
     }
 
+    @Transactional
     public void createPrivateChat(User user1, User user2) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setUsers(List.of(user1, user2));
         chatRoom.setName(user1.getUsername() + " & " + user2.getUsername());
-        chatRoomRepository.save(chatRoom);
+        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
+        logger.info("Created private chat room with id: {} between users: {} and {}", savedChatRoom.getId(), user1.getUsername(), user2.getUsername());
     }
 
-    public Message saveMessage(Message message) {
-        if (message.getChatRoom() == null || !chatRoomRepository.existsById(message.getChatRoom().getId())) {
-            throw new IllegalArgumentException("Invalid chat room");
-        }
-        return messageRepository.save(message);
+    @Transactional
+    public MessageDTO saveMessage(MessageDTO messageDTO, User sender, ChatRoom chatRoom) {
+        Message message = new Message();
+        message.setContent(messageDTO.getContent());
+        message.setUser(sender);
+        message.setChatRoom(chatRoom);
+        message.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
+        Message savedMessage = messageRepository.save(message);
+        return convertToDTO(savedMessage);
     }
 
-    public List<Message> getChatHistory(Long chatRoomId) {
-        return messageRepository.findByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
+    @Transactional(readOnly = true)
+    public List<MessageDTO> getChatHistory(Long chatRoomId) {
+        List<Message> messages = messageRepository.findByChatRoomIdOrderByCreatedAtAsc(chatRoomId);
+        return messages.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public List<Message> getChatHistory(Long chatRoomId, int page, int size) {
+    @Transactional(readOnly = true)
+    public List<MessageDTO> getChatHistory(Long chatRoomId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
-        return messageRepository.findByChatRoomId(chatRoomId, pageable);
+        List<Message> messages = messageRepository.findByChatRoomId(chatRoomId, pageable);
+        return messages.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ChatRoom> getUserChatRooms(User user) {
-        return chatRoomRepository.findByUsersContaining(user);
+        List<ChatRoom> chatRooms = chatRoomRepository.findByUsersContaining(user);
+        logger.info("Found {} chat rooms for user {}", chatRooms.size(), user.getUsername());
+        return chatRooms;
     }
 
+    @Transactional(readOnly = true)
     public ChatRoom findChatRoomById(Long chatRoomId) {
         return chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("Chat room not found"));
     }
 
-    public boolean isUserInChatRoom(Long chatRoomId, User user) {
-        return chatRoomRepository.existsByIdAndUsersContaining(chatRoomId, user);
-    }
-
-    public void addUserToChatRoom(Long chatRoomId, User user) {
-        ChatRoom chatRoom = findChatRoomById(chatRoomId);
-        if (!chatRoom.getUsers().contains(user)) {
-            chatRoom.getUsers().add(user);
-            chatRoomRepository.save(chatRoom);
-        }
-    }
-
-    public void removeUserFromChatRoom(Long chatRoomId, User user) {
-        ChatRoom chatRoom = findChatRoomById(chatRoomId);
-        if (chatRoom.getUsers().remove(user)) {
-            chatRoomRepository.save(chatRoom);
-        }
-    }
-
-    public Message sendMessage(Long chatRoomId, String content, User sender) {
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                .orElseThrow(() -> new IllegalArgumentException("Chat room not found"));
-
-        Message message = new Message();
-        message.setContent(content);
-        message.setUser(sender);
-        message.setChatRoom(chatRoom);
-        message.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-
-        return messageRepository.save(message);
+    private MessageDTO convertToDTO(Message message) {
+        return new MessageDTO(
+                message.getId(),
+                message.getContent(),
+                message.getUser().getUsername(),
+                message.getChatRoom().getId(),
+                message.getChatRoom().getName(),
+                message.getCreatedAt()
+        );
     }
 }
