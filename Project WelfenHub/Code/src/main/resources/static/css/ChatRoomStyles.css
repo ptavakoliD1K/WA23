@@ -353,6 +353,49 @@ footer a:hover {
 .create-group {
     margin-bottom: 20px;
 }
+
+.create-group-button {
+    position: relative;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: white;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.button-text {
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.plus-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 24px;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.create-group-button:hover .button-text {
+    opacity: 0;
+}
+
+.create-group-button:hover .plus-icon {
+    right: 50%;
+    transform: translate(50%, -50%);
+    font-size: 36px;
+}
+
+.create-group-button:hover {
+    background-color: white;
+}
 /* Responsive Styles */
 @media (max-width: 768px) {
     .main-container {
