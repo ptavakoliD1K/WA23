@@ -22,7 +22,8 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/register", "/login", "/css/**", "/images/**", "/static/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/moderator/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -48,7 +49,7 @@ public class SecurityConfig {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String redirectUrl = userDetails.getAuthorities().stream()
                     .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN")) ?
-                    "/admin/dashboard" : "/";
+                    "/admin/AdminDashboard" : "/";
             response.sendRedirect(redirectUrl);
         };
     }

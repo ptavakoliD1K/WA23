@@ -1,6 +1,7 @@
 package com.WelfenHub.services;
 
 import com.WelfenHub.models.User;
+import com.WelfenHub.models.UserRole;
 import com.WelfenHub.repositories.UserRepository;
 import com.WelfenHub.repositories.RoleRepository;
 import com.WelfenHub.models.Role;
@@ -48,7 +49,7 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         Role userRole = roleRepository.findByName("ROLE_USER");
-        user.setRoles(Collections.singletonList(userRole));
+        user.setRole(UserRole.ROLE_ADMIN);
         try {
             logger.info("Encoded password for user: {}", user.getUsername());
             userRepository.save(user);
@@ -87,20 +88,14 @@ public class UserService implements UserDetailsService {
             logger.error("User not found: {}", username);
             throw new UsernameNotFoundException("User not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), Collections.emptyList());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
 
-    public void deleteUserByUsername(String username) {
-        logger.info("Deleting user: {}", username);
-        userRepository.deleteByUsername(username);
-        logger.info("User deleted successfully: {}", username);
+    public void deleteUserById(Long userId) {
+        userRepository.deleteById(userId);
     }
 
-    public void assignAdminRole(User user) {
-        Role adminRole = roleRepository.findByName("ROLE_ADMIN");
-        user.getRoles().add(adminRole);
-        userRepository.save(user);
-    }
+
 
 
     public List<User> findByUsernames(List<String> usernames) {
@@ -110,5 +105,16 @@ public class UserService implements UserDetailsService {
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
+    }
+
+    public void updateUserRole(Long userId, UserRole role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setRole(role);
+        userRepository.save(user);
+    }
+
+    public long getUserCount() {
+        return userRepository.count();
     }
 }

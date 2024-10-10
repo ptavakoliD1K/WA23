@@ -18,6 +18,9 @@
                 <li><a th:href="@{/news}">News</a></li>
                 <li><a th:href="@{/feedback}">Feedback</a></li>
                 <li><a th:href="@{/impressum}">Impressum</a></li>
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+                </li>
                 <li sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post">
                         <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>

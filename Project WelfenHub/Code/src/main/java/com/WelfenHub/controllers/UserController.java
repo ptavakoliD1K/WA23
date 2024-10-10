@@ -41,15 +41,6 @@ public class UserController {
         }
     }
 
-    @PostMapping("/delete-user")
-    public String deleteUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        logger.info("Deleting user: {}", username);
-        userService.deleteUserByUsername(username);
-        SecurityContextHolder.clearContext();
-        return "redirect:/login";
-    }
 
     @GetMapping("/api/user-status")
     public Map<String, Object> getUserStatus() {

@@ -9,6 +9,12 @@ import java.util.Collection;
 import java.util.Set;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
+import com.WelfenHub.models.UserRole;
+import java.util.Collections;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+
+
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
@@ -38,21 +44,18 @@ public class User implements UserDetails {
     @Column(name = "full_name")
     private String fullName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Collection<Role> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private UserRole role;
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
+
 
     public Long getId() {
         return id;
@@ -96,7 +99,10 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        if (this.role != null) {
+            return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
+        }
+        return Collections.emptyList();
     }
 
     @Override
