@@ -14,6 +14,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+
 
 import java.security.Principal;
 import java.util.List;
@@ -50,14 +52,23 @@ public class ChatController {
     }
 
     @PostMapping("/group")
-    public String createGroupChat(@ModelAttribute ChatRoom chatRoom, Principal principal) {
-        logger.info("Create group request received for groupName: {}", chatRoom.getName());
+    public String createGroupChat(@RequestParam String name, @RequestParam List<String> usernames, Principal principal) {
+        logger.info("Create group request received for groupName: {}", name);
+
+        // Finde den Ersteller der Gruppe (aktueller Nutzer)
         User creator = userService.findByUsername(principal.getName());
-        List<User> users = userService.findByUsernames(chatRoom.getUsernames());
-        users.add(creator);
-        chatService.createGroupChat(chatRoom.getName(), users);
+
+        // Finde die restlichen Benutzer anhand der Usernames
+        List<User> users = userService.findByUsernames(usernames);
+        users.add(creator);  // Ersteller zur Gruppe hinzufügen
+
+        // Gruppe erstellen
+        chatService.createGroupChat(name, users);
+
+        logger.info("Group created successfully with name: {}", name);
         return "redirect:/chat";
     }
+
 
     @PostMapping("/private")
     public String createPrivateChat(@RequestParam String username, Principal principal) {
