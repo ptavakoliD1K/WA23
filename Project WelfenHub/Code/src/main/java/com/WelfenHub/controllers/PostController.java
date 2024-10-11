@@ -9,6 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 import java.security.Principal;
 import java.util.List;
@@ -106,6 +111,34 @@ public class PostController {
         }
     }
 
+    @PostMapping("/delete/{postId}")
+    public String deletePost(@PathVariable Long postId, Principal principal) {
+        User currentUser = userService.findByUsername(principal.getName());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            postService.deletePost(postId);
+        }
+        return "redirect:/posts";
+
+    }
+
+    @PostMapping("/comment/delete/{commentId}")
+    public String deleteComment(@PathVariable Long commentId, Principal principal) {
+        User currentUser = userService.findByUsername(principal.getName());
+
+        // Holen der Authentication
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Überprüfen, ob der Benutzer die Rolle ADMIN hat
+        if (authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
+            postService.deleteComment(commentId);
+        }
+
+        return "redirect:/posts";
+    }
 
 }

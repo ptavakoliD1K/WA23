@@ -70,6 +70,12 @@
                 <button type="button" onclick="toggleEditPostForm(${post.id})">Cancel</button>
             </form>
         </div>
+        <!-- Admin Delte Button-->
+        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <form th:action="@{/posts/delete/{id}(id=${post.id})}" method="post">
+                <button type="submit">Delete Post</button>
+            </form>
+        </div>
 
         <!-- Form to add a comment -->
         <form th:action="@{/posts/comment}" method="post">

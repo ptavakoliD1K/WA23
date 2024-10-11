@@ -70,4 +70,13 @@ public class PostService {
     public void saveComment(Comment comment) {
         commentRepository.save(comment);
     }
+
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
+    }
+
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
+
 }
