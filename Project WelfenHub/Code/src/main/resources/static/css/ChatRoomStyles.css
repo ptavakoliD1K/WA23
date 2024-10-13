@@ -15,6 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background: #f4f4f9;
 }
 
 .navbar {
@@ -23,6 +24,8 @@ body {
     overflow: hidden;
     padding-top: 30px;
     padding-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: slide-in 1s ease-out;
 }
 
 .navbar a:hover {
@@ -46,6 +49,7 @@ body {
     color: white;
     margin-bottom: 10px;
     margin-left: 50px;
+    animation: fade-in 1s ease-in-out;
 }
 
 li {
@@ -58,6 +62,7 @@ li a {
     color: white;
     font-size: 20px;
     margin-right: 20px;
+    transition: color 0.3s;
 }
 
 button {
@@ -98,6 +103,7 @@ button a {
     display: flex;
     flex: 1;
     margin: 20px;
+    animation: fade-in 1s ease-in-out;
 }
 
 /* Sidebar Styles */
@@ -105,6 +111,9 @@ button a {
     width: 20%;
     border-right: 1px solid #ccc;
     padding: 10px;
+    background: #f9f9f9;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    animation: slide-in 1s ease-out;
 }
 
 .sidebar .group {
@@ -147,13 +156,14 @@ button a {
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+    animation: slide-in 1s ease-out;
 }
 
-.chat-footer{
+.chat-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
 }
 
 .dialogue-window {
@@ -162,6 +172,9 @@ button a {
     margin: 40px 0;
     padding: 20px;
     overflow-y: auto;
+    background: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fade-in 1.5s ease-in-out;
 }
 
 .text-field {
@@ -179,6 +192,19 @@ button a {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.send-button:hover {
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.send-button:active {
+    background-color: #37445d;
+    transform: scale(0.95);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 footer {
@@ -213,6 +239,7 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+
 /* Modal styles */
 .modal {
     display: none;
@@ -224,6 +251,7 @@ footer a:hover {
     height: 100%;
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
+    animation: fade-in 0.5s ease-in-out;
 }
 
 .modal-content {
@@ -234,6 +262,8 @@ footer a:hover {
     width: 80%;
     max-width: 500px;
     border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: slide-in 0.5s ease-out;
 }
 
 .close {
@@ -287,46 +317,11 @@ footer a:hover {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .btn-create:hover {
     background-color: #45a049;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 .btn-create-group {
@@ -337,8 +332,14 @@ footer a:hover {
     border-radius: 5px;
     cursor: pointer;
     margin-left: 10px;
+    transition: transform 0.1s, box-shadow 0.1s;
 }
 
+.btn-create-group:hover {
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
 
 .btn-create-group:active {
     background-color: #37447d;
@@ -358,7 +359,7 @@ footer a:hover {
     position: relative;
     padding: 10px 20px;
     font-size: 16px;
-    background-color: white;
+    background-color: #37445d;
     color: white;
     border: none;
     border-radius: 5px;
@@ -394,8 +395,9 @@ footer a:hover {
 }
 
 .create-group-button:hover {
-    background-color: white;
+    background-color: #abadb0;
 }
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .main-container {
@@ -418,5 +420,24 @@ footer a:hover {
 
     .text-field {
         width: calc(100% - 110px);
+    }
+}
+
+/* Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
     }
 }
