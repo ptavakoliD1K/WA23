@@ -100,4 +100,21 @@ public class ChatController {
         model.addAttribute("chatRooms", chatRooms);
         return "chatRooms";
     }
+
+    @PostMapping("/{chatRoomId}/addUsers")
+    public String addUsersToGroup(@PathVariable Long chatRoomId, @RequestBody Map<String, Object> userData, Principal principal) {
+        logger.info("Add users request received for chatRoomId: {}", chatRoomId);
+
+        List<String> usernames = (List<String>) userData.get("usernames");
+
+        // Finde die Benutzer anhand der Usernames
+        List<User> users = userService.findByUsernames(usernames);
+
+        // Benutzer zur Gruppe hinzufügen
+        chatService.addUsersToGroup(chatRoomId, users);
+
+        logger.info("Users added successfully to chatRoomId: {}", chatRoomId);
+        return "redirect:/chat";
+    }
+
 }

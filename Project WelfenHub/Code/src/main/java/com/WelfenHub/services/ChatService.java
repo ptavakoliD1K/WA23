@@ -103,4 +103,12 @@ public class ChatService {
                 message.getCreatedAt()
         );
     }
+
+    public void addUsersToGroup(Long chatRoomId, List<User> users) {
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid chatRoomId: " + chatRoomId));
+
+        chatRoom.getUsers().addAll(users);
+        chatRoomRepository.save(chatRoom);
+    }
 }

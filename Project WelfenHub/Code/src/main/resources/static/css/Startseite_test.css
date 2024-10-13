@@ -14,6 +14,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background: #f4f4f9;
 }
 
 .navbar {
@@ -22,6 +23,7 @@ body {
     overflow: hidden;
     padding-top: 30px;
     padding-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .navbar a:hover {
@@ -40,11 +42,12 @@ body {
 }
 
 .name {
-    font-size: 35px; 
-    font-weight: 600; 
+    font-size: 35px;
+    font-weight: 600;
     color: white;
     margin-bottom: 10px;
     margin-left: 50px;
+    animation: slide-in 1s ease-out;
 }
 
 li {
@@ -54,20 +57,21 @@ li {
 }
 
 li a {
-    color: white; 
+    color: white;
     font-size: 20px;
     margin-right: 20px;
+    transition: color 0.3s;
 }
 
 button {
-    background-color: #37445d; 
+    background-color: #37445d;
     margin-left: 10px;
     border-radius: 5px;
-    padding: 10px 20px; 
-    width: auto; 
-    border: none; 
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-    cursor: pointer; 
+    padding: 10px 20px;
+    width: auto;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
     transition: transform 0.1s, box-shadow 0.1s;
     position: relative;
 }
@@ -87,12 +91,10 @@ button:active {
 button a {
     color: rgb(255, 255, 255);
     font-size: 20px;
-    text-decoration: none; 
-    display: block; 
-    text-align: center; 
+    text-decoration: none;
+    display: block;
+    text-align: center;
 }
-
-
 
 .center-image {
     display: flex;
@@ -106,29 +108,20 @@ button a {
     max-width: 150px;
     width: 100%;
     height: auto;
+    animation: fade-in 2s ease-in-out;
 }
 
 h1 {
     text-align: center;
     font-size: 40px;
     padding: 10px;
+    animation: fade-in 1.5s ease-in-out;
 }
 
 hr {
     margin: 0 80px;
     border-width: 2px;
     border-color: black;
-}
-
-.socials {
-    text-align: center;
-    padding: 20px 0;
-}
-
-.socials i {
-    width: 40px;
-    height: 40px;
-    margin: 0 10px;
 }
 
 .card-container {
@@ -141,11 +134,17 @@ hr {
 .card {
     width: 90%;
     max-width: 325px;
-    background-color: #f0f0f0;
+    background-color: #ffffff;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
     margin: 25px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .card img {
@@ -192,7 +191,6 @@ hr {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-
 footer {
     width: 100%;
     background-color: #00274d;
@@ -233,26 +231,26 @@ footer a:hover {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .name {
         font-size: 18px;
     }
-    
+
     li {
         display: block;
         margin-bottom: 5px;
     }
-    
+
     li a {
         font-size: 16px;
         margin-right: 0;
     }
-    
+
     button {
         width: auto;
         padding: 5px 10px;
     }
-    
+
     button a {
         font-size: 16px;
     }
@@ -274,7 +272,7 @@ footer a:hover {
         margin-right: 20px;
         margin-bottom: 10px;
         margin-top: 10px;
-        
+
     }
 
     .center-image img {
@@ -283,5 +281,24 @@ footer a:hover {
 
     footer img {
         width: 40px;
+    }
+}
+
+/* Animations */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
     }
 }

@@ -51,6 +51,7 @@
             <span id="currentGroupName">Wähle eine Gruppe</span>
             <span>Dateien</span>
             <span>👤</span>
+            <button id="openAddUserModal" class="plus-icon">+</button>
         </div>
         <div id="messages" class="dialogue-window">
             <!-- Messages will be dynamically loaded here -->
@@ -89,155 +90,263 @@
     </div>
 </div>
 
+<div id="addUserModal" class="modal">
+    <div class="modal-content">
+        <span class="close">×</span>
+        <h2>Add Users to Group</h2>
+
+        <form id="addUserForm" method="post" th:action="@{'/chat/' + ${currentChatRoomId} + '/addUsers'}">
+            <div class="form-group">
+                <label>Select Users:</label>
+                <div id="addUserList" class="user-list">
+                    <!-- User checkboxes will be dynamically added here -->
+                </div>
+            </div>
+            <button type="submit" class="btn-create">Add Users</button>
+        </form>
+
+    </div>
+</div>
+
+
+
 
 <script th:inline="javascript">
     var stompClient = null;
-    var currentChatRoomId = null;
+ var currentChatRoomId = null;
 
-    function connect() {
-        var socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            subscribeToAllChatRooms();
-        }, function(error) {
-            console.error('STOMP error:', error);
-        });
-    }
+ function connect() {
+     var socket = new SockJS('/ws');
+     stompClient = Stomp.over(socket);
+     stompClient.connect({}, function (frame) {
+         console.log('Connected: ' + frame);
+         subscribeToAllChatRooms();
+     }, function(error) {
+         console.error('STOMP error:', error);
+     });
+ }
 
-    function subscribeToAllChatRooms() {
-        var chatRooms = document.querySelectorAll('.group a[data-chat-room-id]');
-        chatRooms.forEach(function(chatRoom) {
-            var chatRoomId = chatRoom.getAttribute('data-chat-room-id');
-            stompClient.subscribe('/topic/messages/' + chatRoomId, function (messageOutput) {
-                showMessageOutput(JSON.parse(messageOutput.body));
-            });
-        });
-    }
+ function subscribeToAllChatRooms() {
+     var chatRooms = document.querySelectorAll('.group a[data-chat-room-id]')
+     ;
+     chatRooms.forEach(function(chatRoom) {
+         var chatRoomId = chatRoom.getAttribute('data-chat-room-id');
+         stompClient.subscribe('/topic/messages/' + chatRoomId, function (messageOutput) {
+             showMessageOutput(JSON.parse(messageOutput.body));
+         });
+     });
+ }
 
-    function loadChatRoom(chatRoomId, chatRoomName) {
-        currentChatRoomId = chatRoomId;
-        document.getElementById('currentGroupName').textContent = chatRoomName;
-        document.getElementById('messages').innerHTML = '';
+ function loadChatRoom(chatRoomId, chatRoomName) {
+     currentChatRoomId = chatRoomId;
+     document.getElementById('currentGroupName').textContent = chatRoomName;
+     document.getElementById('messages').innerHTML = '';
 
-        fetch('/chat/' + chatRoomId + '/messages')
-            .then(response => response.json())
-            .then(messages => {
-                messages.forEach(showMessageOutput);
-            })
-            .catch(error => {
-                console.error('Error loading messages:', error);
-            });
-    }
+     fetch('/chat/' + chatRoomId + '/messages')
+         .then(response => response.json())
+         .then(messages => {
+             messages.forEach(showMessageOutput);
+         })
+         .catch(error => {
+             console.error('Error loading messages:', error);
+         });
+ }
 
-    function showMessageOutput(message) {
-        var messagesDiv = document.getElementById('messages');
-        var p = document.createElement('p');
-        p.textContent = message.username + ": " + message.content;
-        messagesDiv.appendChild(p);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
+ function showMessageOutput(message) {
+     var messagesDiv = document.getElementById('messages');
+     var p = document.createElement('p');
+     p.textContent = message.username + ": " + message.content;
+     messagesDiv.appendChild(p);
+     messagesDiv.scrollTop = messagesDiv.scrollHeight;
+ }
 
-    function sendMessage() {
-        var messageContent = document.getElementById('messageInput').value;
-        if (messageContent && currentChatRoomId) {
-            var messageObject = {
-                content: messageContent
-            };
-            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify(messageObject));
-            document.getElementById('messageInput').value = '';
-        }
-    }
+ function sendMessage() {
+     var messageContent = document.getElementById('messageInput').value;
+     if (messageContent && currentChatRoomId) {
+         var messageObject = {
+             content: messageContent
+         };
+         stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify(messageObject));
+         document.getElementById('messageInput').value = '';
+     }
+ }
 
-    var modal = document.getElementById("createGroupModal");
-    var btn = document.getElementById("openCreateGroupModal");
-    var span = document.getElementsByClassName("close")[0];
-    var currentUsername = /*[[${#authentication.name}]]*/ 'currentUser';
+ var modal = document.getElementById("createGroupModal");
+ var btn = document.getElementById("openCreateGroupModal");
+ var span = document.getElementsByClassName("close")[0];
+ var currentUsername = /*[[${#authentication.name}]]*/ 'currentUser';
 
-    if (btn) {
-        btn.onclick = function() {
-            if (modal) {
-                modal.style.display = "block";
-                loadUsers();
-            }
-        }
-    }
+ if (btn) {
+     btn.onclick = function() {
+         if (modal) {
+             modal.style.display = "block";
+             loadUsers();
+         }
+     }
+ }
 
-    if (span) {
-        span.onclick = function() {
-            if (modal) {
-                modal.style.display = "none";
-            }
-        }
-    }
+ if (span) {
+     span.onclick = function() {
+         if (modal) {
+             modal.style.display = "none";
+         }
+     }
+ }
 
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+ window.onclick = function(event) {
+     if (event.target == modal) {
+         modal.style.display = "none";
+     }
+ }
 
-    function loadUsers() {
-        fetch('/chat/users')
-            .then(response => response.json())
-            .then(users => {
-                var userList = document.getElementById("userList");
-                if (userList) {
-                    userList.innerHTML = '';
-                    users.forEach(user => {
-                        if (user.username !== currentUsername) {
-                            var checkbox = document.createElement('div');
-                            checkbox.className = 'user-checkbox';
-                            checkbox.innerHTML = `
-                                <input type="checkbox" id="${user.username}" name="usernames" value="${user.username}">
-                                <label for="${user.username}">${user.username}</label>
-                            `;
-                            userList.appendChild(checkbox);
-                        }
-                    });
-                }
-            })
-            .catch(error => console.error('Error loading users:', error));
-    }
+ function loadUsers() {
+     fetch('/chat/users')
+         .then(response => response.json())
+         .then(users => {
+             var userList = document.getElementById("userList");
+             if (userList) {
+                 userList.innerHTML = '';
+                 users.forEach(user => {
+                     if (user.username !== currentUsername) {
+                         var checkbox = document.createElement('div');
+                         checkbox.className = 'user-checkbox';
+                         checkbox.innerHTML = `
+                             <input type="checkbox" id="${user.username}" name="usernames" value="${user.username}">
+                             <label for="${user.username}">${user.username}</label>
+                         `;
+                         userList.appendChild(checkbox);
+                     }
+                 });
+             }
+         })
+         .catch(error => console.error('Error loading users:', error));
+ }
 
-    function createGroup(event) {
+ function createGroup(event) {
+     event.preventDefault(); // Verhindert das Standardformularverhalten
+
+     var groupName = document.getElementById("groupName").value;
+     var selectedUsers = [];
+     var checkboxes = document.querySelectorAll("#userList input[type='checkbox']:checked");
+
+     checkboxes.forEach(function(checkbox) {
+         selectedUsers.push(checkbox.value);
+     });
+
+     if (groupName && selectedUsers.length > 0) {
+         var groupData = {
+             name: groupName,
+             usernames: selectedUsers
+         };
+
+         fetch('/chat/group', {
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json'
+             },
+             body: JSON.stringify(groupData)
+         }).then(response => {
+             if (response.ok) {
+                 modal.style.display = "none";
+                 location.reload(); // Reload the page to show the new group
+             } else {
+                 console.error('Failed to create group. Response status:', response.status);
+             }
+         }).catch(error => console.error('Error creating group:', error));
+     } else {
+         alert("Please enter a group name and select at least one user.");
+     }
+ }
+
+ var addUserModal = document.getElementById("addUserModal");
+ var addUserBtn = document.getElementById("openAddUserModal");
+ var addUserSpan = document.getElementsByClassName("close")[1];
+
+ if (addUserBtn) {
+     addUserBtn.onclick = function() {
+         if (addUserModal) {
+             addUserModal.style.display = "block";
+             loadUsersForAdding();
+         }
+     }
+ }
+
+ if (addUserSpan) {
+     addUserSpan.onclick = function() {
+         if (addUserModal) {
+             addUserModal.style.display = "none";
+         }
+     }
+ }
+
+ window.onclick = function(event) {
+     if (event.target == addUserModal) {
+         addUserModal.style.display = "none";
+     }
+ }
+
+ function loadUsersForAdding() {
+     fetch('/chat/users')
+         .then(response => response.json())
+         .then(users => {
+             var addUserList = document.getElementById("addUserList");
+             if (addUserList) {
+                 addUserList.innerHTML = '';
+                 users.forEach(user => {
+                     if (user.username !== currentUsername) {
+                         var checkbox = document.createElement('div');
+                         checkbox.className = 'user-checkbox';
+                         checkbox.innerHTML = `
+                             <input type="checkbox" id="add-${user.username}" name="usernames" value="${user.username}">
+                             <label for="add-${user.username}">${user.username}</label>
+                         `;
+                         addUserList.appendChild(checkbox);
+                     }
+                 });
+             }
+         })
+         .catch(error => console.error('Error loading users:', error));
+ }
+
+ function addUserToGroup(event) {
     event.preventDefault(); // Verhindert das Standardformularverhalten
 
-    var groupName = document.getElementById("groupName").value;
     var selectedUsers = [];
-    var checkboxes = document.querySelectorAll("#userList input[type='checkbox']:checked");
+    var checkboxes = document.querySelectorAll("#addUserList input[type='checkbox']:checked");
 
     checkboxes.forEach(function(checkbox) {
         selectedUsers.push(checkbox.value);
     });
 
-    if (groupName && selectedUsers.length > 0) {
-        var groupData = {
-            name: groupName,
+    if (selectedUsers.length > 0 && currentChatRoomId) {
+        var userData = {
             usernames: selectedUsers
         };
 
-        fetch('/chat/group', {
+        var form = document.getElementById('addUserForm');
+        var formData = new FormData(form);
+
+        fetch(form.action, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(groupData)
+            body: JSON.stringify(userData)
         }).then(response => {
             if (response.ok) {
-                modal.style.display = "none";
-                location.reload(); // Reload the page to show the new group
+                addUserModal.style.display = "none";
+                location.reload(); // Reload the page to show the updated group
             } else {
-                console.error('Failed to create group. Response status:', response.status);
+                console.error('Failed to add users. Response status:', response.status);
             }
-        }).catch(error => console.error('Error creating group:', error));
+        }).catch(error => console.error('Error adding users:', error));
     } else {
-        alert("Please enter a group name and select at least one user.");
+        alert("Please select at least one user.");
     }
 }
 
 
-    connect();
+ connect();
 </script>
 </body>
 </html>
