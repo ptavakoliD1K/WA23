@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/ChatRoomStyles.css}" />
+    <meta charset="UTF-8">
+    <title>Create Chat Room</title>
+</head>
+<body>
+<div class="container">
+    <h1>Create Chat Room</h1>
+    <form th:action="@{/chat/group}" th:object="${chatRoom}" method="post">
+        <label for="name">Chat Room Name:</label>
+        <input type="text" id="name" th:field="*{name}" placeholder="Chat Room Name" required />
+
+        <label for="usernames">Select Users:</label>
+        <select id="usernames" name="usernames" multiple>
+            <option th:each="user : ${allUsers}" th:value="${user.username}" th:text="${user.username}"></option>
+        </select>
+
+        <button type="submit">Create</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #f4f4f9;
+}
+
+.navbar {
+    background: #00274d;
+    padding: 15px 20px;
+    overflow: hidden;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a:hover {
+    color: rgb(57, 117, 173);
+}
+
+.navbar a:active {
+    color: gray;
+}
+
+.navdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.name {
+    font-size: 35px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    animation: slide-in 1s ease-out;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+li a {
+    color: white;
+    font-size: 20px;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+
+button {
+    background-color: #37445d;
+    margin-left: 10px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: auto;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+}
+
+button:hover {
+    background-color: #abadb0; /* Background color on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
