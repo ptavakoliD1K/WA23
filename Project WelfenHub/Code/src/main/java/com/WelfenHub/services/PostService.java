@@ -21,23 +21,22 @@ public class PostService {
     @Autowired
     private CommentRepository commentRepository;
 
-    public Post createPost(String title, String content, String category, User user) {
+    public List<Post> getPostsByCourse(String course) {
+        return postRepository.findByCourse(course);
+    }
+
+    public Post createPost(String title, String content, String course, int semester, String subject, User user) {
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
-        post.setCategory(category);
+        post.setCourse(course);
+        post.setSemester(semester);
+        post.setSubject(subject); // subject hinzufügen
         post.setUser(user);
         post.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return postRepository.save(post);
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
-    }
-
-    public List<Post> getPostsByCategory(String category) {
-        return postRepository.findByCategoryOrderByCreatedAtDesc(category);
-    }
 
     public void addComment(Long postId, String content, User user) {
         Optional<Post> optionalPost = postRepository.findById(postId);
@@ -77,6 +76,14 @@ public class PostService {
 
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
+    }
+
+    public Post getLatestPostForSubject(String subject) {
+        return postRepository.findTopByCourseOrderByCreatedAtDesc(subject);
+    }
+
+    public List<Post> getAllPosts() {
+        return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
 }

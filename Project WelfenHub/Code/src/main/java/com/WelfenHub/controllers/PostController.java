@@ -29,10 +29,10 @@ public class PostController {
     private UserService userService;
 
     @GetMapping
-    public String viewPosts(@RequestParam(value = "category", required = false) String category, Model model) {
+    public String viewPosts(@RequestParam(value = "course", required = false) String course, Model model) {
         List<Post> posts;
-        if (category != null && !category.isEmpty()) {
-            posts = postService.getPostsByCategory(category);
+        if (course != null && !course.isEmpty()) {
+            posts = postService.getPostsByCourse(course);
         } else {
             posts = postService.getAllPosts();
         }
@@ -41,12 +41,18 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@RequestParam String title, @RequestParam String content, @RequestParam String category, Principal principal) {
+    public String createPost(@RequestParam String title,
+                             @RequestParam String content,
+                             @RequestParam String course,
+                             @RequestParam int semester,
+                             @RequestParam String subject,  // Neu hinzugefügt
+                             Principal principal) {
         String username = principal.getName();
         User user = userService.findByUsername(username);
-        postService.createPost(title, content, category, user);
-        return "redirect:/posts";
+        postService.createPost(title, content, course, semester, subject, user); // subject übergeben
+        return "redirect:/forum/" + subject + "/" + semester + "/course/" + course;
     }
+
 
     @PostMapping("/comment")
     public String addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {

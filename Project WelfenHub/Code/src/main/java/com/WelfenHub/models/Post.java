@@ -1,19 +1,8 @@
 package com.WelfenHub.models;
+
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.sql.Timestamp;
-import java.util.List;  // Add this import
-
-
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.GrantedAuthority;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Post {
@@ -21,13 +10,21 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String category;
-
     private String title;
 
     @Column(length = 5000)
     private String content;
+
+    // Neues Feld für den Kurs
+    @Column(nullable = false)
+    private String course;
+
+    // Neues Feld für das Semester
+    @Column(nullable = false)
+    private int semester;
+
+    @Column(nullable = false)
+    private String subject;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -38,6 +35,14 @@ public class Post {
 
     private Timestamp createdAt;
 
+    // Getter und Setter
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
     public Long getId() {
         return id;
     }
@@ -86,11 +91,19 @@ public class Post {
         this.comments = comments;
     }
 
-    public String getCategory() {
-        return category;
+    public String getCourse() {
+        return course;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public int getSemester() {
+        return semester;
+    }
+
+    public void setSemester(int semester) {
+        this.semester = semester;
     }
 }
