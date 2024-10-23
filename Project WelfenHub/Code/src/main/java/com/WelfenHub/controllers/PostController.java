@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-
 import java.security.Principal;
 import java.util.List;
 
@@ -28,6 +27,7 @@ public class PostController {
     @Autowired
     private UserService userService;
 
+    // Posts anzeigen, mit oder ohne Kursfilter
     @GetMapping
     public String viewPosts(@RequestParam(value = "course", required = false) String course, Model model) {
         List<Post> posts;
@@ -40,6 +40,7 @@ public class PostController {
         return "posts";
     }
 
+    // Neuen Post erstellen
     @PostMapping("/create")
     public String createPost(@RequestParam String title,
                              @RequestParam String content,
@@ -53,15 +54,33 @@ public class PostController {
         return "redirect:/forum/" + subject + "/" + semester + "/course/" + course;
     }
 
-
+    // Kommentar zu einem Post hinzufügen
     @PostMapping("/comment")
     public String addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
+        Post post = postService.findById(postId);  // Den zugehörigen Post abrufen
         String username = principal.getName();
         User user = userService.findByUsername(username);
         postService.addComment(postId, content, user);
-        return "redirect:/posts";
+
+        // Die Werte für subject, semester und course aus dem Post-Objekt abrufen
+        String subject = post.getSubject();
+        int semester = post.getSemester();
+        String course = post.getCourse();
+
+        return "redirect:/forum/" + subject + "/" + semester + "/course/" + course;
     }
 
+    // Einzelnen Post und zugehörige Kommentare anzeigen
+    @GetMapping("/{postId}")
+    public String viewPostWithComments(@PathVariable Long postId, Model model) {
+        Post post = postService.findById(postId);
+        List<Comment> comments = post.getComments();  // Kommentare laden
+        model.addAttribute("post", post);
+        model.addAttribute("comments", comments);
+        return "post-detail"; // Template für die Detailansicht eines Posts mit Kommentaren
+    }
+
+    // Post bearbeiten (Formular anzeigen)
     @GetMapping("/edit/{postId}")
     public String showEditPostForm(@PathVariable Long postId, Principal principal, Model model) {
         Post post = postService.findById(postId);
@@ -75,6 +94,7 @@ public class PostController {
         }
     }
 
+    // Post bearbeiten (Absenden)
     @PostMapping("/edit/{postId}")
     public String editPost(@PathVariable Long postId, @RequestParam String title, @RequestParam String content, Principal principal) {
         Post post = postService.findById(postId);
@@ -90,6 +110,7 @@ public class PostController {
         }
     }
 
+    // Kommentar bearbeiten (Formular anzeigen)
     @GetMapping("/comment/edit/{commentId}")
     public String showEditCommentForm(@PathVariable Long commentId, Principal principal, Model model) {
         Comment comment = postService.findCommentById(commentId);
@@ -103,6 +124,7 @@ public class PostController {
         }
     }
 
+    // Kommentar bearbeiten (Absenden)
     @PostMapping("/comment/edit/{commentId}")
     public String editComment(@PathVariable Long commentId, @RequestParam String content, Principal principal) {
         Comment comment = postService.findCommentById(commentId);
@@ -117,6 +139,7 @@ public class PostController {
         }
     }
 
+    // Post löschen
     @PostMapping("/delete/{postId}")
     public String deletePost(@PathVariable Long postId, Principal principal) {
         User currentUser = userService.findByUsername(principal.getName());
@@ -128,17 +151,15 @@ public class PostController {
             postService.deletePost(postId);
         }
         return "redirect:/posts";
-
     }
 
+    // Kommentar löschen
     @PostMapping("/comment/delete/{commentId}")
     public String deleteComment(@PathVariable Long commentId, Principal principal) {
         User currentUser = userService.findByUsername(principal.getName());
 
-        // Holen der Authentication
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Überprüfen, ob der Benutzer die Rolle ADMIN hat
         if (authentication != null && authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
             postService.deleteComment(commentId);
@@ -146,5 +167,4 @@ public class PostController {
 
         return "redirect:/posts";
     }
-
 }
