@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Semester Übersicht</title>
+    <link rel="stylesheet" th:href="@{/css/Semesteroverview.css}" />
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="name">WelfenHUB - wenn Welfen helfen</div>
+            <ul>
+                <li><a th:href="@{/}" class="active">Startseite</a></li>
+                <li><a th:href="@{/posts}">Forum</a></li>
+                <li><a th:href="@{/news}">News</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/impressum}">Impressum</a></li>
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit">Abmelden</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="semester-overview-container">
+    <h1 th:text="'Semesterübersicht'"></h1>
+
+    <div class="semester-section">
+        <h2>1. Semester</h2>
+        <div class="course-list">
+            <ul>
+                <li>
+                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Kurs1')}">
+                        Kurs 1
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Kurs2')}">
+                        Kurs 2
+                    </a>
+                </li>
+                <!-- Weitere Kurse hier -->
+            </ul>
+            <div class="latest-post">
+                <h3>Zuletzt kommentierter Beitrag</h3>
+                <p th:if="${latestPost != null}">
+                    <strong>Beitragstitel:</strong> <span th:text="${latestPost.title}"></span><br/>
+                    <strong>Erstellt von:</strong> <span th:if="${latestPost.user != null}" th:text="${latestPost.user.username}">Unbekannter Benutzer</span><br/>
+                    <strong>Inhalt:</strong> <span th:text="${latestPost.content}"></span>
+                </p>
+                <p th:if="${latestPost == null}">Es gibt keine zuletzt kommentierten Beiträge.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weitere Semester hier hinzufügen -->
+</div>
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,373 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: #f4f4f9;
+}
+
+.navbar {
+    background: #00274d;
+    padding: 15px 20px;
+    overflow: hidden;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a:hover {
+    color: rgb(57, 117, 173);
+}
+
+.navbar a:active {
+    color: gray;
+}
+
+.navdiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.name {
+    font-size: 35px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    animation: slide-in 1s ease-out;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+li a {
+    color: white;
+    font-size: 20px;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+
+button {
+    background-color: #37445d;
+    margin-left: 10px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: auto;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+}
+
+button:hover {
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Content Styles */
+h1 {
+    text-align: center;
+    font-size: 36px;
+    color: #00274d;
+    margin: 20px 0;
+}
+
+.posts-list {
+    padding: 20px;
+    width: 100%; /* Posts sollen die volle Breite des Containers nutzen */
+    margin: 0; /* Kein automatischer Rand */
+}
+
+.post-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: calc(100% - 40px); /* Fast die volle Bildschirmbreite mit 20px Abstand links und rechts */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    max-width: 1200px; /* Maximale Breite auf großen Bildschirmen */
+    margin: 0 auto 20px auto; /* Zentriert die Post-Boxen bei großen Bildschirmen */
+}
+
+.post-box:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.post-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.post-info {
+    font-size: 14px;
+    color: #777;
+    margin-top: 10px;
+}
+
+.post-content {
+    margin-top: 15px;
+}
+
+.comments-section {
+    margin-top: 20px;
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #37445d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #556b8e;
+}
+
+/* Styling for the Modal (Popup) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 50%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Styling for the Plus Button */
+.new-post-button {
+    position: fixed;
+    top: 160px;
+    right: 20px;
+    background-color: #00274d;
+    color: white;
+    font-size: 24px;
+    padding: 4px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #00274d;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+}
+
+footer p {
+    margin: 0;
+}
+
+footer a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer img {
+    width: 50px;
+    height: auto;
+    margin-top: 10px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .navbar ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .navbar ul li {
+        margin-bottom: 10px;
+    }
+
+    .name {
+        font-size: 24px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 16px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .posts-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    }
+
+    li {
+    display: block; /* Jeder Post wird als Block-Element angezeigt */
+    margin-bottom: 20px; /* Abstand zwischen den Posts */
+    }
+
+    .post-box {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: 100%; /* Boxen nutzen die volle Breite */
+    max-width: 1200px; /* Maximale Breite für große Bildschirme */
+    margin: 0 auto; /* Zentriert die Post-Box auf der Seite */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+    }
+
+    .post-box:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.post-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.post-info {
+    font-size: 14px;
+    color: #777;
+    margin-top: 10px;
+}
+
+.post-content {
+    margin-top: 15px;
+}
+
+
+.modal-content {
+    width: 80%;
+}
+}
+
+/* Container für den Suchknopf und den Plus-Button */
+.action-buttons-container {
+    display: flex;
+    align-items: center;  /* Elemente vertikal zentrieren */
+    position: fixed;
+    top: 160px;
+    right: 120px;
+}
+
+.new-post-button {
+    margin-right: 10px;  /* Abstand zwischen Plus-Button und Suchknopf */
+}
+
+/* Anpassung des Such-Containers */
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.search-bar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 0;  /* Startbreite 0 (versteckt) */
+    overflow: hidden;
+    transition: width 0.5s ease-in-out;  /* Animationseffekt */
+}
+
+.search-bar.open {
+    width: 300px;  /* Breite nach dem Öffnen */
+}
+
+.search-bar input {
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    background-color: #00274d;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #3a3f50;
+}
+

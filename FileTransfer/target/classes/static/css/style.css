@@ -1,0 +1,203 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    background-color: #fff;
+    padding: 20px 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+}
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+.drop_zone {
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: relative;
+}
+.drop_zone.dragover {
+    background-color: #e0e0e0;
+}
+.drop_zone p {
+    margin: 0;
+    color: #007bff;
+    font-size: 16px;
+}
+.file-list {
+    margin-top: 10px;
+}
+input[type="file"] {
+    display: none;
+}
+#upButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#upButton:hover {
+    background-color: #0056b3;
+}
+.message {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #28a745;
+}
+h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #0056b3;
+}
+.progress-bar-container {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 20px;
+    display: none;
+}
+.progress-bar {
+    width: 0;
+    height: 20px;
+    background-color: #007bff;
+    text-align: center;
+    color: white;
+    line-height: 20px;
+    transition: width 0.3s;
+}
+.icon {
+    margin-left: 8px;
+    color: #007bff;
+    cursor: pointer;
+}
+.icon:hover {
+    color: #0056b3;
+}
+
+.downloadButton {
+    color: white;
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.deleteButton, .previewButton {
+    color: white;
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+}
+
+.deleteButton:hover, .downloadButton:hover, .previewButton:hover{
+    background-color: #0056b3;
+}
+
+.fileName {
+    margin-left: 20px;
+}
+
+.searchFunc input {
+    height: 29px;
+    width: 250px;
+    border-radius: 4px;
+    border: 2px dashed #007bff;
+}
+
+.searchFunc input:focus {
+    outline: none;
+}
+
+.searchFunc button {
+    color: white;
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 20px;
+}
+
+.searchFunc button:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 700px;
+    text-align: left;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+

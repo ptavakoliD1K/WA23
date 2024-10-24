@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+    <link rel="stylesheet" th:href="@{/css/subject.css}" />
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="name">WelfenHUB - wenn Welfen helfen</div>
+            <ul>
+                <li><a th:href="@{/}" class="active">Startseite</a></li>
+                <li><a th:href="@{/posts}">Forum</a></li>
+                <li><a th:href="@{/news}">News</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/impressum}">Impressum</a></li>
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit">Abmelden</button>
+                    </form>
+                </li>
+            </ul>
+
+    </nav>
+</header>
+
+<h1>Posts</h1>
+
+<!-- Container für den Suchknopf und den Plus-Button -->
+<div class="action-buttons-container">
+    <!-- Plus button to open the modal -->
+    <a class="new-post-button" onclick="openModal()">+</a>
+
+    <!-- Search button and bar -->
+    <div class="search-container">
+        <span class="search-icon" onclick="toggleSearch()">🔍</span>
+
+        <!-- Hidden Search Bar -->
+        <div id="searchBar" class="search-bar" style="display: none;">
+            <form th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
+                <input type="text" name="query" placeholder="Search by Title..." required/>
+                <input type="hidden" name="subject" th:value="${subject}"/>
+                <input type="hidden" name="semester" th:value="${semester}"/>
+                <input type="hidden" name="course" th:value="${course}"/>
+                <button type="submit">Search</button>
+            </form>
+
+            <!-- Reset Search Button -->
+            <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${semester}, course=${course})}"
+               class="reset-search-button">
+                Suche zurücksetzen
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal (Popup) for Creating a New Post -->
+<div id="newPostModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Neuen Post erstellen</h2>
+        <form th:action="@{/posts/create}" method="post">
+            <input type="hidden" name="subject" th:value="${subject}"/>
+            <input type="hidden" name="semester" th:value="${semester}"/>
+            <input type="hidden" name="course" th:value="${course}"/>
+
+            <label>Title:</label>
+            <input type="text" name="title" required/><br/>
+
+            <label>Content:</label>
+            <textarea name="content" required></textarea><br/>
+
+            <button type="submit">Create Post</button>
+        </form>
+    </div>
+</div>
+
+<div class="posts-list">
+    <ul>
+        <li th:each="post : ${posts}">
+            <!-- Post Titel zum Aufklappen -->
+            <div class="post-box">
+                <div class="post-title" onclick="togglePost(this)">
+                    <h2 th:text="${post.title}">Post Title</h2>
+                    <p class="post-info">
+                        Posted by <span th:text="${post.user.username}">User</span> on <span th:text="${post.createdAt}">Date</span>
+                    </p>
+                </div>
+                <!-- Versteckter Post-Inhalt -->
+                <div class="post-content" style="display: none;">
+                    <p th:text="${post.content}">Post Content</p>
+
+                    <!-- Kommentare -->
+                    <div class="comments-section">
+                        <h3>Kommentare:</h3>
+                        <ul>
+                            <li th:each="comment : ${post.comments}">
+                                <p th:text="${comment.user.username}">Comment User</p>
+                                <p th:text="${comment.content}">Comment Content</p>
+                                <p th:text="${comment.createdDate}">Comment Date</p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Kommentarformular -->
+                    <div class="comment-form">
+                        <form th:action="@{/posts/comment}" method="post">
+                            <input type="hidden" name="postId" th:value="${post.id}" />
+
+                            <label for="comment-content">Dein Kommentar:</label>
+                            <textarea id="comment-content" name="content" rows="3" required></textarea>
+                            <button type="submit">Kommentieren</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<footer th:insert="fragments/footer :: footer"></footer>
+
+<script>
+    // Funktion zum Aufklappen des Post-Inhalts
+    function togglePost(postElement) {
+        const content = postElement.nextElementSibling;
+        if (content.style.display === "none") {
+            content.style.display = "block";
+        } else {
+            content.style.display = "none";
+        }
+    }
+
+    function openModal() {
+        document.getElementById("newPostModal").style.display = "block";
+    }
+
+    // Close the modal
+    function closeModal() {
+        document.getElementById("newPostModal").style.display = "none";
+    }
+
+    // Close the modal if user clicks outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById("newPostModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function toggleSearch() {
+        var searchBar = document.getElementById("searchBar");
+        if (searchBar.style.display === "none" || searchBar.style.display === "") {
+            searchBar.style.display = "block";
+        } else {
+            searchBar.style.display = "none";
+        }
+    }
+
+
+    function toggleSearch() {
+        var searchBar = document.getElementById("searchBar");
+        if (searchBar.classList.contains("open")) {
+            searchBar.classList.remove("open");  // Leiste schließen
+        } else {
+            searchBar.classList.add("open");  // Leiste öffnen
+        }
+    }
+
+
+</script>
+
+</body>
+</html>

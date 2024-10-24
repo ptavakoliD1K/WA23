@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<h1>Admin Dashboard</h1>
+<p>Total Users: <span th:text="${userCount}"></span></p>
+
+<h2>User Management</h2>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Current Role</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+            <form th:action="@{/admin/updateRole}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}" />
+                <select name="role">
+                    <option value="ROLE_ADMIN">Admin</option>
+                    <option value="ROLE_MODERATOR">Moderator</option>
+                    <option value="ROLE_USER">User</option>
+                </select>
+                <button type="submit">Update Role</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/deleteUser}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}" />
+                <button type="submit">Löschen</button>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

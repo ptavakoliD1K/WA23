@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startseite</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="navdiv">
+            <div class="name">WelfenHUB - Forum</div>
+            <ul>
+                <li><a th:href="@{/}" class="active">Startseite</a></li>
+                <li><a th:href="@{/forum}">Forum</a></li>
+                <li><a th:href="@{/news}">News</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/impressum}">Impressum</a></li>
+                <button th:onclick="|window.location.href='@{/logout}'|">Abmelden</button>
+            </ul>
+        </div>
+    </nav>
+</header>
