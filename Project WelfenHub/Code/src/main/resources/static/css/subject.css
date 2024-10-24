@@ -309,3 +309,65 @@ footer img {
     width: 80%;
 }
 }
+
+/* Container für den Suchknopf und den Plus-Button */
+.action-buttons-container {
+    display: flex;
+    align-items: center;  /* Elemente vertikal zentrieren */
+    position: fixed;
+    top: 160px;
+    right: 120px;
+}
+
+.new-post-button {
+    margin-right: 10px;  /* Abstand zwischen Plus-Button und Suchknopf */
+}
+
+/* Anpassung des Such-Containers */
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.search-bar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 0;  /* Startbreite 0 (versteckt) */
+    overflow: hidden;
+    transition: width 0.5s ease-in-out;  /* Animationseffekt */
+}
+
+.search-bar.open {
+    width: 300px;  /* Breite nach dem Öffnen */
+}
+
+.search-bar input {
+    padding: 5px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.search-bar button {
+    padding: 5px 10px;
+    background-color: #00274d;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.search-bar button:hover {
+    background-color: #3a3f50;
+}
+

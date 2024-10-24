@@ -167,4 +167,15 @@ public class PostController {
 
         return "redirect:/posts";
     }
+
+    @GetMapping("/search")
+    public String searchPosts(@RequestParam("query") String query, Model model) {
+        List<Post> posts = postService.searchPostsByTitle(query);
+        model.addAttribute("posts", posts);
+
+        // Display the search results in the same posts view
+        return "subject";  // Assuming this is your posts view template
+    }
+
+
 }

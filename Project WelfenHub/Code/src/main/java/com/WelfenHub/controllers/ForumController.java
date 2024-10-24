@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 import java.util.List;
 
@@ -52,4 +54,21 @@ public class ForumController {
         model.addAttribute("subject", subject);
         return "subject"; // Die Seite mit allen Posts zu einem bestimmten Kurs
     }
+
+    @GetMapping("/forum/{subject}/{semester}/course/{course}/search")
+    public String searchInCourse(@PathVariable String subject,
+                                 @PathVariable int semester,
+                                 @PathVariable String course,
+                                 @RequestParam("query") String query,
+                                 Model model) {
+        List<Post> posts = postService.searchPostsByTitle(query);
+        model.addAttribute("posts", posts);
+        model.addAttribute("course", course);
+        model.addAttribute("semester", semester);
+        model.addAttribute("subject", subject);
+
+        // Return the correct template, for example, "subject" if it displays the posts
+        return "subject";
+    }
+
 }

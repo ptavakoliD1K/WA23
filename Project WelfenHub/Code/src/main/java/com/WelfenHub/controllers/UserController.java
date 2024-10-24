@@ -41,6 +41,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/passwordreset")
+    public String showPasswordResetForm(Model model) {
+        model.addAttribute("user", new User()); // Assuming User is your model class
+        return "passwordreset";
+    }
 
     @GetMapping("/api/user-status")
     public Map<String, Object> getUserStatus() {

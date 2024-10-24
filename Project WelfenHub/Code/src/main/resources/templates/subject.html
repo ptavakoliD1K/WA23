@@ -26,14 +26,39 @@
                     </form>
                 </li>
             </ul>
-        </div>
+
     </nav>
 </header>
 
 <h1>Posts</h1>
 
-<!-- Plus button to open the modal -->
-<a class="new-post-button" onclick="openModal()">+</a>
+<!-- Container für den Suchknopf und den Plus-Button -->
+<div class="action-buttons-container">
+    <!-- Plus button to open the modal -->
+    <a class="new-post-button" onclick="openModal()">+</a>
+
+    <!-- Search button and bar -->
+    <div class="search-container">
+        <span class="search-icon" onclick="toggleSearch()">🔍</span>
+
+        <!-- Hidden Search Bar -->
+        <div id="searchBar" class="search-bar" style="display: none;">
+            <form th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
+                <input type="text" name="query" placeholder="Search by Title..." required/>
+                <input type="hidden" name="subject" th:value="${subject}"/>
+                <input type="hidden" name="semester" th:value="${semester}"/>
+                <input type="hidden" name="course" th:value="${course}"/>
+                <button type="submit">Search</button>
+            </form>
+
+            <!-- Reset Search Button -->
+            <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${semester}, course=${course})}"
+               class="reset-search-button">
+                Suche zurücksetzen
+            </a>
+        </div>
+    </div>
+</div>
 
 <!-- The Modal (Popup) for Creating a New Post -->
 <div id="newPostModal" class="modal">
@@ -128,6 +153,27 @@
             modal.style.display = "none";
         }
     }
+
+    function toggleSearch() {
+        var searchBar = document.getElementById("searchBar");
+        if (searchBar.style.display === "none" || searchBar.style.display === "") {
+            searchBar.style.display = "block";
+        } else {
+            searchBar.style.display = "none";
+        }
+    }
+
+
+    function toggleSearch() {
+        var searchBar = document.getElementById("searchBar");
+        if (searchBar.classList.contains("open")) {
+            searchBar.classList.remove("open");  // Leiste schließen
+        } else {
+            searchBar.classList.add("open");  // Leiste öffnen
+        }
+    }
+
+
 </script>
 
 </body>

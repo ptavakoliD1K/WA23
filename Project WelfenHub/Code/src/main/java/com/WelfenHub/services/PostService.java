@@ -86,4 +86,9 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    public List<Post> searchPostsByTitle(String query) {
+        return postRepository.findByTitleContainingIgnoreCase(query);
+    }
+
+
 }
