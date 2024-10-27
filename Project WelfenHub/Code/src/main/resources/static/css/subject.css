@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -6,8 +7,12 @@
     box-sizing: border-box;
 }
 
-html, body {
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
     height: 100%;
+    font-size: 14px;
 }
 
 body {
@@ -85,49 +90,51 @@ button:hover {
 /* Main Content Styles */
 h1 {
     text-align: center;
-    font-size: 36px;
+    font-size: 24px;
     color: #00274d;
     margin: 20px 0;
 }
 
-.posts-list {
+.main-content {
+    flex: 1;
     padding: 20px;
-    width: 100%; /* Posts sollen die volle Breite des Containers nutzen */
-    margin: 0; /* Kein automatischer Rand */
+    margin-left: 270px; /* Platz für die fixierte Sidebar */
+    background-color: #ffffff;
 }
 
-.post-box {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.posts-list {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.posts-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 20px;
+}
+
+.post-item {
+    background-color: white;
+    margin: 8px 0;
     padding: 15px;
-    margin-bottom: 20px;
-    width: calc(100% - 40px); /* Fast die volle Bildschirmbreite mit 20px Abstand links und rechts */
+    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    max-width: 1200px; /* Maximale Breite auf großen Bildschirmen */
-    margin: 0 auto 20px auto; /* Zentriert die Post-Boxen bei großen Bildschirmen */
+    width: 100%; /* Volle Breite */
 }
 
-.post-box:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.post-title {
-    font-size: 24px;
-    color: #333;
+.post-item h2 {
+    font-size: 18px;
+    color: #00274d;
     margin-bottom: 10px;
-    cursor: pointer;
 }
 
-.post-info {
-    font-size: 14px;
-    color: #777;
-    margin-top: 10px;
+.post-item p {
+    margin-bottom: 10px;
 }
 
-.post-content {
-    margin-top: 15px;
+.post-item span {
+    font-weight: bold;
 }
 
 .comments-section {
@@ -136,6 +143,17 @@ h1 {
 
 .comment-form {
     margin-top: 20px;
+    font-size: 14px;
+}
+
+.comment-toggle {
+    font-size: 18px;
+    background: #00274d;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    padding: 0;
+    margin-top: 8px;
 }
 
 textarea {
@@ -197,14 +215,13 @@ button:hover {
 
 /* Styling for the Plus Button */
 .new-post-button {
-    position: fixed;
     top: 160px;
     right: 20px;
     background-color: #00274d;
     color: white;
     font-size: 24px;
     padding: 4px 30px;
-    border-radius: 10px;
+    border-radius: 100px;
     cursor: pointer;
 }
 
@@ -214,7 +231,11 @@ footer {
     color: white;
     text-align: center;
     padding: 20px;
-    margin-top: auto;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 60px;
 }
 
 footer p {
@@ -261,94 +282,91 @@ footer img {
     }
 
     .posts-list ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
     li {
-    display: block; /* Jeder Post wird als Block-Element angezeigt */
-    margin-bottom: 20px; /* Abstand zwischen den Posts */
+        display: block; /* Jeder Post wird als Block-Element angezeigt */
+        margin-bottom: 20px; /* Abstand zwischen den Posts */
     }
 
     .post-box {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    width: 100%; /* Boxen nutzen die volle Breite */
-    max-width: 1200px; /* Maximale Breite für große Bildschirme */
-    margin: 0 auto; /* Zentriert die Post-Box auf der Seite */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        width: 100%; /* Boxen nutzen die volle Breite */
+        max-width: 1200px; /* Maximale Breite für große Bildschirme */
+        margin: 0 auto; /* Zentriert die Post-Box auf der Seite */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
     }
 
     .post-box:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .post-title {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 10px;
+        cursor: pointer;
+    }
+
+    .post-info {
+        font-size: 14px;
+        color: #777;
+        margin-top: 10px;
+    }
+
+    .post-content {
+        margin-top: 15px;
+    }
+
+    .modal-content {
+        width: 80%;
+    }
 }
 
-.post-title {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
-
-.post-info {
-    font-size: 14px;
-    color: #777;
-    margin-top: 10px;
-}
-
-.post-content {
-    margin-top: 15px;
-}
-
-
-.modal-content {
-    width: 80%;
-}
-}
-
-/* Container für den Suchknopf und den Plus-Button */
+/* Action Buttons */
 .action-buttons-container {
     display: flex;
-    align-items: center;  /* Elemente vertikal zentrieren */
-    position: fixed;
-    top: 160px;
-    right: 120px;
-}
-
-.new-post-button {
-    margin-right: 10px;  /* Abstand zwischen Plus-Button und Suchknopf */
-}
-
-/* Anpassung des Such-Containers */
-.search-container {
-    position: relative;
+    align-items: center;
+    justify-content: flex-end;
+    position: absolute;
+    right: 20px;
+    top: 120px; /* Fixed position below header */
 }
 
 .search-icon {
     font-size: 24px;
     cursor: pointer;
+    margin-right: 10px; /* Abstand zum Plus-Button */
+    }
+
+.search-container {
+position: relative;
 }
+
+
+.new-post-button {
+    margin-right: 10px;  /* Abstand zwischen Plus-Button und Suchknopf */
+    top: 120px;
+}
+
+
 
 .search-bar {
     position: absolute;
+    top: 30px;
     right: 0;
-    top: 0;
     background-color: white;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 0;  /* Startbreite 0 (versteckt) */
-    overflow: hidden;
-    transition: width 0.5s ease-in-out;  /* Animationseffekt */
-}
-
-.search-bar.open {
-    width: 300px;  /* Breite nach dem Öffnen */
 }
 
 .search-bar input {
@@ -371,3 +389,69 @@ footer img {
     background-color: #3a3f50;
 }
 
+/* Layout-Container für Sidebar und Hauptinhalt */
+.content-container {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 60px); /* Abzug für den Footer */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: #f4f4f9;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 155px; /* Align with header height */
+    left: 0;
+    height: calc(100vh - 90px); /* Full viewport minus header */
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Semester Section Styling */
+.semester-section {
+    margin-bottom: 20px;
+}
+
+.semester-section h3 {
+    font-size: 16px;
+    color: #00274d;
+    margin-bottom: 10px;
+}
+
+.semester-section ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.semester-section ul li,
+.course-list li {
+    margin-bottom: 8px;
+}
+
+.semester-section ul li a,
+.course-list li a {
+    color: #37445d;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+/* Hover Effects */
+.semester-section ul li a:hover,
+.course-list li a:hover {
+    color: #1a73e8; /* Adjusted to a unified blue tone */
+}
+
+/* Consistent Course List Styling */
+.course-list {
+    list-style-type: none;
+    padding: 0;
+}
