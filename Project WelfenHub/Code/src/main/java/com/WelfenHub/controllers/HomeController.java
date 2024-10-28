@@ -20,4 +20,9 @@ public class HomeController {
     public String adminDashboard() {
         return "admin";
     }
+
+    @GetMapping("/fileshare")
+    public String fileshare() {
+        return "fileshare";
+    }
 }
