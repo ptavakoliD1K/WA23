@@ -1,6 +1,6 @@
 package com.WelfenHub.controllers;
 
-import de.filetransfer.service.FileDTO;
+import com.WelfenHub.dto.FileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +33,7 @@ public class FileSearchController {
             @RequestParam("fachrichtung") String fachrichtung
         ) {
         List<FileDTO> results = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:C:/PorjektFH/Welfenhub2/Project WelfenHub/database/file_upload.db")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:./database/users.db")) {
             String sql = "SELECT id, name FROM files WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, "%" + query + "%");

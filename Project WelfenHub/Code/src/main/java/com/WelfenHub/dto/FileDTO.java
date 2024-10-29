@@ -1,4 +1,4 @@
-package de.filetransfer.service;
+package com.WelfenHub.dto;
 
 public class FileDTO {
     private Long id;

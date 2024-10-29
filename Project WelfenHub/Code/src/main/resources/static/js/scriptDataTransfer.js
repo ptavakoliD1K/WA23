@@ -12,6 +12,17 @@ const fachrichtungValue = document.getElementById('fachrichtung');
 const searchBar = document.getElementById('searchQuery');
 
 /**
+ * gets CSRF Token
+ */
+
+function getCsrfToken() {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    const token = match ? match[1] : null;
+    return token;
+}
+
+
+/**
  * updates files shown in the frontend
  * @param {*} files
  */
@@ -129,10 +140,9 @@ dropZone.addEventListener('drop', (e) => {
  */
 
 uploadForm.addEventListener('submit', (e) => {
-
     e.preventDefault();
     if (!fileUploadInput.files.length) {
-        alert('Please select files to upload');
+        alert('Bitte wähle Dateien zum Hochladen aus');
         return;
     }
 
@@ -147,6 +157,9 @@ uploadForm.addEventListener('submit', (e) => {
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `http://localhost:8080/upload`, true);
+
+    const csrfToken = getCsrfToken();
+    xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken); // Hier den Header setzen
 
     xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -164,11 +177,11 @@ uploadForm.addEventListener('submit', (e) => {
 
     xhr.onload = () => {
         if (xhr.status === 200) {
-            message.textContent = 'Files uploaded successfully!';
+            message.textContent = 'Dateien erfolgreich hochgeladen!';
             message.style.color = '#28a745';
             fetchFileList();
         } else {
-            message.textContent = 'File upload failed!';
+            message.textContent = 'Hochladen der Datei fehlgeschlagen!';
             message.style.color = '#dc3545';
         }
         progressBarContainer.style.display = 'none';
@@ -176,7 +189,7 @@ uploadForm.addEventListener('submit', (e) => {
 
     xhr.onerror = () => {
         console.error('Fehler:', xhr.responseText);
-        message.textContent = 'File upload failed!';
+        message.textContent = 'Hochladen der Datei fehlgeschlagen!';
         message.style.color = '#dc3545';
         progressBarContainer.style.display = 'none';
     };
@@ -184,13 +197,14 @@ uploadForm.addEventListener('submit', (e) => {
     xhr.send(formData);
 });
 
+
 /**
  * fetches file list from database
  * communicates with backend
  */
 
 async function fetchFileList() {
-    const selectedSemester = dropdownValue.value; // Hol die Werte hier
+    const selectedSemester = dropdownValue.value;
     const selectedModule = moduleValue.value;
     const selectedFachrichtung = fachrichtungValue.value;
 
@@ -229,34 +243,35 @@ function downloadFile(fileName) {
 
 async function deleteFile(fileName, selectedSemester, selectedModule, selectedFachrichtung) {
     if (confirm("Möchten Sie die Datei wirklich löschen?")) {
-
         if (!fileName) {
-                console.error('File name not found');
-                return;
-            }
+            console.error('File name not found');
+            return;
+        }
 
-            try {
-                const response = await fetch(`/delete-file?name=${encodeURIComponent(fileName)}&semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    const result = await response.text();
-                    console.log(result);
-                    fetchFileList();
-                } else {
-                    console.error('Failed to delete file');
+        try {
+            const response = await fetch(`/delete-file?name=${encodeURIComponent(fileName)}&semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-XSRF-TOKEN': getCsrfToken()
                 }
-            } catch (error) {
-                console.error('Error:', error);
-                console.error('An error occurred while deleting the file');
+            });
+
+            if (response.ok) {
+                const result = await response.text();
+                console.log(result);
+                fetchFileList();
+            } else {
+                console.error('Failed to delete file');
             }
+        } catch (error) {
+            console.error('Error:', error);
+            console.error('An error occurred while deleting the file');
+        }
     } else {
         console.log("Löschen abgebrochen");
     }
-
-
 }
+
 
 /**
  * searches files in the database

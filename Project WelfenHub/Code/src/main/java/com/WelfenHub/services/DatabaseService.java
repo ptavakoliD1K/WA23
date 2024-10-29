@@ -11,7 +11,7 @@ import java.sql.SQLException;
 @Service
 public class DatabaseService {
 
-    @Value("jdbc:sqlite:C:/PorjektFH/Welfenhub2/Project WelfenHub/database/file_upload.db")
+    @Value("${spring.datasource.url}")
     private String databaseUrl;
 
     /**
