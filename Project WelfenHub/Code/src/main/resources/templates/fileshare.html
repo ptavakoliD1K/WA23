@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>WelfenHUB - Fileshare</title>
+    <link rel="stylesheet" href="/css/fileshareStyle.css">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+</head>
+<body>
+<div class="container">
+
+    <h1>Dateien hochladen</h1>
+    <div class="drop_zone" id="drop_zone">
+        <p>Drag & Drop your file here or click to select a file</p>
+        <input type="file" id="file-input" name="file" accept=".pdf" multiple/>
+    </div>
+
+    <div class="chooseProps">
+        <select name="semester" id="semesterDropDown">
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+        </select>
+        <select name="module" id="moduleDropDown">
+            <option value="informatik">Informatik</option>
+            <option value="bwl">BWL</option>
+            <option value="softskills">Soft-Skills</option>
+        </select>
+        <select name="fachrichtung" id="fachrichtung">
+            <option value="bwl">Betriebswirtschaftslehre</option>
+            <option value="winf">Wirtschaftsinformatik</option>
+        </select>
+
+    </div>
+
+    <div class="file-list" id="file-list"></div>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-upload-input" style="display:none" multiple/>
+        <button type="submit" id="upButton">Upload</button>
+    </form>
+
+    <div class="progress-bar-container" id="progress-bar-container">
+        <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+
+    <h2>Hochgeladene Dateien</h2>
+    <div class="searchFunc" style="display: none;" id="searchBar">
+        <input type="text" id="searchQuery" placeholder="Dateinamen eingeben...">
+    </div>
+    <ul id="fileList">
+
+    </ul>
+
+    <div id="previewModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <span class="close">&times;</span>
+        </div>
+    </div>
+</div>
+
+<script src="/js/scriptDataTransfer.js"></script>
+</body>
+</html>

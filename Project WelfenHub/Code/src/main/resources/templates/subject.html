@@ -26,41 +26,82 @@
                     </form>
                 </li>
             </ul>
-
+        </div>
     </nav>
 </header>
 
-<h1>Posts</h1>
-
-<!-- Container für den Suchknopf und den Plus-Button -->
-<div class="action-buttons-container">
-    <!-- Plus button to open the modal -->
-    <a class="new-post-button" onclick="openModal()">+</a>
-
-    <!-- Search button and bar -->
-    <div class="search-container">
-        <span class="search-icon" onclick="toggleSearch()">🔍</span>
-
-        <!-- Hidden Search Bar -->
-        <div id="searchBar" class="search-bar" style="display: none;">
-            <form th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
-                <input type="text" name="query" placeholder="Search by Title..." required/>
-                <input type="hidden" name="subject" th:value="${subject}"/>
-                <input type="hidden" name="semester" th:value="${semester}"/>
-                <input type="hidden" name="course" th:value="${course}"/>
-                <button type="submit">Search</button>
-            </form>
-
-            <!-- Reset Search Button -->
-            <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${semester}, course=${course})}"
-               class="reset-search-button">
-                Suche zurücksetzen
-            </a>
+<div class="content-container">
+    <!-- Sidebar mit Semestern und Fächern -->
+    <aside class="sidebar">
+        <h2>Semester</h2>
+        <div class="semester-section">
+            <h3 onclick="toggleSemester(this)">1. Semester ▼</h3>
+            <ul class="course-list">
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_der_Computertechnik')}">Grundlagen der Computertechnik</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Engineering_Management')}">Engineering Management</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_Mathematik')}">Grundlagen Mathematik</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Technische_Kommunikation')}">Technische Kommunikation</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Soft_Skills')}">Soft Skills</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_sicherer_Programmierung')}">Grundlagen sicherer Programmierung</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Einstieg_Projektarbeit')}">Einstieg Projektarbeit</a></li>
+                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Betriebswirtschaftslehre_I')}">Betriebswirtschaftslehre I</a></li>
+            </ul>
         </div>
-    </div>
+    </aside>
+
+    <!-- Hauptinhalt (Posts) -->
+    <main class="main-content">
+        <h1>Posts</h1>
+
+        <div class="action-buttons-container">
+            <div class="search-container">
+                <span class="search-icon" onclick="toggleSearch()">🔍</span>
+                <a class="new-post-button" onclick="openModal()">+</a>
+                <div id="searchBar" class="search-bar" style="display: none;">
+                    <form th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
+                        <input type="text" name="query" placeholder="Search by Title..." required/>
+                        <input type="hidden" name="subject" th:value="${subject}"/>
+                        <input type="hidden" name="semester" th:value="${semester}"/>
+                        <input type="hidden" name="course" th:value="${course}"/>
+                        <button type="submit">Search</button>
+                    </form>
+                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${semester}, course=${course})}" class="reset-search-button">Suche zurücksetzen</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="posts-list">
+            <ul>
+                <li th:each="post : ${posts}" class="post-item">
+                    <h2 th:text="${post.title}">Post Title</h2>
+                    <p th:text="${post.content}">Post Content</p>
+                    <p>Posted by <span th:text="${post.user.username}">User</span> on <span th:text="${post.createdAt}">Date</span></p>
+                    <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
+                    <div class="comments-section" style="display: none;">
+                        <h3>Kommentare:</h3>
+                        <ul>
+                            <li th:each="comment : ${post.comments}">
+                                <p th:text="${comment.user.username}">Comment User</p>
+                                <p th:text="${comment.content}">Comment Content</p>
+                                <p th:text="${comment.createdDate}">Comment Date</p>
+                            </li>
+                        </ul>
+                        <div class="comment-form">
+                            <form th:action="@{/posts/comment}" method="post">
+                                <input type="hidden" name="postId" th:value="${post.id}" />
+                                <label for="comment-content">Dein Kommentar:</label>
+                                <textarea id="comment-content" name="content" rows="3" required></textarea>
+                                <button type="submit">Kommentieren</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </main>
 </div>
 
-<!-- The Modal (Popup) for Creating a New Post -->
+<!-- Modal for Creating a New Post -->
 <div id="newPostModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -81,59 +122,17 @@
     </div>
 </div>
 
-<div class="posts-list">
-    <ul>
-        <li th:each="post : ${posts}">
-            <!-- Post Titel zum Aufklappen -->
-            <div class="post-box">
-                <div class="post-title" onclick="togglePost(this)">
-                    <h2 th:text="${post.title}">Post Title</h2>
-                    <p class="post-info">
-                        Posted by <span th:text="${post.user.username}">User</span> on <span th:text="${post.createdAt}">Date</span>
-                    </p>
-                </div>
-                <!-- Versteckter Post-Inhalt -->
-                <div class="post-content" style="display: none;">
-                    <p th:text="${post.content}">Post Content</p>
-
-                    <!-- Kommentare -->
-                    <div class="comments-section">
-                        <h3>Kommentare:</h3>
-                        <ul>
-                            <li th:each="comment : ${post.comments}">
-                                <p th:text="${comment.user.username}">Comment User</p>
-                                <p th:text="${comment.content}">Comment Content</p>
-                                <p th:text="${comment.createdDate}">Comment Date</p>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Kommentarformular -->
-                    <div class="comment-form">
-                        <form th:action="@{/posts/comment}" method="post">
-                            <input type="hidden" name="postId" th:value="${post.id}" />
-
-                            <label for="comment-content">Dein Kommentar:</label>
-                            <textarea id="comment-content" name="content" rows="3" required></textarea>
-                            <button type="submit">Kommentieren</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </li>
-    </ul>
-</div>
-
 <footer th:insert="fragments/footer :: footer"></footer>
 
 <script>
-    // Funktion zum Aufklappen des Post-Inhalts
-    function togglePost(postElement) {
-        const content = postElement.nextElementSibling;
-        if (content.style.display === "none") {
-            content.style.display = "block";
+    function toggleComments(button) {
+        const commentsSection = button.nextElementSibling;
+        if (commentsSection.style.display === "none") {
+            commentsSection.style.display = "block";
+            button.textContent = "▲";
         } else {
-            content.style.display = "none";
+            commentsSection.style.display = "none";
+            button.textContent = "▼";
         }
     }
 
@@ -141,12 +140,10 @@
         document.getElementById("newPostModal").style.display = "block";
     }
 
-    // Close the modal
     function closeModal() {
         document.getElementById("newPostModal").style.display = "none";
     }
 
-    // Close the modal if user clicks outside of it
     window.onclick = function(event) {
         const modal = document.getElementById("newPostModal");
         if (event.target === modal) {
@@ -155,25 +152,20 @@
     }
 
     function toggleSearch() {
-        var searchBar = document.getElementById("searchBar");
-        if (searchBar.style.display === "none" || searchBar.style.display === "") {
-            searchBar.style.display = "block";
-        } else {
-            searchBar.style.display = "none";
-        }
+        const searchBar = document.getElementById("searchBar");
+        searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
     }
 
-
-    function toggleSearch() {
-        var searchBar = document.getElementById("searchBar");
-        if (searchBar.classList.contains("open")) {
-            searchBar.classList.remove("open");  // Leiste schließen
+     function toggleSemester(element) {
+        const courseList = element.nextElementSibling;
+        if (courseList.style.display === "none" || courseList.style.display === "") {
+            courseList.style.display = "block";
+            element.textContent = element.textContent.replace("▲", "▼");
         } else {
-            searchBar.classList.add("open");  // Leiste öffnen
+            courseList.style.display = "none";
+            element.textContent = element.textContent.replace("▼", "▲");
         }
     }
-
-
 </script>
 
 </body>
