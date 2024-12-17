@@ -22,6 +22,7 @@ public class FileSearchController {
      * @param semester
      * @param module
      * @param fachrichtung
+     * @param tag
      * @return
      */
 
@@ -30,16 +31,18 @@ public class FileSearchController {
             @RequestParam String query,
             @RequestParam("semester") String semester,
             @RequestParam("module") String module,
-            @RequestParam("fachrichtung") String fachrichtung
+            @RequestParam("fachrichtung") String fachrichtung,
+            @RequestParam("tag") String tag
         ) {
         List<FileDTO> results = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:./database/users.db")) {
-            String sql = "SELECT id, name FROM files WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ?";
+            String sql = "SELECT id, name FROM files WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, "%" + query + "%");
                 pstmt.setString(2, semester);
                 pstmt.setString(3, module);
                 pstmt.setString(4, fachrichtung);
+                pstmt.setString(5, tag);
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {
                         FileDTO fileDTO = new FileDTO();

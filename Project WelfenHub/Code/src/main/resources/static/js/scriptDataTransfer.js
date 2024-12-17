@@ -10,6 +10,14 @@ const dropdownValue = document.getElementById('semesterDropDown');
 const moduleValue = document.getElementById('moduleDropDown');
 const fachrichtungValue = document.getElementById('fachrichtung');
 const searchBar = document.getElementById('searchQuery');
+const title = document.getElementById('fileShareTitle');
+const tag = document.getElementById('tag');
+
+function hideProgressBar() {
+    if (progressBar.textContent == "0%") {
+        progressBarContainer.style.display = "none";
+    }
+}
 
 /**
  * gets CSRF Token
@@ -55,18 +63,18 @@ function displayFileList(files) {
 
         // Create a download button
         const downloadButton = document.createElement('button');
-        downloadButton.textContent = 'Download';
+        downloadButton.className = "fas fa-download";
         downloadButton.onclick = () => downloadFile(fileName);
 
         // Create a preview button
         const previewButton = document.createElement('button');
-        previewButton.textContent = "Vorschau";
+        previewButton.className = "fas fa-eye";
         previewButton.onclick = () => previewFile(fileName);
 
         // Create a delete button
         const deleteButton = document.createElement('button');
-        deleteButton.textContent = "Löschen";
-        deleteButton.onclick = () => deleteFile(fileName, dropdownValue.value, moduleValue.value, fachrichtungValue.value);
+        deleteButton.className = "fas fa-trash";
+        deleteButton.onclick = () => deleteFile(fileName, dropdownValue.value, moduleValue.value, fachrichtungValue.value, tag.value);
 
         // Append the file name and button to the div
         fileDiv.appendChild(fileText);
@@ -87,11 +95,13 @@ function updateSelectedValues() {
     const selectedSemester = dropdownValue.value;
     const selectedModule = moduleValue.value;
     const selectedFachrichtung = fachrichtungValue.value;
+    const selectedTag = tag.value;
 
     console.log('Selected Values:');
     console.log('Semester:', selectedSemester);
     console.log('Module:', selectedModule);
     console.log('Fachrichtung:', selectedFachrichtung);
+    console.log('Tag:', selectedTag);
 
     fetchFileList();
 }
@@ -102,6 +112,8 @@ dropdownValue.addEventListener('change', updateSelectedValues);
 moduleValue.addEventListener('change', updateSelectedValues);
 
 fachrichtungValue.addEventListener('change', updateSelectedValues);
+
+tag.addEventListener('change', updateSelectedValues);
 
 dropZone.addEventListener('click', () => {
     fileInput.click();
@@ -141,6 +153,7 @@ dropZone.addEventListener('drop', (e) => {
 
 uploadForm.addEventListener('submit', (e) => {
     e.preventDefault();
+
     if (!fileUploadInput.files.length) {
         alert('Bitte wähle Dateien zum Hochladen aus');
         return;
@@ -154,6 +167,7 @@ uploadForm.addEventListener('submit', (e) => {
     formData.append('semester', dropdownValue.value);
     formData.append('module', moduleValue.value);
     formData.append('fachrichtung', fachrichtungValue.value);
+    formData.append('tag', tag.value);
 
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `http://localhost:8080/upload`, true);
@@ -197,6 +211,22 @@ uploadForm.addEventListener('submit', (e) => {
     xhr.send(formData);
 });
 
+function onResize() {
+  const width = window.innerWidth;
+
+  if (width < 820) {
+    title.textContent = "WelfenHub";
+  } else {
+    title.textContent = "Welfenhub - wenn Welfen Helfen"
+  }
+}
+
+
+window.addEventListener("resize", onResize);
+
+onResize();
+
+
 
 /**
  * fetches file list from database
@@ -207,9 +237,10 @@ async function fetchFileList() {
     const selectedSemester = dropdownValue.value;
     const selectedModule = moduleValue.value;
     const selectedFachrichtung = fachrichtungValue.value;
+    const selectedTag = tag.value;
 
     try {
-        const response = await fetch(`/files/list?semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}`);
+        const response = await fetch(`/files/list?semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}&tag=${encodeURIComponent(selectedTag)}`);
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
@@ -238,10 +269,11 @@ function downloadFile(fileName) {
  * @param {*} selectedSemester
  * @param {*} selectedModule
  * @param {*} selectedFachrichtung
+ * @param {*} tag
  * @returns
  */
 
-async function deleteFile(fileName, selectedSemester, selectedModule, selectedFachrichtung) {
+async function deleteFile(fileName, selectedSemester, selectedModule, selectedFachrichtung, tag) {
     if (confirm("Möchten Sie die Datei wirklich löschen?")) {
         if (!fileName) {
             console.error('File name not found');
@@ -249,7 +281,7 @@ async function deleteFile(fileName, selectedSemester, selectedModule, selectedFa
         }
 
         try {
-            const response = await fetch(`/delete-file?name=${encodeURIComponent(fileName)}&semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}`, {
+            const response = await fetch(`/delete-file?name=${encodeURIComponent(fileName)}&semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}&tag=${encodeURIComponent(tag)}`, {
                 method: 'DELETE',
                 headers: {
                     'X-XSRF-TOKEN': getCsrfToken()
@@ -283,9 +315,10 @@ async function searchFiles() {
     const selectedSemester = dropdownValue.value;
     const selectedModule = moduleValue.value;
     const selectedFachrichtung = fachrichtungValue.value;
+    const selectedTag = tag.value;
 
     try {
-        const response = await fetch(`/api/search?query=${encodeURIComponent(query)}&semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}`);
+        const response = await fetch(`/api/search?query=${encodeURIComponent(query)}&semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}&tag=${encodeURIComponent(selectedTag)}`);
         const results = await response.json();
         displayFileList(results.map(file => file.name));
     } catch (error) {
@@ -360,6 +393,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
     };
 });
 
+fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) {
+        const MAX_FILE_NAME_LENGTH = 30; // Maximale Länge des Dateinamens
+        const validFiles = []; // Liste für gültige Dateien
+
+        // Überprüfen der Dateinamen und nur gültige hinzufügen
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const fileName = fileInput.files[i].name;
+            if (fileName.length <= MAX_FILE_NAME_LENGTH) {
+                validFiles.push(fileInput.files[i]); // Nur gültige Dateien hinzufügen
+            } else {
+                alert(`Der Dateiname "${fileName}" ist zu lang. Maximal ${MAX_FILE_NAME_LENGTH} Zeichen sind erlaubt.`);
+            }
+        }
+
+        // Setze nur gültige Dateien in das fileUploadInput
+        if (validFiles.length > 0) {
+            const dataTransfer = new DataTransfer(); // Neues DataTransfer-Objekt erstellen
+            validFiles.forEach(file => dataTransfer.items.add(file));
+            fileUploadInput.files = dataTransfer.files; // Nur gültige Dateien setzen
+            updateFileList(validFiles); // Liste mit gültigen Dateien aktualisieren
+        } else {
+            fileUploadInput.files = new DataTransfer().files; // Input zurücksetzen
+            fileList.innerHTML = ''; // Leere Liste anzeigen
+        }
+    }
+});
+
+
+
 document.addEventListener('DOMContentLoaded', updateSelectedValues);
+document.addEventListener('DOMContentLoaded', hideProgressBar);
 
 

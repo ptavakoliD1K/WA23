@@ -4,15 +4,31 @@
     <meta charset="UTF-8">
     <title>WelfenHUB - Fileshare</title>
     <link rel="stylesheet" href="/css/fileshareStyle.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+
+<div class="header">
+    <h1 id="fileShareTitle">WelfenHub - wenn Welfen Helfen</h1>
+    <a href="">Stundenplan</a>
+    <a href="">Forum</a>
+    <a href="">Skripte</a>
+    <button type="submit" id="signOut">Abmelden</button>
+    <div class="burgerMenuSum">
+        <div class="burgerMenu"></div>
+        <div class="burgerMenu"></div>
+        <div class="burgerMenu"></div>
+    </div>
+</div>
+
 <div class="container">
 
-    <h1>Dateien hochladen</h1>
+    <h1>Fileshare</h1>
     <div class="drop_zone" id="drop_zone">
-        <p>Drag & Drop your file here or click to select a file</p>
+        <p>Drag & Drop Deine Dateien hier</p>
         <input type="file" id="file-input" name="file" accept=".pdf" multiple/>
     </div>
 
@@ -30,6 +46,11 @@
             <option value="bwl">BWL</option>
             <option value="softskills">Soft-Skills</option>
         </select>
+        <select name="tag" id="tag">
+            <option value="script">Skript</option>
+            <option value="studyNotes">Lernzettel</option>
+            <option value="conclusion">Zusammenfassung</option>
+        </select>
         <select name="fachrichtung" id="fachrichtung">
             <option value="bwl">Betriebswirtschaftslehre</option>
             <option value="winf">Wirtschaftsinformatik</option>
@@ -37,10 +58,13 @@
 
     </div>
 
+
+    <h3>Ausgewählte Dateien</h3>
     <div class="file-list" id="file-list"></div>
+
     <form id="upload-form" enctype="multipart/form-data">
         <input type="file" name="file" id="file-upload-input" style="display:none" multiple/>
-        <button type="submit" id="upButton">Upload</button>
+        <button type="submit" id="upButton">Hochladen</button>
     </form>
 
     <div class="progress-bar-container" id="progress-bar-container">
@@ -49,8 +73,6 @@
 
     <div class="message" id="message"></div>
 
-
-    <h2>Hochgeladene Dateien</h2>
     <div class="searchFunc" style="display: none;" id="searchBar">
         <input type="text" id="searchQuery" placeholder="Dateinamen eingeben...">
     </div>
@@ -64,6 +86,12 @@
         </div>
     </div>
 </div>
+
+<footer xmlns:th="http://www.w3.org/1999/xhtml">
+    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a></p>
+    <img th:src="@{/images/WA_logo_white.png}" alt="WelfenHub Logo">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+</footer>
 
 <script src="/js/scriptDataTransfer.js"></script>
 </body>

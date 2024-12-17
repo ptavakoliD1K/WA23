@@ -42,11 +42,12 @@ public class FileController {
     public ResponseEntity<String> getFileList(
             @RequestParam("semester") String semester,
             @RequestParam("module") String module,
-            @RequestParam("fachrichtung") String fachrichtung
+            @RequestParam("fachrichtung") String fachrichtung,
+            @RequestParam("tag") String tag
     ) {
         List<String> fileNames;
         try {
-            fileNames = getFileNamesFromDatabase(semester, module, fachrichtung);
+            fileNames = getFileNamesFromDatabase(semester, module, fachrichtung, tag);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>("{\"error\": \"Fehler beim Abrufen der Dateiliste\"}", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -90,19 +91,21 @@ public class FileController {
      * @param semester
      * @param module
      * @param fachrichtung
+     * @param tag
      * @throws SQLException
      * @throws ClassNotFoundException
      */
 
-    private List<String> getFileNamesFromDatabase(String semester, String module, String fachrichtung) throws SQLException, ClassNotFoundException {
+    private List<String> getFileNamesFromDatabase(String semester, String module, String fachrichtung, String tag) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         List<String> fileNames = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(DB_URL)) {
-            String selectSQL = "SELECT name FROM files WHERE semester = ? AND module = ? AND fachrichtung = ?";
+            String selectSQL = "SELECT name FROM files WHERE semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, semester);
                 pstmt.setString(2, module);
                 pstmt.setString(3, fachrichtung);
+                pstmt.setString(4, tag);
 
                 try (ResultSet rs = pstmt.executeQuery()) {
                     while (rs.next()) {

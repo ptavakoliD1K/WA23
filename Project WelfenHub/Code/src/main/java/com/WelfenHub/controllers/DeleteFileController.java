@@ -18,6 +18,7 @@ public class DeleteFileController {
      * @param semester
      * @param module
      * @param fachrichtung
+     * @param tag
      * @return
      */
 
@@ -26,10 +27,11 @@ public class DeleteFileController {
             @RequestParam String name,
             @RequestParam("semester") String semester,
             @RequestParam("module") String module,
-            @RequestParam("fachrichtung") String fachrichtung
+            @RequestParam("fachrichtung") String fachrichtung,
+            @RequestParam("tag") String tag
 
     ) {
-        boolean result = databaseService.deleteFile(name, semester, module, fachrichtung);
+        boolean result = databaseService.deleteFile(name, semester, module, fachrichtung, tag);
         return result ? "File deleted successfully" : "File not found";
     }
 }

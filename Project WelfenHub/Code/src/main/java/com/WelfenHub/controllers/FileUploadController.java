@@ -26,6 +26,7 @@ public class FileUploadController {
      * @param semester
      * @param module
      * @param fachrichtung
+     * @param tag
      * @return
      */
 
@@ -34,14 +35,15 @@ public class FileUploadController {
             @RequestParam("files[]") MultipartFile[] files,
             @RequestParam("semester") String semester,
             @RequestParam("module") String module,
-            @RequestParam("fachrichtung") String fachrichtung
+            @RequestParam("fachrichtung") String fachrichtung,
+            @RequestParam("tag") String tag
     ) {
         System.out.println("Test");
         try {
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
                 byte[] fileBytes = inputStreamToByteArray(file.getInputStream());
-                saveFileToDatabase(fileName, fileBytes, semester, module, fachrichtung);
+                saveFileToDatabase(fileName, fileBytes, semester, module, fachrichtung, tag);
             }
             return ResponseEntity.status(HttpStatus.OK).body("Dateien erfolgreich hochgeladen!");
         } catch (Exception e) {
@@ -74,18 +76,20 @@ public class FileUploadController {
      * @param semester
      * @param module
      * @param fachrichtung
+     * @param tag
      * @throws SQLException
      */
 
-    private void saveFileToDatabase(String fileName, byte[] fileBytes, String semester, String module, String fachrichtung) throws SQLException {
+    private void saveFileToDatabase(String fileName, byte[] fileBytes, String semester, String module, String fachrichtung, String tag) throws SQLException {
         try (Connection conn = dataSource.getConnection()) {
-            String insertSQL = "INSERT INTO files (name, content, semester, module, fachrichtung) VALUES (?, ?, ?, ?, ?)";
+            String insertSQL = "INSERT INTO files (name, content, semester, module, fachrichtung, tag) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
                 pstmt.setString(1, fileName);
                 pstmt.setBytes(2, fileBytes);
                 pstmt.setString(3, semester);
                 pstmt.setString(4, module);
                 pstmt.setString(5, fachrichtung);
+                pstmt.setString(6, tag);
                 pstmt.executeUpdate();
             }
         }

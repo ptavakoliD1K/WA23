@@ -4,114 +4,112 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4e0737b7-8b49-49ee-8002-2491f590ab8d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/config/WebConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/WA_logo_white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/Startseite_test.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Ereignisse.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Fileshare.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Forum.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/images/Gruppenchat.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/fragments/footer.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/fragments/header.html" afterDir="false" />
+    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Fixed Filesharing with CSRF">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/DeleteFileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/DeleteFileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileSearchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileSearchController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileUploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileUploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/DatabaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/fileshareStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/fileshareStyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptDataTransfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptDataTransfer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/fileshare.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/fileshare.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/database/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/database/users.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;Eikmans&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/ptavakoliD1K/WA23.git&quot;,
-    &quot;accountId&quot;: &quot;0887fb6b-2ec1-4a88-a223-45a7f1339c8b&quot;
-  }
-}</component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$/WA23" value="developement" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 0
+  &quot;associatedIndex&quot;: 4
 }</component>
-  <component name="ProjectId" id="2heQ1cWG5gvSYErXFjgxKrTKPFF" />
+  <component name="ProjectId" id="2o42BOKYp746F5BVONz2mxTQGea" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JavaScript Debug.files.html.executor": "Run",
-    "JavaScript Debug.login.html.executor": "Run",
-    "JavaScript Debug.register.html.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "developement",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/Code/src/main/resources/static",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.DatabaseInitializer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Welfenhub.executor&quot;: &quot;Run&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;developement&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/PorjektFH/Welfenhub2/Project WelfenHub&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub\Code\src\main\resources\static" />
+      <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\database" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub\Code\src\main\resources\static\images" />
-      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub\Code\src\main\resources\static\css" />
-      <recent name="C:\Users\eikef\Desktop\maventestneu\Project WelfenHub" />
-      <recent name="C:\Users\eikef\Desktop\maventestneu\demo\src\main\resources\static\images" />
-      <recent name="C:\Users\eikef\Desktop\maventestneu\demo\src\main\resources\static\css" />
+      <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\database" />
+      <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\Code\src\main\java\com\WelfenHub" />
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="login.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/maventestneu/demo/src/main/resources/templates/login.html" useBuiltInWebServerPort="true">
-      <method v="2" />
+    <configuration name="Welfenhub" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.WelfenHub.MyprojectApplication" />
+      <module name="WelfenHub" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Project WelfenHub" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="4e0737b7-8b49-49ee-8002-2491f590ab8d" name="Changes" comment="" />
-      <created>1717951849370</created>
+      <changelist id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="" />
+      <created>1730114390440</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1717951849370</updated>
-      <workItem from="1717951850521" duration="266000" />
-      <workItem from="1717952126445" duration="4929000" />
-      <workItem from="1717970144650" duration="3720000" />
-      <workItem from="1718017857907" duration="4089000" />
-      <workItem from="1718125866870" duration="7911000" />
-      <workItem from="1718208654498" duration="6033000" />
-      <workItem from="1718794734974" duration="2334000" />
-      <workItem from="1719146072112" duration="33000" />
-      <workItem from="1720438295708" duration="5427000" />
-      <workItem from="1721320964871" duration="23000" />
-      <workItem from="1721765784321" duration="8000" />
+      <updated>1730114390440</updated>
     </task>
+    <task id="LOCAL-00001" summary="Added FileSharing to Main Project">
+      <option name="closed" value="true" />
+      <created>1730126037314</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1730126037314</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed Filesharing with CSRF">
+      <option name="closed" value="true" />
+      <created>1730200142005</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730200142005</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -123,5 +121,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added FileSharing to Main Project" />
+    <MESSAGE value="Fixed Filesharing with CSRF" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Filesharing with CSRF" />
   </component>
 </project>

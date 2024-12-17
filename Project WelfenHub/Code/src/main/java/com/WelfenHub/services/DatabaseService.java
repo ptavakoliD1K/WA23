@@ -20,11 +20,12 @@ public class DatabaseService {
      * @param semester
      * @param module
      * @param fachrichtung
+     * @param tag
      * @return
      */
 
-    public boolean deleteFile(String name, String semester, String module, String fachrichtung) {
-        String sql = "DELETE FROM files WHERE name = ? AND semester = ? AND module = ? AND fachrichtung = ?";
+    public boolean deleteFile(String name, String semester, String module, String fachrichtung, String tag) {
+        String sql = "DELETE FROM files WHERE name = ? AND semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
 
         try (Connection conn = DriverManager.getConnection(databaseUrl);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -33,6 +34,7 @@ public class DatabaseService {
             pstmt.setString(2, semester);
             pstmt.setString(3, module);
             pstmt.setString(4, fachrichtung);
+            pstmt.setString(5, tag);
             int affectedRows = pstmt.executeUpdate();
 
             return affectedRows > 0;
