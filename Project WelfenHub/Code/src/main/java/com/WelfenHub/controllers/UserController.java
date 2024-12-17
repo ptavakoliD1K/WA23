@@ -2,6 +2,7 @@ package com.WelfenHub.controllers;
 
 import com.WelfenHub.models.User;
 import com.WelfenHub.services.UserService;
+import com.WelfenHub.services.PasswordResetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
@@ -40,12 +41,39 @@ public class UserController {
             return "login";  // Redirect back to login page with error message
         }
     }
+    // Alles für passwordreset ;)
+    private final PasswordResetService passwordResetService;
+
+    @Autowired
+    public UserController (PasswordResetService passwordResetService) {
+        this.passwordResetService = passwordResetService;
+    }
 
     @GetMapping("/passwordreset")
     public String showPasswordResetForm(Model model) {
         model.addAttribute("user", new User()); // Assuming User is your model class
         return "passwordreset";
     }
+   /* @PostMapping("/passwordreset")
+    public String passwordResetProcess(Model model) {
+        String output= "";
+        User user = UserRepository.findByEmail(user.getEmail());
+        if (user != null) {
+            output = userService.sendEmail();
+        }
+    }*/
+
+   @PostMapping("/passwordResetProcess") // /passwordResetProcess //
+   public String passwordResetProcess(@RequestParam("eingabe") String eingabe, Model model) {
+
+       // Nutzung der Eingabe in der Java-Funktion
+       String mailStatus = passwordResetService.sendPasswordResetEmail(eingabe);
+
+       model.addAttribute("mailStatus", mailStatus); //eingabe
+
+       return "passwordreset";
+   }
+
 
     @GetMapping("/api/user-status")
     public Map<String, Object> getUserStatus() {
