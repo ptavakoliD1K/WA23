@@ -13,6 +13,11 @@ const searchBar = document.getElementById('searchQuery');
 const title = document.getElementById('fileShareTitle');
 const tag = document.getElementById('tag');
 
+
+/**
+ * Hides progress-bar if Progress is 0%
+ */
+
 function hideProgressBar() {
     if (progressBar.textContent == "0%") {
         progressBarContainer.style.display = "none";
@@ -57,6 +62,7 @@ function displayFileList(files) {
     files.forEach(fileName => {
         // Create a new div for each file
         const fileDiv = document.createElement('div');
+        const lineDiv = document.createElement('div')
 
         // Create text for the file name
         const fileText = document.createTextNode(fileName);
@@ -76,6 +82,9 @@ function displayFileList(files) {
         deleteButton.className = "fas fa-trash";
         deleteButton.onclick = () => deleteFile(fileName, dropdownValue.value, moduleValue.value, fachrichtungValue.value, tag.value);
 
+        // set class-name of lineDiv
+        lineDiv.className = "lineDiv"
+
         // Append the file name and button to the div
         fileDiv.appendChild(fileText);
         fileDiv.appendChild(downloadButton);
@@ -84,6 +93,7 @@ function displayFileList(files) {
 
         // Append the div to the file list element
         fileListElement.appendChild(fileDiv);
+        fileListElement.appendChild(lineDiv);
     });
 }
 
@@ -114,6 +124,10 @@ moduleValue.addEventListener('change', updateSelectedValues);
 fachrichtungValue.addEventListener('change', updateSelectedValues);
 
 tag.addEventListener('change', updateSelectedValues);
+
+/**
+ * Event-Listener if anything on the site changes
+ */
 
 dropZone.addEventListener('click', () => {
     fileInput.click();
@@ -210,6 +224,10 @@ uploadForm.addEventListener('submit', (e) => {
 
     xhr.send(formData);
 });
+
+/**
+ * Changes title of header if width of site changes
+ */
 
 function onResize() {
   const width = window.innerWidth;
@@ -378,6 +396,10 @@ function showSearchBar() {
     searchBar.style.display = 'block';
 }
 
+/**
+ * Event-Listener if site is fully loaded
+ */
+
 document.addEventListener('DOMContentLoaded', (event) => {
 
     // Modal schließen
@@ -395,7 +417,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 fileInput.addEventListener('change', () => {
     if (fileInput.files.length) {
-        const MAX_FILE_NAME_LENGTH = 30; // Maximale Länge des Dateinamens
+        const MAX_FILE_NAME_LENGTH = 60; // Maximale Länge des Dateinamens
         const validFiles = []; // Liste für gültige Dateien
 
         // Überprüfen der Dateinamen und nur gültige hinzufügen

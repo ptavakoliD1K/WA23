@@ -3,7 +3,7 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .header {
@@ -41,7 +41,7 @@ body {
     cursor: pointer;
     border: none;
     background-color: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     font-size: 20px;
 }
@@ -65,7 +65,7 @@ body {
     margin-right: 20px;
     display: grid;
     grid-template-rows: auto;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1.75fr;
 }
 
 .chooseProps {
@@ -78,7 +78,7 @@ body {
 
 .chooseProps select{
     border: none;
-    width: 60%;
+    width: 80%;
     height: 50px;
     color: black;
     background-color: #bcd6ff;
@@ -87,7 +87,7 @@ body {
     margin-top: 10px;
 }
 
-.chooseProps:active, .chooseProps:focused, .chooseProps:focus-within, .chooseProps:target, chooseProps:focus-visible {
+.chooseProps:active, .chooseProps:focus, .chooseProps:focus-within, .chooseProps:target, chooseProps:focus-visible {
     border: none;
     outline: none;
 }
@@ -100,16 +100,16 @@ body {
 .drop_zone {
     grid-column: 1;
     grid-row: 2;
-    width: 60%;
+    width: 80%;
 }
 
 .drop_zone p {
-    border: solid;
-    border-radius: 3px;
+    border-radius: 5px;
     text-align: center;
     box-sizing: border-box;
     padding-top: 25px;
     height: 75px;
+    border: 2px solid #c7c5c5;
 }
 
 .drop_zone p:hover {
@@ -126,7 +126,13 @@ body {
 #progress-bar-container {
     grid-column: 1;
     grid-row: 4;
-    margin-top: 50px;
+    display: none;
+    width: 60%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+       margin-top: 10px;
+    padding: 2px;
+    overflow: hidden;
 }
 
 #message {
@@ -135,32 +141,21 @@ body {
     margin-top: 30px;
 }
 
-#progress-bar-container {
-    display: none; /* Wird erst sichtbar, wenn der Upload beginnt */
-    width: 60%;
-    background-color: #f3f3f3;
-    border-radius: 5px;
-    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
-    margin-top: 10px;
-    padding: 2px;
-    overflow: hidden;
-}
-
 #progress-bar {
     height: 20px;
-    width: 0%; /* Fortschritt wird durch JavaScript gesteuert */
-    background-color: #007bff; /* Blau, kann angepasst werden */
+    width: 0%;
+    background-color: #007bff;
     border-radius: 5px;
     text-align: center;
     line-height: 20px;
     color: white;
     font-weight: bold;
-    transition: width 0.2s ease-in-out; /* Sanfte Animation */
+    transition: width 0.2s ease-in-out;
 }
 
 h3 {
     grid-column: 1;
-    grid:row: 5;
+    grid-row: 5;
 }
 
 #file-list {
@@ -169,7 +164,7 @@ h3 {
 }
 
 #file-list p {
-    margin-top: -20px;
+    margin-top: -15px;
 }
 
 .container h2 {
@@ -189,6 +184,11 @@ h3 {
     margin-left: 0px;
     padding-left: 0px;
     margin-top: 60px;
+}
+
+.lineDiv {
+    background-color: #c7c5c5;
+    height: 1px;
 }
 
 #fileList div {
@@ -220,7 +220,7 @@ h3 {
     padding: 8px 16px;
     border-radius: 4px;
     color: #fff;
-    transition: transform 0.1;
+    transition: transform 0.1s;
     outline: none;
     margin-top: 10px
 }
@@ -244,13 +244,13 @@ h3 {
     border: none;
 }
 
-#searchQuery:hover, #searchQuery:focused {
+#searchQuery:hover, #searchQuery:focus {
     border: none;
     outline: none;
 }
 
 footer {
-    margin-top: 110px !important;
+    margin-top: 520px !important;
 }
 
 .modal {
