@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Test">
+    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Final improvements of FileShare">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/fileshareStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/fileshareStyle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptDataTransfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptDataTransfer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/database/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/database/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/passwordreset.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/passwordreset.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="JavaScript File" />
         <option value="Class" />
       </list>
     </option>
@@ -73,9 +77,12 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.DatabaseInitializer.executor": "Run",
+    "Application.PasswordResetLinkService.executor": "Run",
     "Application.Welfenhub.executor": "Run",
+    "Attach to process.pid 3108.executor": "ProcessAttachDebug",
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
     "git-widget-placeholder": "developement",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/PorjektFH/Welfenhub2/Project WelfenHub",
@@ -96,6 +103,19 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Welfenhub">
+    <configuration name="PasswordResetLinkService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.WelfenHub.services.PasswordResetLinkService" />
+      <module name="WelfenHub" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.WelfenHub.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Welfenhub" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -128,8 +148,14 @@
     </configuration>
     <list>
       <item itemvalue="Application.Welfenhub" />
+      <item itemvalue="Application.PasswordResetLinkService" />
       <item itemvalue="Spring Boot.MyprojectApplication" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PasswordResetLinkService" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -156,7 +182,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730200142005</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1734595396913</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734595396913</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,6 +211,17 @@
     <MESSAGE value="Added FileSharing to Main Project" />
     <MESSAGE value="Fixed Filesharing with CSRF" />
     <MESSAGE value="Test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Test" />
+    <MESSAGE value="Final improvements of FileShare" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final improvements of FileShare" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ClassCastException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

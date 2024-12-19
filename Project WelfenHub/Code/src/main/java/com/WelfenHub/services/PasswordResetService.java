@@ -1,60 +1,84 @@
 package com.WelfenHub.services;
 
-import com.WelfenHub.models.User;
-import com.WelfenHub.models.UserRole;
-import com.WelfenHub.repositories.UserRepository;
-import com.WelfenHub.repositories.RoleRepository;
-import com.WelfenHub.models.Role;
+import jakarta.mail.Authenticator;
+import jakarta.mail.BodyPart;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.Multipart;
+import jakarta.mail.PasswordAuthentication;
+import jakarta.mail.Session;
+import jakarta.mail.Transport;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.Optional;
 
-import java.util.Collections;
-import java.util.List;
-
-/////////////////////////////
-
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
-import javax.mail.Authenticator;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
+/**
+ *  starts email-sending-process, creates e-mail and sends it for password reset
+ */
 
 @Service
 public class PasswordResetService {
 
-    private static final String MY_ACCOUNT = "welfenhub@gmail.com";
-    private static final String MY_PASSWORD = "bkpf bewr lvfh cskf"; // Google-App Passwort
-    private static final String TEST_RECIPIENT = "simon.pollak@stud.welfenakademie.de";
+    @Value("${spring.mail.username}")
+    private String myAccount; // Google-Account e-mail
 
-    public String sendPasswordResetEmail(String empfaenger) {
-        try {
-            sendEmail(TEST_RECIPIENT);  // empfaenger
-            return "E-Mail erfolgreich versendet!";
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return "Fehler beim Senden der E-Mail.";
+    @Value("${spring.mail.password}")
+    private String myPassword; // Google-Account password
+
+    @Autowired
+    private DataSource dataSource;
+
+    /**
+     * checks if email is in database and starts sending process
+     * @param receiver
+     * @throws SQLException
+     */
+
+    public void sendPasswordResetEmail(String receiver) throws SQLException {
+
+        int result = 0;
+
+        try(Connection conn = dataSource.getConnection()) {
+            String insertSQL = "SELECT COUNT(*) FROM user WHERE email = ?";
+            try(PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                pstmt.setString(1, receiver);
+                try(ResultSet rs = pstmt.executeQuery()) {
+                    result = rs.getInt(1);
+                }
+            }
+        }
+
+        if (result != 1) {
+            System.out.println("E-mail is not in the database");
+            return;
+        } else {
+            try {
+                sendEmail(receiver);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void sendEmail(String empfaenger) throws MessagingException {
-        // E-Mail-Einstellungen konfigurieren
+    /**
+     * sends mail to receiver with information of e-mail client of Google
+     * @param receiver
+     * @throws MessagingException
+     */
+
+    private void sendEmail(String receiver) throws MessagingException {
+        // configure e-mail options
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
@@ -64,26 +88,35 @@ public class PasswordResetService {
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(MY_ACCOUNT, MY_PASSWORD);
+                return new PasswordAuthentication(myAccount, myPassword);
             }
         });
 
-        // E-Mail erstellen und senden
-        Message message = prepareMessage(session, MY_ACCOUNT, empfaenger);
+        // create and send email
+        Message message = prepareMessage(session, myAccount, receiver);
         Transport.send(message);
-        System.out.println("E-Mail erfolgreich versendet an " + empfaenger);
+        System.out.println("E-Mail erfolgreich versendet an " + receiver);
     }
 
-    private Message prepareMessage(Session session, String myAccount, String empfaenger) throws MessagingException {
+    /**
+     * Creates message and content of e-mail, which is sent
+     * @param session
+     * @param myAccount
+     * @param receiver
+     * @return email
+     * @throws MessagingException
+     */
+
+    private Message prepareMessage(Session session, String myAccount, String receiver) throws MessagingException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccount));
-        message.setRecipient(Message.RecipientType.TO, new InternetAddress(empfaenger));
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
         message.setSubject("Passwort zurücksetzen");
 
         // Erstellen und Hinzufügen des Inhalts der E-Mail
         Multipart multipart = new MimeMultipart();
         BodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setText("Hier klicken, um das Passwort zurückzusetzen.");
+        messageBodyPart.setText("Mit dem folgenden Link können Sie Ihr Passwort zurücksetzen: " + PasswordResetLinkService.linkGenerator());
         multipart.addBodyPart(messageBodyPart);
         message.setContent(multipart);
 

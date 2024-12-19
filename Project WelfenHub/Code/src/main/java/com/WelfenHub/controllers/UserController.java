@@ -14,6 +14,8 @@ import org.springframework.ui.Model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,13 +65,18 @@ public class UserController {
         }
     }*/
 
+    /**
+     * Gets email from front-end and sends it to back-end
+     * @param email
+     * @return "passwordreset", relevant for thymeleaf
+     * @throws SQLException
+     */
    @PostMapping("/passwordResetProcess") // /passwordResetProcess //
-   public String passwordResetProcess(@RequestParam("eingabe") String eingabe, Model model) {
-
+   public String passwordResetProcess(
+           @RequestParam("email") String email
+   ) throws SQLException {
        // Nutzung der Eingabe in der Java-Funktion
-       String mailStatus = passwordResetService.sendPasswordResetEmail(eingabe);
-
-       model.addAttribute("mailStatus", mailStatus); //eingabe
+       passwordResetService.sendPasswordResetEmail(email);
 
        return "passwordreset";
    }
