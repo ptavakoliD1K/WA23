@@ -28,7 +28,7 @@ import java.util.List;
 @RequestMapping("/files")
 public class FileController {
 
-    private static final String DB_URL = "jdbc:sqlite:./database/users.db";
+    private static final String DB_URL = "jdbc:sqlite:C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/database/users.db";
 
     /**
      * gets file list, calls getFileNamesFromDatabase()

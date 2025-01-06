@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import java.util.Map;
+import java.util.List;
 
 
 import java.util.List;
@@ -24,20 +26,11 @@ public class ForumController {
         return "start"; // Die Startseite mit Fachauswahl
     }
 
-    // Seite mit Semesterübersicht für ein Fach
     @GetMapping("/forum/{subject}")
     public String getSemesterOverview(@PathVariable String subject, Model model) {
         model.addAttribute("subject", subject);
-
-        // Beispiel für das Abrufen des zuletzt kommentierten Posts
-        Post latestPost = postService.getLatestPostForSubject(subject);
-        if (latestPost != null) {
-            model.addAttribute("latestPost", latestPost);
-        } else {
-            model.addAttribute("latestPost", new Post()); // Setze ein leeres Post-Objekt als Fallback
-        }
-
-        return "semester-overview"; // Die Seite mit der Semesterübersicht
+        model.addAttribute("coursesBySemester", getCoursesForSubject(subject));
+        return "semester-overview";
     }
 
     // Zeige alle Posts für ein bestimmtes Fach und Semester
@@ -52,7 +45,36 @@ public class ForumController {
         model.addAttribute("course", course);
         model.addAttribute("semester", semester);
         model.addAttribute("subject", subject);
+
+        // Lade die Fächer für das aktuelle Semester und alle Semester
+        Map<Integer, List<String>> coursesBySemester = getCoursesForSubject(subject);
+        model.addAttribute("sidepanelCourses", coursesBySemester.get(semester)); // Kurse des aktuellen Semesters
+        model.addAttribute("coursesBySemester", coursesBySemester); // Alle Semester
+
         return "subject"; // Die Seite mit allen Posts zu einem bestimmten Kurs
+    }
+
+
+    private Map<Integer, List<String>> getCoursesForSubject(String subject) {
+        switch (subject.toLowerCase()) {
+            case "bwl":
+                return Map.of(
+                        1, List.of("BWL I", "BWL II", "Marketing", "Finanzmanagement"),
+                        2, List.of("Investition", "Rechnungswesen", "Controlling", "Organisationsentwicklung")
+                );
+            case "wirtschaftsinformatik":
+                return Map.of(
+                        1, List.of("Programmieren I", "Datenbanken", "IT-Management", "Webentwicklung"),
+                        2, List.of("Programmieren II", "KI-Grundlagen", "Cloud Computing", "Cybersecurity")
+                );
+            case "sonstiges":
+                return Map.of(
+                        1, List.of("Kreatives Schreiben", "Philosophie", "Psychologie", "Design Thinking"),
+                        2, List.of("Fotografie", "Musiktheorie", "Moderne Kunst", "Soziologie")
+                );
+            default:
+                return Map.of(); // Leere Map für unbekannte Fächer
+        }
     }
 
     @GetMapping("/forum/{subject}/{semester}/course/{course}/search")

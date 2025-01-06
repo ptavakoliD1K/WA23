@@ -33,21 +33,20 @@
 <div class="content-container">
     <!-- Sidebar mit Semestern und Fächern -->
     <aside class="sidebar">
-        <h2>Semester</h2>
-        <div class="semester-section">
-            <h3 onclick="toggleSemester(this)">1. Semester ▼</h3>
-            <ul class="course-list">
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_der_Computertechnik')}">Grundlagen der Computertechnik</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Engineering_Management')}">Engineering Management</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_Mathematik')}">Grundlagen Mathematik</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Technische_Kommunikation')}">Technische Kommunikation</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Soft_Skills')}">Soft Skills</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_sicherer_Programmierung')}">Grundlagen sicherer Programmierung</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Einstieg_Projektarbeit')}">Einstieg Projektarbeit</a></li>
-                <li><a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Betriebswirtschaftslehre_I')}">Betriebswirtschaftslehre I</a></li>
+        <h2 th:text="'Fächer in ' + ${subject}"></h2>
+
+        <!-- Dynamische Anzeige der Semester und Kurse -->
+        <div th:each="entry : ${coursesBySemester}">
+            <h3 th:text="'Semester ' + ${entry.key}"></h3>
+            <ul>
+                <li th:each="course : ${entry.value}">
+                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${entry.key}, course=${course})}"
+                       th:text="${course}">Course Name</a>
+                </li>
             </ul>
         </div>
     </aside>
+
 
     <!-- Hauptinhalt (Posts) -->
     <main class="main-content">

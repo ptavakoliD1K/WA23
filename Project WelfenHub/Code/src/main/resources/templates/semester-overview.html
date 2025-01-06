@@ -31,67 +31,23 @@
 </header>
 
 <div class="semester-overview-container">
-    <h1 th:text="'Semesterübersicht'"></h1>
+    <h1 th:text="'Semesterübersicht für ' + ${subject}"></h1>
 
-    <div class="semester-section">
-        <h2>1. Semester</h2>
-        <div class="course-list">
-            <ul>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_der_Computertechnik')}">
-                        Grundlagen der Computertechnik
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Engineering_Management')}">
-                        Engineering Management
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_Mathematik')}">
-                        Grundlagen Mathematik
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Technische_Kommunikation')}">
-                        Technische Kommunikation
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Soft_Skills')}">
-                        Soft Skills
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Grundlagen_sicherer_Programmierung')}">
-                        Grundlagen sicherer Programmierung
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Einstieg_Projektarbeit')}">
-                        Einstieg Projektarbeit
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=1, course='Betriebswirtschaftslehre_I')}">
-                        Betriebswirtschaftslehre I
-                    </a>
-                </li>
-                <!-- Weitere Kurse hier -->
-            </ul>
-            <div class="latest-post">
-                <h3>Zuletzt kommentierter Beitrag</h3>
-                <p th:if="${latestPost != null}">
-                    <strong>Beitragstitel:</strong> <span th:text="${latestPost.title}"></span><br/>
-                    <strong>Erstellt von:</strong> <span th:if="${latestPost.user != null}" th:text="${latestPost.user.username}">Unbekannter Benutzer</span><br/>
-                    <strong>Inhalt:</strong> <span th:text="${latestPost.content}"></span>
-                </p>
-                <p th:if="${latestPost == null}">Es gibt keine zuletzt kommentierten Beiträge.</p>
+    <!-- Dynamische Anzeige für jedes Semester -->
+    <div th:each="entry : ${coursesBySemester}">
+        <!-- Zugriff auf Semester und Kurse -->
+        <div class="semester-section">
+            <h2 th:text="'Semester ' + ${entry.key}"></h2>
+            <div class="course-list">
+                <ul>
+                    <li th:each="course : ${entry.value}">
+                        <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${entry.key}, course=${course})}"
+                           th:text="${course}">Course Name</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-
-    <!-- Weitere Semester hier hinzufügen -->
 </div>
 
 <footer th:insert="fragments/footer :: footer"></footer>
