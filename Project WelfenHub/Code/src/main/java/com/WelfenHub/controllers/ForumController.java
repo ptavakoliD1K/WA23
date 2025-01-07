@@ -64,9 +64,17 @@ public class ForumController {
                 );
             case "wirtschaftsinformatik":
                 return Map.of(
-                        1, List.of("Programmieren I", "Datenbanken", "IT-Management", "Webentwicklung"),
-                        2, List.of("Programmieren II", "KI-Grundlagen", "Cloud Computing", "Cybersecurity")
-                );
+                        1, List.of("Grundlagen der Computertechnik", "Engineering Management", "Grundlagen Mathematik", "Technische Kommunikation", "Grundlagen sicherer Programmierung", "Einstieg in die Projektarbeit", "BWL I"),
+                        2, List.of("Programmstrukturen", "Spezielle Mathematik", "Technische Kommunikation", "Grundlagen sicherer Programmierung", "Secruity Engineering", "Einstieg in die Projektarbeit"),
+                        3, List.of("Anwendungsrealisierung", "Datenbank Programmierung", "Secruity Engineering", "Projektumsetzung", "BWL II"),
+                        4, List.of("Alternative Daten- und Programmieransätze", "Sicherheit verteilter Systeme", "Secruity Management", "Projektumsetzung", "BWL II", "Development Engineering"),
+                        5, List.of("IT-gestütztes Management", "Verknüpfung der Wirtschaftsinformatik", "Geschäftliche Kommunikation", "Developement Practice", "Vertiefungen"),
+                        6, List.of("ITSM", "Geschäftliche Kommunikation?", "Developement Test", "Bachelorarbeit", "Vertiefungen")
+
+
+
+
+                        );
             case "sonstiges":
                 return Map.of(
                         1, List.of("Kreatives Schreiben", "Philosophie", "Psychologie", "Design Thinking"),

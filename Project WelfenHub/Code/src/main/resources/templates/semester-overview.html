@@ -29,9 +29,12 @@
         </div>
     </nav>
 </header>
-
 <div class="semester-overview-container">
-    <h1 th:text="'Semesterübersicht für ' + ${subject}"></h1>
+    <!-- Zentrierter Titel -->
+    <div class="semester-overview-header">
+        <h1 th:text="${subject.equalsIgnoreCase('bwl') ? 'BWL' : (subject.equalsIgnoreCase('wirtschaftsinformatik') ? 'Wirtschaftsinformatik' : (subject.equalsIgnoreCase('sonstiges') ? 'Sonstiges' : #strings.capitalize(subject)))}"></h1>
+    </div>
+
 
     <!-- Dynamische Anzeige für jedes Semester -->
     <div th:each="entry : ${coursesBySemester}">

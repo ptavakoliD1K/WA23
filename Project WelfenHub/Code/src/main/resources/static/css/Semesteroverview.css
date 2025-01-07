@@ -166,3 +166,14 @@ button:hover {
         transform: translateX(0);
     }
 }
+
+.semester-overview-header {
+    text-align: center; /* Zentriert den Text */
+    margin-top: 20px; /* Abstand nach oben */
+}
+
+.semester-overview-header h1 {
+    font-size: 32px; /* Größe des Titels */
+    font-weight: bold; /* Fettschrift */
+    color: #00274d; /* Optional: eine passende Farbe */
+}
