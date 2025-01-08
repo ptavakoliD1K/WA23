@@ -1,6 +1,7 @@
 package com.WelfenHub.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.MediaType;
 import com.google.gson.Gson;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
@@ -28,7 +28,8 @@ import java.util.List;
 @RequestMapping("/files")
 public class FileController {
 
-    private static final String DB_URL = "jdbc:sqlite:C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/database/users.db";
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
 
     /**
      * gets file list, calls getFileNamesFromDatabase()
@@ -99,7 +100,7 @@ public class FileController {
     private List<String> getFileNamesFromDatabase(String semester, String module, String fachrichtung, String tag) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         List<String> fileNames = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(DB_URL)) {
+        try (Connection conn = DriverManager.getConnection(dbUrl)) {
             String selectSQL = "SELECT name FROM files WHERE semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, semester);
@@ -128,7 +129,7 @@ public class FileController {
 
     private byte[] getFileFromDatabase(String fileName) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
-        try (Connection conn = DriverManager.getConnection(DB_URL)) {
+        try (Connection conn = DriverManager.getConnection(dbUrl)) {
             String selectSQL = "SELECT content FROM files WHERE name = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, fileName);

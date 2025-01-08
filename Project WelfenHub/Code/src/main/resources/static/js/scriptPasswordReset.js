@@ -30,6 +30,8 @@ resetForm.addEventListener('submit', (e) => {
     };
 
     xhr.send(formData);
+    alert("Passwort-Reset wurde beantragt. Sie erhalten in kürze eine E-Mail.")
+    window.location.href = "/login";
 });
 
 /**

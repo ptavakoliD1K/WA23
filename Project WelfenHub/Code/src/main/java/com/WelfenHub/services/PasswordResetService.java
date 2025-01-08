@@ -77,7 +77,7 @@ public class PasswordResetService {
      * @throws MessagingException
      */
 
-    private void sendEmail(String receiver) throws MessagingException {
+    private void sendEmail(String receiver) throws MessagingException, SQLException {
         // configure e-mail options
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -107,7 +107,7 @@ public class PasswordResetService {
      * @throws MessagingException
      */
 
-    private Message prepareMessage(Session session, String myAccount, String receiver) throws MessagingException {
+    private Message prepareMessage(Session session, String myAccount, String receiver) throws MessagingException, SQLException {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccount));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
@@ -116,7 +116,7 @@ public class PasswordResetService {
         // Erstellen und Hinzufügen des Inhalts der E-Mail
         Multipart multipart = new MimeMultipart();
         BodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setText("Mit dem folgenden Link können Sie Ihr Passwort zurücksetzen: " + PasswordResetLinkService.linkGenerator());
+        messageBodyPart.setText("Mit dem folgenden Link können Sie Ihr Passwort zurücksetzen: \n" + PasswordResetLinkService.linkGeneratorAndSaver(receiver));
         multipart.addBodyPart(messageBodyPart);
         message.setContent(multipart);
 
