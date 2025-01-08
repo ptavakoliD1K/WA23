@@ -3,6 +3,7 @@ package com.WelfenHub.controllers;
 import com.WelfenHub.models.User;
 import com.WelfenHub.services.UserService;
 import com.WelfenHub.services.PasswordResetService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
@@ -80,7 +81,6 @@ public class UserController {
 
        return "passwordreset";
    }
-
 
     @GetMapping("/api/user-status")
     public Map<String, Object> getUserStatus() {
