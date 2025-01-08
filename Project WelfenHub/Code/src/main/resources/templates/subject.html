@@ -30,12 +30,11 @@
     </nav>
 </header>
 
+<!-- Hauptcontainer für Sidebar und Content -->
 <div class="content-container">
-    <!-- Sidebar mit Semestern und Fächern -->
+    <!-- Sidebar -->
     <aside class="sidebar">
-        <h2 th:text="'Fächer in ' + ${subject}"></h2>
-
-        <!-- Dynamische Anzeige der Semester und Kurse -->
+        <h2 th:text="${subject.equalsIgnoreCase('bwl') ? 'BWL' : (subject.equalsIgnoreCase('wirtschaftsinformatik') ? 'Wirtschaftsinformatik' : (subject.equalsIgnoreCase('sonstiges') ? 'Sonstiges' : #strings.capitalize(subject)))}"></h2>
         <div th:each="entry : ${coursesBySemester}">
             <h3 th:text="'Semester ' + ${entry.key}"></h3>
             <ul>
@@ -47,11 +46,11 @@
         </div>
     </aside>
 
-
-    <!-- Hauptinhalt (Posts) -->
+    <!-- Hauptinhalt -->
     <main class="main-content">
         <h1>Posts</h1>
 
+        <!-- Suchleiste und Neuer Post Button -->
         <div class="action-buttons-container">
             <div class="search-container">
                 <span class="search-icon" onclick="toggleSearch()">🔍</span>
@@ -69,6 +68,7 @@
             </div>
         </div>
 
+        <!-- Posts -->
         <div class="posts-list">
             <ul>
                 <li th:each="post : ${posts}" class="post-item">
@@ -100,7 +100,7 @@
     </main>
 </div>
 
-<!-- Modal for Creating a New Post -->
+<!-- Modal für neuen Post -->
 <div id="newPostModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -121,18 +121,15 @@
     </div>
 </div>
 
+<!-- Footer -->
 <footer th:insert="fragments/footer :: footer"></footer>
+
 
 <script>
     function toggleComments(button) {
         const commentsSection = button.nextElementSibling;
-        if (commentsSection.style.display === "none") {
-            commentsSection.style.display = "block";
-            button.textContent = "▲";
-        } else {
-            commentsSection.style.display = "none";
-            button.textContent = "▼";
-        }
+        commentsSection.style.display = commentsSection.style.display === "none" ? "block" : "none";
+        button.textContent = commentsSection.style.display === "block" ? "▲" : "▼";
     }
 
     function openModal() {
@@ -143,29 +140,12 @@
         document.getElementById("newPostModal").style.display = "none";
     }
 
-    window.onclick = function(event) {
-        const modal = document.getElementById("newPostModal");
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    }
-
     function toggleSearch() {
         const searchBar = document.getElementById("searchBar");
         searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
     }
-
-     function toggleSemester(element) {
-        const courseList = element.nextElementSibling;
-        if (courseList.style.display === "none" || courseList.style.display === "") {
-            courseList.style.display = "block";
-            element.textContent = element.textContent.replace("▲", "▼");
-        } else {
-            courseList.style.display = "none";
-            element.textContent = element.textContent.replace("▼", "▲");
-        }
-    }
 </script>
-
 </body>
 </html>
+
+

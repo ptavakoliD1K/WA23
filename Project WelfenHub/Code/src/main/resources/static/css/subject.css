@@ -7,20 +7,23 @@
     box-sizing: border-box;
 }
 
-body, html {
+/* Body und HTML */
+html, body {
+    height: 100%; /* Stellt sicher, dass die gesamte Seite die volle Höhe hat */
     margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    font-size: 14px;
+    display: flex;
+    flex-direction: column; /* Header, Content und Footer in einer Spalte */
 }
 
+/* Body und Layout-Anpassungen */
 body {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    min-height: 100vh; /* Stellt sicher, dass die Seite die gesamte Höhe des Viewports einnimmt */
     background: #f4f4f9;
+    margin: 0;
 }
+
 
 .navbar {
     background: #00274d;
@@ -95,11 +98,12 @@ h1 {
     margin: 20px 0;
 }
 
+/* Hauptinhalt */
 .main-content {
-    flex: 1;
+    flex: 1; /* Füllt den verfügbaren Platz neben der Sidebar */
     padding: 20px;
-    margin-left: 270px; /* Platz für die fixierte Sidebar */
     background-color: #ffffff;
+    overflow: auto; /* Scrollbar für den Hauptinhalt */
 }
 
 .posts-list {
@@ -225,21 +229,30 @@ button:hover {
     cursor: pointer;
 }
 
-/* Footer Styles */
+/* Footer */
 footer {
     background-color: #00274d;
     color: white;
     text-align: center;
     padding: 20px;
     width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
     height: 60px;
+    position: relative; /* Nicht fixiert, nur am Ende des Inhalts */
+    z-index: 0; /* Footer unter der Sidebar */
+    margin-top: auto; /* Schiebt den Footer ans Ende, wenn Inhalt kürzer ist */
 }
 
 footer p {
     margin: 0;
+}
+
+footer img {
+    width: 85px;
+    height: auto;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    top: 5px;
 }
 
 footer a {
@@ -249,12 +262,6 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
-}
-
-footer img {
-    width: 50px;
-    height: auto;
-    margin-top: 10px;
 }
 
 /* Media Queries */
@@ -389,30 +396,57 @@ position: relative;
     background-color: #3a3f50;
 }
 
-/* Layout-Container für Sidebar und Hauptinhalt */
+/* Content-Container */
 .content-container {
-    display: flex;
-    width: 100%;
-    min-height: calc(100vh - 60px); /* Abzug für den Footer */
+    flex: 1; /* Füllt den Platz zwischen Header und Footer */
+    display: flex; /* Sidebar und Hauptinhalt nebeneinander */
+    margin-bottom: 20px; /* Platz für den Footer */
 }
 
-/* Sidebar Styling */
+/* Sidebar */
 .sidebar {
     width: 250px;
     background-color: #f4f4f9;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 155px; /* Align with header height */
-    left: 0;
-    height: calc(100vh - 90px); /* Full viewport minus header */
-    overflow-y: auto;
+    z-index: 1; /* Bringt die Sidebar in den Vordergrund */
+    position: relative; /* Relativ zur Sidebar-Position */
+    height: auto; /* Passt die Höhe automatisch an */
 }
 
-.sidebar h2 {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 15px;
+/* Semester Styling */
+.sidebar h3 {
+    font-size: 16px;
+    color: #00274d;
+    margin-bottom: 10px;
+}
+
+/* Fächer Styling */
+.sidebar ul li a {
+    font-size: 14px;
+    color: #00274d;
+    text-decoration: none;
+    padding: 5px 10px;
+    display: inline-block;
+    border-radius: 5px;
+    background-color: #f4f4f9;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sidebar ul li a:hover {
+    background-color: #d0e4f7;
+    color: #37445d;
+}
+
+/* List Styles */
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 10px;
 }
 
 /* Semester Section Styling */

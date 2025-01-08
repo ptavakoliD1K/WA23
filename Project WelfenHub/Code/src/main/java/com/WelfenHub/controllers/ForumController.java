@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 import java.util.List;
+import java.util.TreeMap;
+
 
 
 import java.util.List;
@@ -58,30 +60,26 @@ public class ForumController {
     private Map<Integer, List<String>> getCoursesForSubject(String subject) {
         switch (subject.toLowerCase()) {
             case "bwl":
-                return Map.of(
+                return new TreeMap<>(Map.of(
                         1, List.of("BWL I", "BWL II", "Marketing", "Finanzmanagement"),
                         2, List.of("Investition", "Rechnungswesen", "Controlling", "Organisationsentwicklung")
-                );
+                ));
             case "wirtschaftsinformatik":
-                return Map.of(
+                return new TreeMap<>(Map.of(
                         1, List.of("Grundlagen der Computertechnik", "Engineering Management", "Grundlagen Mathematik", "Technische Kommunikation", "Grundlagen sicherer Programmierung", "Einstieg in die Projektarbeit", "BWL I"),
                         2, List.of("Programmstrukturen", "Spezielle Mathematik", "Technische Kommunikation", "Grundlagen sicherer Programmierung", "Secruity Engineering", "Einstieg in die Projektarbeit"),
                         3, List.of("Anwendungsrealisierung", "Datenbank Programmierung", "Secruity Engineering", "Projektumsetzung", "BWL II"),
                         4, List.of("Alternative Daten- und Programmieransätze", "Sicherheit verteilter Systeme", "Secruity Management", "Projektumsetzung", "BWL II", "Development Engineering"),
                         5, List.of("IT-gestütztes Management", "Verknüpfung der Wirtschaftsinformatik", "Geschäftliche Kommunikation", "Developement Practice", "Vertiefungen"),
                         6, List.of("ITSM", "Geschäftliche Kommunikation?", "Developement Test", "Bachelorarbeit", "Vertiefungen")
-
-
-
-
-                        );
+                        ));
             case "sonstiges":
-                return Map.of(
+                return new TreeMap<>(Map.of(
                         1, List.of("Kreatives Schreiben", "Philosophie", "Psychologie", "Design Thinking"),
                         2, List.of("Fotografie", "Musiktheorie", "Moderne Kunst", "Soziologie")
-                );
+                ));
             default:
-                return Map.of(); // Leere Map für unbekannte Fächer
+                return new TreeMap<>(Map.of()); // Leere Map für unbekannte Fächer
         }
     }
 
