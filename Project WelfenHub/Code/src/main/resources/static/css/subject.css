@@ -229,40 +229,7 @@ button:hover {
     cursor: pointer;
 }
 
-/* Footer */
-footer {
-    background-color: #00274d;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    width: 100%;
-    height: 60px;
-    position: relative; /* Nicht fixiert, nur am Ende des Inhalts */
-    z-index: 0; /* Footer unter der Sidebar */
-    margin-top: auto; /* Schiebt den Footer ans Ende, wenn Inhalt kürzer ist */
-}
 
-footer p {
-    margin: 0;
-}
-
-footer img {
-    width: 85px;
-    height: auto;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    top: 5px;
-}
-
-footer a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
 
 /* Media Queries */
 @media (max-width: 768px) {
@@ -401,6 +368,8 @@ position: relative;
     flex: 1; /* Füllt den Platz zwischen Header und Footer */
     display: flex; /* Sidebar und Hauptinhalt nebeneinander */
     margin-bottom: 20px; /* Platz für den Footer */
+    min-height: calc(100vh - 90px); /* Höhe des Inhalts ohne Header und Footer */
+
 }
 
 /* Sidebar */
@@ -410,8 +379,7 @@ position: relative;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 1; /* Bringt die Sidebar in den Vordergrund */
-    position: relative; /* Relativ zur Sidebar-Position */
-    height: auto; /* Passt die Höhe automatisch an */
+    overflow-y: auto; /* Ermöglicht Scrollen innerhalb der Sidebar */
 }
 
 /* Semester Styling */

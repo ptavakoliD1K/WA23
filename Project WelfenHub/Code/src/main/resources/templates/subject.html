@@ -34,7 +34,6 @@
 <div class="content-container">
     <!-- Sidebar -->
     <aside class="sidebar">
-        <h2 th:text="${subject.equalsIgnoreCase('bwl') ? 'BWL' : (subject.equalsIgnoreCase('wirtschaftsinformatik') ? 'Wirtschaftsinformatik' : (subject.equalsIgnoreCase('sonstiges') ? 'Sonstiges' : #strings.capitalize(subject)))}"></h2>
         <div th:each="entry : ${coursesBySemester}">
             <h3 th:text="'Semester ' + ${entry.key}"></h3>
             <ul>
