@@ -5,6 +5,10 @@ const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
 const messageInput = document.getElementById("message")
 
+/**
+ * event-listener, which sends POST request when submit
+ */
+
 feedbackForm.addEventListener("submit", (e) => {
    e.preventDefault()
 
@@ -38,6 +42,11 @@ feedbackForm.addEventListener("submit", (e) => {
     xhr.send(formData);
 
 });
+
+/**
+ * gets CSRF-Token
+ * @returns {string}
+ */
 
 function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);

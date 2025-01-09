@@ -30,7 +30,6 @@ public class FeedbackController {
      * @param name
      * @param senderEmail
      * @param message
-     * @param model
      * @throws MessagingException
      * @throws SQLException
      */

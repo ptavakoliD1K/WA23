@@ -10,8 +10,23 @@ import org.springframework.stereotype.Service;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * sends email to itself to receive feedback of the formular
+ */
+
 @Service
 public class sendFeedbackEmailService {
+
+    /**
+     * sends email and receives value of prepareMessage
+     * @param senderEmail
+     * @param name
+     * @param feedbackMessage
+     * @param myAccount
+     * @param myPassword
+     * @throws MessagingException
+     * @throws SQLException
+     */
 
     public static void sendEmail(String senderEmail, String name, String feedbackMessage, String myAccount, String myPassword) throws MessagingException, SQLException {
 
@@ -33,6 +48,19 @@ public class sendFeedbackEmailService {
         Transport.send(message);
         System.out.println("E-Mail erfolgreich versendet an " + myAccount);
     }
+
+    /**
+     * prepares message and sets content
+     * @param session
+     * @param myAccount
+     * @param senderEmail
+     * @param feedbackMessage
+     * @param name
+     * @param receiver
+     * @return
+     * @throws MessagingException
+     * @throws SQLException
+     */
 
     private static Message prepareMessage(Session session, String myAccount, String senderEmail, String feedbackMessage, String name, String receiver) throws MessagingException, SQLException {
 
