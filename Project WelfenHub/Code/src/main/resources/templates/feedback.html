@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Feedback</title>
-    <link rel="stylesheet" href="css/forum_styles.css" />
+    <link rel="stylesheet" href="/css/feedbackStyle.css" />
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 <!-- Include Header -->
@@ -11,24 +13,18 @@
 
     <h1>Feedback</h1>
 
-    <div th:if="${successMessage}">
-        <p style="color: green;" th:text="${successMessage}"></p>
-    </div>
-
-    <form action="/feedback" method="post">
+    <form action="/feedback" method="post" id="formFeedback">
         <div>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" id="name" name="name" required placeholder="Vollständiger Name" maxlength="60">
         </div>
         <div>
-            <label for="email">E-Mail:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" id="email" name="email" required placeholder="E-Mail" maxlength="120">
         </div>
         <div>
-            <label for="message">Nachricht:</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+            <textarea id="message" name="message" rows="5" required placeholder="Ihre Nachricht..." maxlength="1400"></textarea>
         </div>
         <button type="submit">Feedback senden</button>
     </form>
+<script src="/js/scriptFeedback.js"></script>
 </body>
 </html>

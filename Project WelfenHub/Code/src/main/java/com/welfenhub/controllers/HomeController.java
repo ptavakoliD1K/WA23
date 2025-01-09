@@ -25,4 +25,9 @@ public class HomeController {
     public String fileshare() {
         return "fileshare";
     }
+
+    @GetMapping("/feedback")
+    public String feedback() {
+        return "feedback";
+    }
 }
