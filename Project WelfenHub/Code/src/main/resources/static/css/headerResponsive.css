@@ -1,0 +1,208 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+nav {
+    background: #f4f4f9;
+}
+
+.navbar {
+    background: #00274d;
+    padding: 15px 20px;
+    overflow: hidden;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar a:hover {
+    color: rgb(57, 117, 173);
+}
+
+.navbar a:active {
+    color: gray;
+}
+
+.navdiv {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+}
+
+.name {
+    font-size: 35px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    animation: slide-in 1s ease-out;
+}
+
+ul {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+li {
+    list-style: none;
+    display: inline-block;
+    margin-bottom: 10px;
+    align-self: center;
+}
+
+li a {
+    color: white;
+    font-size: 20px;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+
+button {
+    background-color: #37445d;
+    margin-left: 10px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 100px;
+    height: 35px;
+    border: none;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    align-self: center;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #abadb0; /* Background color on hover */
+    transform: scale(1.05); /* Slightly enlarge button on hover */
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+}
+
+#burgerMenu {
+    display: none;
+}
+
+#navResp {
+    display: none;
+    width: 100%;
+    height: 300px;
+}
+
+#toggleNav {
+    display: none;
+}
+
+@media (max-width: 970px) {
+    .navdiv {
+        display: grid;
+        grid-template-columns: 1fr auto;
+    }
+
+    .name {
+        grid-column: 1;
+        grid-row: 1;
+        text-align: center;
+        padding-top: 17px;
+    }
+
+    #burgerMenu .white {
+        width: 40px;
+        height: 5px;
+        background-color: white;
+        display: block;
+        cursor: pointer;
+    }
+
+    #burgerMenu .transparent {
+        display: block;
+        width: 40px;
+        background-color: transparent;
+        height: 5px;
+        cursor: pointer;
+    }
+
+    #burgerMenu {
+        grid-row: 1;
+        align-self: center;
+        grid-column: 2;
+        display: block;
+        justify-self: center;
+    }
+
+    ul {
+        display: none;
+    }
+
+    li {
+        margin-top: 7px;
+    }
+
+    @keyframes nav2toggle {
+        0%{
+            height: 0px;
+        }
+        100%{
+            height: 300px;
+        }
+    }
+
+    @keyframes toggleLink {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    #toggleNav:checked ~ #navResp{
+        display: grid;
+        position: absolute;
+        animation-name: nav2toggle;
+        animation-duration: 0.4s;
+        background-color: #04488b;
+        z-index: 22;
+    }
+
+    #navResp ul{
+        display: none;
+    }
+
+    #toggleNav:checked ~ #navResp ul {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+        place-items: center;
+        display: grid;
+        animation-name: toggleLink;
+        animation-duration: 1.5s;
+        gap: 0;
+    }
+
+    #navResp ul li a {
+        margin-right: 0;
+    }
+
+    .navResponsive a:hover {
+        color: rgb(57, 117, 173);
+    }
+
+    .navResponsive a:active {
+        color: gray;
+    }
+
+    button {
+        margin: 0;
+    }
+}
+
+

@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>Feedback</title>
     <link rel="stylesheet" href="/css/feedbackStyle.css" />
-    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 <!-- Include Header -->
-    <div th:insert="fragments/header :: header"></div>
+    <div th:insert="fragments/headerResponsive.html"></div>
 
     <h1>Feedback</h1>
 
@@ -21,7 +22,7 @@
             <input type="email" id="email" name="email" required placeholder="E-Mail" maxlength="120">
         </div>
         <div>
-            <textarea id="message" name="message" rows="5" required placeholder="Ihre Nachricht..." maxlength="1400"></textarea>
+            <textarea id="message" name="message" rows="5" required placeholder="Ihre Nachricht..." maxlength="5000"></textarea>
         </div>
         <button type="submit">Feedback senden</button>
     </form>
