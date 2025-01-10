@@ -44,6 +44,7 @@ form div textarea {
     resize: vertical;
     height: 400px;
     padding: 10px 10px 10px 10px;
+    min-height: 290px;
 }
 
 form button {

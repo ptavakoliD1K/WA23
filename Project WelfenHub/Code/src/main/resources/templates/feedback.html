@@ -5,6 +5,7 @@
     <title>Feedback</title>
     <link rel="stylesheet" href="/css/feedbackStyle.css" />
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -26,6 +27,9 @@
         </div>
         <button type="submit">Feedback senden</button>
     </form>
+
+
+    <div th:insert="fragments/footer.html"></div>
 <script src="/js/scriptFeedback.js"></script>
 </body>
 </html>
