@@ -12,7 +12,7 @@ const fachrichtungValue = document.getElementById('fachrichtung');
 const searchBar = document.getElementById('searchQuery');
 const title = document.getElementById('fileShareTitle');
 const tag = document.getElementById('tag');
-
+const headerContainer = document.getElementById('header-container');
 
 /**
  * Hides progress-bar if Progress is 0%
@@ -106,12 +106,6 @@ function updateSelectedValues() {
     const selectedModule = moduleValue.value;
     const selectedFachrichtung = fachrichtungValue.value;
     const selectedTag = tag.value;
-
-    console.log('Selected Values:');
-    console.log('Semester:', selectedSemester);
-    console.log('Module:', selectedModule);
-    console.log('Fachrichtung:', selectedFachrichtung);
-    console.log('Tag:', selectedTag);
 
     fetchFileList();
 }
@@ -224,27 +218,6 @@ uploadForm.addEventListener('submit', (e) => {
 
     xhr.send(formData);
 });
-
-/**
- * Changes title of header if width of site changes
- */
-
-function onResize() {
-  const width = window.innerWidth;
-
-  if (width < 820) {
-    title.textContent = "WelfenHub";
-  } else {
-    title.textContent = "Welfenhub - wenn Welfen Helfen"
-  }
-}
-
-
-window.addEventListener("resize", onResize);
-
-onResize();
-
-
 
 /**
  * fetches file list from database

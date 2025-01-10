@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>WelfenHUB - Fileshare</title>
     <link rel="stylesheet" href="/css/fileshareStyle.css">
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -11,18 +12,11 @@
 </head>
 <body>
 
-<div class="header">
-    <h1 id="fileShareTitle">WelfenHub - wenn Welfen Helfen</h1>
-    <a href="">Stundenplan</a>
-    <a href="">Forum</a>
-    <a href="">Skripte</a>
-    <button type="submit" id="signOut">Abmelden</button>
-    <div class="burgerMenuSum">
-        <div class="burgerMenu"></div>
-        <div class="burgerMenu"></div>
-        <div class="burgerMenu"></div>
-    </div>
-</div>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
 
 <div class="container">
 
@@ -88,8 +82,9 @@
 </div>
 
 <footer xmlns:th="http://www.w3.org/1999/xhtml">
-    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a></p>
-    <img th:src="@{/images/WA_logo_white.png}" alt="WelfenHub Logo">
+    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a>
+    </p>
+    <img th:src="@{/images/logo_white.png}" alt="WelfenHub Logo">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
 </footer>
 

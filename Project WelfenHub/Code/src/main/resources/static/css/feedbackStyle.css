@@ -5,6 +5,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+    margin: 0;
 }
 
 h1 {
@@ -43,8 +44,9 @@ form div input, form div textarea{
 form div textarea {
     resize: vertical;
     height: 400px;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 18px 10px 18px;
     min-height: 290px;
+    font-family: Arial, sans-serif;
 }
 
 form button {

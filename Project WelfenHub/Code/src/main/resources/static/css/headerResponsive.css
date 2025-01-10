@@ -1,4 +1,5 @@
-* {
+/* Header-Spezifische Styles */
+#responsive-header * {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -6,38 +7,37 @@
     box-sizing: border-box;
 }
 
-html, body {
-    height: 100%;
-}
-
-nav {
-    background: #f4f4f9;
-}
-
-.navbar {
+#responsive-header {
     background: #00274d;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#responsive-header nav {
+    background: #00274d;
+}
+
+#responsive-header .navbar {
     padding: 15px 20px;
     overflow: hidden;
     padding-top: 30px;
     padding-bottom: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.navbar a:hover {
+#responsive-header .navbar a:hover {
     color: rgb(57, 117, 173);
 }
 
-.navbar a:active {
+#responsive-header .navbar a:active {
     color: gray;
 }
 
-.navdiv {
+#responsive-header .navdiv {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 1fr;
 }
 
-.name {
+#responsive-header .name {
     font-size: 35px;
     font-weight: 600;
     color: white;
@@ -46,28 +46,28 @@ nav {
     animation: slide-in 1s ease-out;
 }
 
-ul {
+#responsive-header ul {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     gap: 20px;
 }
 
-li {
+#responsive-header li {
     list-style: none;
     display: inline-block;
     margin-bottom: 10px;
     align-self: center;
 }
 
-li a {
+#responsive-header li a {
     color: white;
     font-size: 20px;
     margin-right: 20px;
     transition: color 0.3s;
 }
 
-button {
+#responsive-header button {
     background-color: #37445d;
     margin-left: 10px;
     border-radius: 5px;
@@ -82,40 +82,41 @@ button {
     margin-bottom: 10px;
 }
 
-button:hover {
-    background-color: #abadb0; /* Background color on hover */
-    transform: scale(1.05); /* Slightly enlarge button on hover */
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+#responsive-header button:hover {
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-#burgerMenu {
+/* Responsive Design für Header */
+#responsive-header #burgerMenu {
     display: none;
 }
 
-#navResp {
+#responsive-header #navResp {
     display: none;
     width: 100%;
     height: 300px;
 }
 
-#toggleNav {
+#responsive-header #toggleNav {
     display: none;
 }
 
 @media (max-width: 970px) {
-    .navdiv {
+    #responsive-header .navdiv {
         display: grid;
         grid-template-columns: 1fr auto;
     }
 
-    .name {
+    #responsive-header .name {
         grid-column: 1;
         grid-row: 1;
         text-align: center;
         padding-top: 17px;
     }
 
-    #burgerMenu .white {
+    #responsive-header #burgerMenu .white {
         width: 40px;
         height: 5px;
         background-color: white;
@@ -123,7 +124,7 @@ button:hover {
         cursor: pointer;
     }
 
-    #burgerMenu .transparent {
+    #responsive-header #burgerMenu .transparent {
         display: block;
         width: 40px;
         background-color: transparent;
@@ -131,7 +132,7 @@ button:hover {
         cursor: pointer;
     }
 
-    #burgerMenu {
+    #responsive-header #burgerMenu {
         grid-row: 1;
         align-self: center;
         grid-column: 2;
@@ -139,19 +140,19 @@ button:hover {
         justify-self: center;
     }
 
-    ul {
+    #responsive-header ul {
         display: none;
     }
 
-    li {
+    #responsive-header li {
         margin-top: 7px;
     }
 
     @keyframes nav2toggle {
-        0%{
+        0% {
             height: 0px;
         }
-        100%{
+        100% {
             height: 300px;
         }
     }
@@ -165,7 +166,7 @@ button:hover {
         }
     }
 
-    #toggleNav:checked ~ #navResp{
+    #responsive-header #toggleNav:checked ~ #navResp {
         display: grid;
         position: absolute;
         animation-name: nav2toggle;
@@ -174,11 +175,11 @@ button:hover {
         z-index: 22;
     }
 
-    #navResp ul{
+    #responsive-header #navResp ul {
         display: none;
     }
 
-    #toggleNav:checked ~ #navResp ul {
+    #responsive-header #toggleNav:checked ~ #navResp ul {
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
         place-items: center;
@@ -188,21 +189,19 @@ button:hover {
         gap: 0;
     }
 
-    #navResp ul li a {
+    #responsive-header #navResp ul li a {
         margin-right: 0;
     }
 
-    .navResponsive a:hover {
+    #responsive-header .navResponsive a:hover {
         color: rgb(57, 117, 173);
     }
 
-    .navResponsive a:active {
+    #responsive-header .navResponsive a:active {
         color: gray;
     }
 
-    button {
+    #responsive-header button {
         margin: 0;
     }
 }
-
-
