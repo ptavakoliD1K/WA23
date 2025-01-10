@@ -6,9 +6,6 @@
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     background-size: cover;
     background-position: center;
@@ -28,12 +25,13 @@ header img {
 }
 
 .wrapper {
-    width: 500px;
+    width: 50%;
     background: white;
     color: black;
     border-radius: 10px;
     border: 0.1px solid rgba(0, 0, 0, 0.39);
     padding: 30px 40px;
+    margin: 15% auto 8% auto;
 }
 
 .wrapper h1 {
@@ -113,7 +111,6 @@ footer {
     text-align: center;
     box-sizing: border-box;
     position: absolute;
-    bottom: 0;
 }
 
 footer p {
@@ -136,4 +133,20 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+@media (max-width: 940px) {
+    header img {
+        display: none;
+    }
+
+    .wrapper {
+        width: 70%;
+    }
+}
+
+@media (max-width: 440px) {
+    .wrapper {
+        width: 98%;
+    }
 }
