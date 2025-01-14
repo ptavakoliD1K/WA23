@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Controller
 @RequestMapping("/posts")
@@ -53,19 +55,21 @@ public class PostController {
     }
 
     // Kommentar zu einem Post hinzufügen
+    @ResponseBody
     @PostMapping("/comment")
-    public String addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
-        Post post = postService.findById(postId);  // Den zugehörigen Post abrufen
-        String username = principal.getName();
-        User user = userService.findByUsername(username);
-        postService.addComment(postId, content, user);
-
-        // Die Werte für subject, semester und course aus dem Post-Objekt abrufen
-        String subject = post.getSubject();
-        int semester = post.getSemester();
-        String course = post.getCourse();
-
-        return "redirect:/forum/" + subject + "/" + semester + "/course/" + course;
+    public Map<String, Object> addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
+        System.out.println("Request received: postId=" + postId + ", content=" + content);
+        Map<String, Object> response = new HashMap<>();
+        try {
+            // Kommentar hinzufügen
+            Comment newComment = postService.addComment(postId, content, principal.getName());
+            response.put("success", true);
+            response.put("comment", newComment);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
 
     // Einzelnen Post und zugehörige Kommentare anzeigen

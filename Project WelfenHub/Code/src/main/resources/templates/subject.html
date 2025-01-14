@@ -85,11 +85,12 @@
                             </li>
                         </ul>
                         <div class="comment-form">
-                            <form th:action="@{/posts/comment}" method="post">
+                            <form id="commentForm_${post.id}" onsubmit="postComment(event, ${post.id});" th:id="'commentForm_' + ${post.id}" th:onsubmit="'postComment(event, ' + ${post.id} + ');'">
                                 <input type="hidden" name="postId" th:value="${post.id}" />
-                                <label for="comment-content">Dein Kommentar:</label>
-                                <textarea id="comment-content" name="content" rows="3" required></textarea>
+                                <label th:for="'comment-content-' + ${post.id}">Dein Kommentar:</label>
+                                <textarea th:id="'comment-content-' + ${post.id}" name="content" rows="3" required></textarea>
                                 <button type="submit">Kommentieren</button>
+                                <p th:text="'Debug: ' + ${post.id}"></p>
                             </form>
                         </div>
                     </div>
@@ -124,26 +125,7 @@
 <footer th:insert="fragments/footer :: footer"></footer>
 
 
-<script>
-    function toggleComments(button) {
-        const commentsSection = button.nextElementSibling;
-        commentsSection.style.display = commentsSection.style.display === "none" ? "block" : "none";
-        button.textContent = commentsSection.style.display === "block" ? "▲" : "▼";
-    }
-
-    function openModal() {
-        document.getElementById("newPostModal").style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById("newPostModal").style.display = "none";
-    }
-
-    function toggleSearch() {
-        const searchBar = document.getElementById("searchBar");
-        searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
-    }
-</script>
+<script src="/js/scriptAddComment.js"></script>
 </body>
 </html>
 

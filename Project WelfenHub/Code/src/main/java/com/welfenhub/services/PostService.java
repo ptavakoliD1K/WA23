@@ -3,10 +3,15 @@ package com.welfenhub.services;
 import com.welfenhub.models.Post;
 import com.welfenhub.models.User;
 import com.welfenhub.models.Comment;
+import com.welfenhub.repositories.UserRepository;
 import com.welfenhub.repositories.PostRepository;
 import com.welfenhub.repositories.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Map;
+import java.util.HashMap;
+import java.time.LocalDateTime;
+
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -20,6 +25,9 @@ public class PostService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Post> getPostsByCourse(String course) {
         return postRepository.findByCourse(course);
@@ -38,15 +46,27 @@ public class PostService {
     }
 
 
-    public void addComment(Long postId, String content, User user) {
+    public Comment addComment(Long postId, String content, String username) {
         Optional<Post> optionalPost = postRepository.findById(postId);
         if (optionalPost.isPresent()) {
             Post post = optionalPost.get();
+
+            // Benutzer anhand des Benutzernamens abrufen
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new IllegalArgumentException("User not found");
+            }
+
+            // Kommentar erstellen und speichern
             Comment comment = new Comment();
             comment.setContent(content);
             comment.setPost(post);
             comment.setUser(user);
-            commentRepository.save(comment);
+            comment.setCreatedDate(LocalDateTime.now());
+            Comment savedComment = commentRepository.save(comment);
+            System.out.println("Saved Comment: " + savedComment);
+
+            return savedComment;
         } else {
             throw new IllegalArgumentException("Invalid post ID");
         }

@@ -1,4 +1,4 @@
-package com.welfenhub.security;
+package com.WelfenHub.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,14 +21,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF Configuration
+                // CSRF teilweise deaktivieren
                 .csrf(csrf -> csrf
+                        .ignoringAntMatchers("/posts/comment")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
 
+
                 // Authorization Rules
                 .authorizeRequests(auth -> auth
-                        .antMatchers("/register", "/login", "/css/**", "/images/**", "/static/**", "/templates/**", "/passwordreset", "/upload", "/js/**", "/passwordResetProcess", "/reset-password**", "/setNewPassword**").permitAll()
+                        .antMatchers("/register", "/login", "/css/**", "/images/**", "/static/**", "/templates/**", "/passwordreset", "/upload", "/js/**", "/passwordResetProcess", "/reset-password**", "/setNewPassword**","/posts/**").permitAll()
                         .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers("/moderator/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
                         .anyRequest().authenticated()

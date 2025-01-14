@@ -34,7 +34,7 @@ public class FileSearchController {
             @RequestParam("tag") String tag
         ) {
         List<FileDTO> results = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:./database/users.db")) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/database/users.db")) {
             String sql = "SELECT id, name FROM files WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, "%" + query + "%");
