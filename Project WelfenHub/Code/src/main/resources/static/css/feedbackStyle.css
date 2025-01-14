@@ -64,4 +64,10 @@ form button {
     margin-top: 2px;
 }
 
+@media (min-height: 980px) {
+    textarea {
+        height: 800px !important;
+    }
+}
+
 
