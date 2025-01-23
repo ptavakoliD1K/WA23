@@ -30,4 +30,9 @@ public class HomeController {
     public String feedback() {
         return "feedback";
     }
+
+    @GetMapping("/dozenten_bewertung")
+    public String dozentenBewertung() {
+        return "dozentenFeedback";
+    }
 }

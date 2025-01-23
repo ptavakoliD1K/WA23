@@ -1,0 +1,10 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+#mainForm {
+    display: grid;
+    grid-template-rows: repeat(18, 1fr);
+    grid-template-columns: 1fr;
+}

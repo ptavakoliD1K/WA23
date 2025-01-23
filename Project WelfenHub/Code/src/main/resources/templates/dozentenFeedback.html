@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Dozenten-Bewertung</title>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/dozentenFeedback.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+<form action="" id="mainForm">
+    <input type="text" placeholder="Lehrveranstaltung" id="lehrveranstaltung" required>
+    <input type="text" placeholder="Dozent" id="dozent" required>
+    <select name="semester" id="semester" required>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+    </select>
+    <input type="number" placeholder="Jahrgang" min="2022" id="inputYear" required>
+    <input type="text" placeholder="Fachrichtung" id="fachrichtung" required>
+    <span>Gesamteindruck</span>
+    <label id="gesamteindruckLabel">
+        <input type="radio" name="gesamteindruck" value="1" class="gesamtEindruck">
+        <input type="radio" name="gesamteindruck" value="2" class="gesamtEindruck">
+        <input type="radio" name="gesamteindruck" value="3" class="gesamtEindruck">
+        <input type="radio" name="gesamteindruck" value="4" class="gesamtEindruck">
+        <input type="radio" name="gesamteindruck" value="5" class="gesamtEindruck">
+    </label>
+    <span>Vergleich zu anderen Lehrveranstaltungen</span>
+    <label id="vergleichLabel">
+        <input type="radio" name="vergleich" value="1" class="vergleichAndere">
+        <input type="radio" name="vergleich" value="2" class="vergleichAndere">
+        <input type="radio" name="vergleich" value="3" class="vergleichAndere">
+        <input type="radio" name="vergleich" value="4" class="vergleichAndere">
+        <input type="radio" name="vergleich" value="5" class="vergleichAndere">
+    </label>
+    <span>Arbeitsklima/ Atmosphäre in der Lehrveranstaltung</span>
+    <label id="klimaLabel">
+        <input type="radio" name="arbeitsklima" value="1" class="arbeitsklima">
+        <input type="radio" name="arbeitsklima" value="2" class="arbeitsklima">
+        <input type="radio" name="arbeitsklima" value="3" class="arbeitsklima">
+        <input type="radio" name="arbeitsklima" value="4" class="arbeitsklima">
+        <input type="radio" name="arbeitsklima" value="5" class="arbeitsklima">
+    </label>
+    <span>Aufbau / Strukturierung</span>
+    <label id="strukturierungLabel">
+        <input type="radio" name="aufbau" value="1" class="aufbau">
+        <input type="radio" name="aufbau" value="3" class="aufbau">
+        <input type="radio" name="aufbau" value="2" class="aufbau">
+        <input type="radio" name="aufbau" value="4" class="aufbau">
+        <input type="radio" name="aufbau" value="5" class="aufbau">
+    </label>
+    <span>Detaillierungsgrad: einordnender Überblick</span>
+    <label id="detailLabel">
+        <input type="radio" name="detail" value="1" class="detail">
+        <input type="radio" name="detail" value="2" class="detail">
+        <input type="radio" name="detail" value="3" class="detail">
+        <input type="radio" name="detail" value="4" class="detail">
+        <input type="radio" name="detail" value="5" class="detail">
+    </label>
+    <span>Detailinformation</span>
+    <label id="detailInfoLabel">
+        <input type="radio" name="detailInfos" value="1" class="detailInfos">
+        <input type="radio" name="detailInfos" value="2" class="detailInfos">
+        <input type="radio" name="detailInfos" value="3" class="detailInfos">
+        <input type="radio" name="detailInfos" value="4" class="detailInfos">
+        <input type="radio" name="detailInfos" value="5" class="detailInfos">
+    </label>
+    <span>Stoffumfang</span>
+    <label id="umfangLabel">
+        <input type="radio" name="stoffumfang" value="1" class="stoffumfang">
+        <input type="radio" name="stoffumfang" value="2" class="stoffumfang">
+        <input type="radio" name="stoffumfang" value="3" class="stoffumfang">
+        <input type="radio" name="stoffumfang" value="4" class="stoffumfang">
+        <input type="radio" name="stoffumfang" value="5" class="stoffumfang">
+    </label>
+    <span>Aktualität und Sachdienlichkeit des Lehrmaterials</span>
+    <label id="sachLabel">
+        <input type="radio" name="sach" value="1" class="sach">
+        <input type="radio" name="sach" value="2" class="sach">
+        <input type="radio" name="sach" value="3" class="sach">
+        <input type="radio" name="sach" value="4" class="sach">
+        <input type="radio" name="sach" value="5" class="sach">
+    </label>
+    <span>Es wird das Interesse der Studierenden geweckt</span>
+    <label id="interesseWecken">
+        <input type="radio" name="interesse" value="1" class="interesse">
+        <input type="radio" name="interesse" value="2" class="interesse">
+        <input type="radio" name="interesse" value="3" class="interesse">
+        <input type="radio" name="interesse" value="4" class="interesse">
+        <input type="radio" name="interesse" value="5" class="interesse">
+    </label>
+    <span>Inhalte werden interessant präsentiert</span>
+    <label id="presentationLabel">
+        <input type="radio" name="presentation" value="1" class="presentation">
+        <input type="radio" name="presentation" value="2" class="presentation">
+        <input type="radio" name="presentation" value="3" class="presentation">
+        <input type="radio" name="presentation" value="4" class="presentation">
+        <input type="radio" name="presentation" value="5" class="presentation">
+    </label>
+    <span>Erklärungen sind klar und verständlich</span>
+    <label id="explanationLabel">
+        <input type="radio" name="explanation" value="1" class="explanation">
+        <input type="radio" name="explanation" value="2" class="explanation">
+        <input type="radio" name="explanation" value="3" class="explanation">
+        <input type="radio" name="explanation" value="4" class="explanation">
+        <input type="radio" name="explanation" value="5" class="explanation">
+    </label>
+    <span>Auf (Zwischen-)Fragen wird stets eingegangen</span>
+    <label id="questionLabel">
+        <input type="radio" name="question" value="1" class="question">
+        <input type="radio" name="question" value="2" class="question">
+        <input type="radio" name="question" value="3" class="question">
+        <input type="radio" name="question" value="4" class="question">
+        <input type="radio" name="question" value="5" class="question">
+    </label>
+    <span>Aktive Beteiligung der Studierenden wird ermöglicht</span>
+    <label id="aktiveBeteiligungLabel">
+        <input type="radio" name="aktiveBeteiligung" value="1" class="aktiveBeteiligung">
+        <input type="radio" name="aktiveBeteiligung" value="2" class="aktiveBeteiligung">
+        <input type="radio" name="aktiveBeteiligung" value="3" class="aktiveBeteiligung">
+        <input type="radio" name="aktiveBeteiligung" value="4" class="aktiveBeteiligung">
+        <input type="radio" name="aktiveBeteiligung" value="5" class="aktiveBeteiligung">
+    </label>
+    <span>Dozent/ Dozentin wirkt fachlich kompetent</span>
+    <label id="kompetentLabel">
+        <input type="radio" name="kompetent" value="1" class="kompetent">
+        <input type="radio" name="kompetent" value="2" class="kompetent">
+        <input type="radio" name="kompetent" value="3" class="kompetent">
+        <input type="radio" name="kompetent" value="4" class="kompetent">
+        <input type="radio" name="kompetent" value="5" class="kompetent">
+    </label>
+    <span>Das Thema interessiert mich</span>
+    <label id="themaLabel">
+        <input type="radio" name="thema" value="1" class="thema">
+        <input type="radio" name="thema" value="2" class="thema">
+        <input type="radio" name="thema" value="3" class="thema">
+        <input type="radio" name="thema" value="4" class="thema">
+        <input type="radio" name="thema" value="5" class="thema">
+    </label>
+    <span>An der LV habe ich mich beteiligt</span>
+    <label id="beteiligungLabel">
+        <input type="radio" name="beteiligung" value="1" class="beteiligung">
+        <input type="radio" name="beteiligung" value="2" class="beteiligung">
+        <input type="radio" name="beteiligung" value="3" class="beteiligung">
+        <input type="radio" name="beteiligung" value="4" class="beteiligung">
+        <input type="radio" name="beteiligung" value="5" class="beteiligung">
+    </label>
+    <span>Den Lernerfolg der LV beurteile ich als</span>
+    <label id="lernerfolgLabel">
+        <input type="radio" name="lernerfolg" value="1" class="lernerfolg">
+        <input type="radio" name="lernerfolg" value="2" class="lernerfolg">
+        <input type="radio" name="lernerfolg" value="3" class="lernerfolg">
+        <input type="radio" name="lernerfolg" value="4" class="lernerfolg">
+        <input type="radio" name="lernerfolg" value="5" class="lernerfolg">
+    </label>
+    <span>Anregungen, Hinweise, Verbesserungsvorschläge</span>
+    <textarea maxlength="1000" id="hints"></textarea>
+    <input type="submit" value="Abschicken">
+</form>
+</body>
+<script src="/js/scriptDozentenFeedback.js"></script>
+</html>
+

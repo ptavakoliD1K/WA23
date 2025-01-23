@@ -249,10 +249,6 @@ h3 {
     outline: none;
 }
 
-footer {
-    margin-top: 560px !important;
-}
-
 .modal {
     display: none;
     position: fixed;
@@ -286,6 +282,10 @@ footer {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+footer {
+    margin-top: 100px !important;
 }
 
 @media (max-width: 768px) {
@@ -368,5 +368,11 @@ footer {
         width: 35px;
         background-color: white;
         margin-top: 5px;
+    }
+}
+
+@media (max-width: 920px) {
+    footer {
+        margin-top: 560px !important;
     }
 }
