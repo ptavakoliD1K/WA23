@@ -10,15 +10,26 @@ const messageInput = document.getElementById("message")
  */
 
 feedbackForm.addEventListener("submit", (e) => {
-   e.preventDefault()
+    e.preventDefault()
 
     const email = emailInput.value;
     const name = nameInput.value;
     const message = messageInput.value;
 
     const formData = new FormData();
-    formData.append('senderEmail', email);
-    formData.append('name', name);
+
+    if (!isEmpty(email)) {
+        formData.append('senderMail', 'Unbekannt');
+    } else {
+        formData.append('senderEmail', email);
+    }
+
+    if (!isEmpty(name)) {
+        formData.append('name', 'Unbekannt');
+    } else {
+        formData.append('name', name);
+    }
+
     formData.append('message', message);
 
     const xhr = new XMLHttpRequest();
@@ -52,4 +63,14 @@ function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
     const token = match ? match[1] : null;
     return token;
+}
+
+/**
+ * checks if input field is empty
+ * @param str
+ * @returns {number}
+ */
+
+function isEmpty(str) {
+    return str.trim().length === 0;
 }

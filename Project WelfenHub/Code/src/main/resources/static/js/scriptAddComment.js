@@ -1,13 +1,11 @@
 
-    console.log("Skript geladen");
+function toggleComments(button) {
+    const commentsSection = button.nextElementSibling;
+    commentsSection.style.display = commentsSection.style.display === "none" ? "block" : "none";
+    button.textContent = commentsSection.style.display === "block" ? "▲" : "▼";
+}
 
-   function toggleComments(button) {
-            const commentsSection = button.nextElementSibling;
-            commentsSection.style.display = commentsSection.style.display === "none" ? "block" : "none";
-            button.textContent = commentsSection.style.display === "block" ? "▲" : "▼";
-        }
-
-    function postComment(event, postId) {
+function postComment(event, postId) {
     console.log("postComment wird aufgerufen für postId:", postId);
     event.preventDefault(); // Verhindert das Neuladen der Seite
 
@@ -17,10 +15,9 @@
     const xhr = new XMLHttpRequest();
     xhr.open('POST', "http://localhost:8080/posts/comment");
 
-    // CSRF-Token setzen
-    /*const csrfToken = document.querySelector('input[name="_csrf"]').value;
-    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-    */
+    const csrfToken = getCsrfToken();
+    xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
+
     xhr.onload = () => {
         console.log("XHR Response:", xhr.responseText);
 
@@ -55,15 +52,26 @@
     xhr.send(formData);
 }
 
-    function openModal() {
-        document.getElementById("newPostModal").style.display = "block";
-    }
+function openModal() {
+    document.getElementById("newPostModal").style.display = "block";
+}
 
-    function closeModal() {
-        document.getElementById("newPostModal").style.display = "none";
-    }
+function closeModal() {
+    document.getElementById("newPostModal").style.display = "none";
+}
 
-    function toggleSearch() {
-        const searchBar = document.getElementById("searchBar");
-        searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
-    }
+function toggleSearch() {
+    const searchBar = document.getElementById("searchBar");
+    searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
+}
+
+/**
+ * gets CSRF Token of Header
+ * @returns {string}
+ */
+
+function getCsrfToken() {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    const token = match ? match[1] : null;
+    return token;
+}

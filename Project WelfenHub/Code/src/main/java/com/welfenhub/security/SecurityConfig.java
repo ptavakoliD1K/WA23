@@ -1,4 +1,4 @@
-package com.WelfenHub.security;
+package com.welfenhub.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,12 +21,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF teilweise deaktivieren
+                // CSRF Configuration
                 .csrf(csrf -> csrf
-                        .ignoringAntMatchers("/posts/comment")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
-
 
                 // Authorization Rules
                 .authorizeRequests(auth -> auth
