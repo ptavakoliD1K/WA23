@@ -1,6 +1,7 @@
 package com.welfenhub.controllers;
 
 import com.welfenhub.dto.FileDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,9 @@ import java.util.List;
 
 @RestController
 public class FileSearchController {
+
+    @Value("${spring.datasource.url}")
+    private String dataSource;
 
     /**
      * searches the files in the database with the properties
@@ -34,7 +38,7 @@ public class FileSearchController {
             @RequestParam("tag") String tag
         ) {
         List<FileDTO> results = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/database/users.db")) {
+        try (Connection conn = DriverManager.getConnection(dataSource)) {
             String sql = "SELECT id, name FROM files WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, "%" + query + "%");
