@@ -20,7 +20,10 @@
                 <li><a th:href="@{/news}">News</a></li>
                 <li><a th:href="@{/feedback}">Feedback</a></li>
                 <li><a th:href="@{/impressum}">Impressum</a></li>
-                <button th:onclick="|window.location.href='@{/logout}'|">Abmelden</button>
+                <form th:action="@{/logout}" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                    <button type="submit">Abmelden</button>
+                </form>
             </ul>
             <div id="burgerMenu">
                 <label for="toggleNav">
@@ -41,7 +44,10 @@
             <li><a th:href="@{/news}">News</a></li>
             <li><a th:href="@{/feedback}">Feedback</a></li>
             <li><a th:href="@{/impressum}">Impressum</a></li>
-            <button th:onclick="|window.location.href='@{/logout}'|">Abmelden</button>
+            <form th:action="@{/logout}" method="post">
+                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                <button type="submit">Abmelden</button>
+            </form>
         </ul>
     </div>
 </header>
