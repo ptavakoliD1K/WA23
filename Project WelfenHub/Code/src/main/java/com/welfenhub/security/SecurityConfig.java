@@ -14,7 +14,8 @@ public class SecurityConfig {
     private final String REMEMBER_ME_KEY = "uniqueAndSecretKey"; // Key for Remember-Me functionality
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder()
+    {
         return new BCryptPasswordEncoder();
     }
 
