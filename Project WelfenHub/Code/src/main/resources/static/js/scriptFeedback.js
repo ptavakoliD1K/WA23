@@ -18,13 +18,13 @@ feedbackForm.addEventListener("submit", (e) => {
 
     const formData = new FormData();
 
-    if (!isEmpty(email)) {
-        formData.append('senderMail', 'Unbekannt');
+    if (isEmpty(email)) {
+        formData.append('senderEmail', 'Unbekannt');
     } else {
         formData.append('senderEmail', email);
     }
 
-    if (!isEmpty(name)) {
+    if (isEmpty(name)) {
         formData.append('name', 'Unbekannt');
     } else {
         formData.append('name', name);
@@ -42,7 +42,7 @@ feedbackForm.addEventListener("submit", (e) => {
         if (xhr.status !== 200) {
             console.error("Fehler: E-Mail wurde nicht gesendet");
         } else if (xhr.status === 200) {
-            alert("Die Nachricht wurde erfolgreich an gesendet. Vielen Dank für Ihr Feedback");
+            alert("Die Nachricht wurde erfolgreich gesendet. Vielen Dank für Ihr Feedback");
         }
     };
 
@@ -68,9 +68,9 @@ function getCsrfToken() {
 /**
  * checks if input field is empty
  * @param str
- * @returns {number}
+ * @returns {boolean}
  */
 
 function isEmpty(str) {
-    return str.trim().length === 0;
+    return !str.trim().length;
 }
