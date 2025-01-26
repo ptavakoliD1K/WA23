@@ -64,8 +64,6 @@ public class sendFeedbackEmailService {
 
     private static Message prepareMessage(Session session, String myAccount, String senderEmail, String feedbackMessage, String name, String receiver) throws MessagingException, SQLException {
 
-        System.out.println("Test");
-
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccount));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));

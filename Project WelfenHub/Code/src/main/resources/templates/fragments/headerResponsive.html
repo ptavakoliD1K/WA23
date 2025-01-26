@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,10 +20,15 @@
                 <li><a th:href="@{/news}">News</a></li>
                 <li><a th:href="@{/feedback}">Feedback</a></li>
                 <li><a th:href="@{/impressum}">Impressum</a></li>
-                <form th:action="@{/logout}" method="post">
-                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                    <button type="submit">Abmelden</button>
-                </form>
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" id="formLogout">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit">Abmelden</button>
+                    </form>
+                </li>
             </ul>
             <div id="burgerMenu">
                 <label for="toggleNav">
@@ -44,10 +49,15 @@
             <li><a th:href="@{/news}">News</a></li>
             <li><a th:href="@{/feedback}">Feedback</a></li>
             <li><a th:href="@{/impressum}">Impressum</a></li>
-            <form th:action="@{/logout}" method="post">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                <button type="submit">Abmelden</button>
-            </form>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                    <button type="submit">Abmelden</button>
+                </form>
+            </li>
         </ul>
     </div>
 </header>
