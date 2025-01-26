@@ -108,6 +108,13 @@
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+
 		<!-- SQLite JDBC Driver -->
 		<dependency>
 			<groupId>org.xerial</groupId>
