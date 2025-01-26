@@ -1,4 +1,4 @@
-package com.WelfenHub.security;
+package com.welfenhub.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,31 +7,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
 
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     private final String REMEMBER_ME_KEY = "uniqueAndSecretKey"; // Key for Remember-Me functionality
 
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF teilweise deaktivieren
+                // CSRF Configuration
                 .csrf(csrf -> csrf
-                        .ignoringAntMatchers("/posts/comment")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 )
-
 
                 // Authorization Rules
                 .authorizeRequests(auth -> auth
