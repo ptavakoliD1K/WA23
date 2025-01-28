@@ -1,0 +1,329 @@
+/************************************************
+ *  Grundlegendes Layout
+ ************************************************/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Scrollen innerhalb des Chatbereichs ermöglichen */
+}
+
+#chatMainContainer {
+    margin: 0;
+    padding: 0;
+    height: calc(100vh - 100px);
+    display: grid;
+    grid-template-columns: 280px 1fr; /* Vereinfacht */
+    grid-template-areas: "sidebar main";
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    position: relative;
+    top: 0px;
+}
+
+
+
+/************************************************
+ *  Seitenleiste (Gruppen)
+ ************************************************/
+/* Feste Breite, damit die Suchleiste nicht breiter werden kann */
+.groupSidebar {
+    background-color: #00274d9e;
+    margin: 0;
+    padding: 0;
+    width: 280px;
+    height: 100%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Ermöglicht Scrollen, falls der Inhalt zu lang ist */
+}
+
+
+.sidebarHeader {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebarHeader h2 {
+    margin: 0;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* Button zum Erstellen einer Gruppe */
+.createGroupBtn {
+    background-color: #ffae00;
+    color: #333;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    text-align: center;
+}
+
+.createGroupBtn:hover {
+    background-color: #ffc847;
+}
+
+.groupSearch {
+    position: relative;
+    width: 100%;
+    margin-top: 10px; /* Fügt etwas Abstand hinzu */
+}
+
+.groupSearch input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 35px 8px 10px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    background-color: #ffffff; /* Stellt sicher, dass der Hintergrund weiß ist */
+}
+
+.groupSearch i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #333; /* Ändert die Farbe zu einem dunkleren Ton für bessere Sichtbarkeit */
+    cursor: pointer;
+}
+
+.groupList {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.groupItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background-color 0.2s;
+}
+
+.groupItem:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.groupItem.active {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.groupName {
+    font-size: 16px;
+}
+
+.groupBadge {
+    background-color: #FFAE00;
+    color: #333;
+    padding: 5px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/************************************************
+ *  Chat-Bereich
+ ************************************************/
+.chatArea {
+    grid-area: main;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header, Messages, Input */
+    /*height: 100%; */
+    background-color: #f2f2f2;
+     min-height: 0; /* Wichtig für korrektes Scrolling */
+}
+
+.chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00274d9e;
+    color: white;
+    padding: 15px 20px;
+    grid-row: 1;
+
+}
+
+.chatTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.chatHeaderIcons i {
+    font-size: 24px;
+    margin-left: 15px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.chatHeaderIcons i:hover {
+    color: #FFAE00;
+}
+
+/************************************************
+ *  Nachrichtenliste
+ ************************************************/
+.chatMessages {
+    display: flex;
+    flex-direction: column;
+    grid-row: 2;
+    overflow-y: auto;
+    padding: 20px;
+    margin-bottom: 0; /* Entfernt */
+    min-height: 0; /* Wichtig für korrektes Scrolling */
+}
+
+/* Grund-Styles für eine einzelne Nachricht */
+.message {
+    max-width: 60%;
+    margin-bottom: 15px;
+    display: block;
+    position: relative;
+}
+
+.senderName {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.timestamp {
+    font-size: 10px;
+    color: #555;
+    margin-left: 8px;
+}
+
+.textBubble {
+    background-color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    font-size: 14px;
+}
+
+/* eingehende Nachrichten: links */
+.incoming {
+    align-self: flex-start;
+    text-align: left;
+}
+
+.incoming .textBubble {
+    background-color: #fff;
+}
+
+/* ausgehende Nachrichten: rechts */
+.outgoing {
+    align-self: flex-end;
+    text-align: right;
+}
+
+.outgoing .textBubble {
+    background-color: #00274d;
+    color: #ffffff;
+}
+
+/************************************************
+ *  Nachrichteneingabe
+ ************************************************/
+.chatInput {
+    position: relative; /* Geändert von absolute */
+    bottom: auto; /* Entfernt */
+    left: auto; /* Entfernt */
+    right: auto; /* Entfernt */
+    background-color: #ffffff;
+    padding: 10px 20px;
+    border-top: 2px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: auto;
+    grid-row: 3;
+    z-index: 10;
+}
+
+
+.chatInput input {
+    flex: 1;
+    height: 40px; /* Definierte Höhe */
+    border: 2px solid #FFAE00;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 14px;
+    outline: none;
+}
+
+.chatInput button {
+    height: 40px; /* Gleiche Höhe wie Input */
+    padding: 0 20px;
+    background-color: #00274d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.chatInput button:hover {
+    background-color: #04488b;
+}
+
+/************************************************
+ *  Scrollbar-Styles (optional)
+ ************************************************/
+.groupList::-webkit-scrollbar,
+.chatMessages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.groupList::-webkit-scrollbar-track,
+.chatMessages::-webkit-scrollbar-track {
+    background-color: #04488b;
+}
+
+.groupList::-webkit-scrollbar-thumb,
+.chatMessages::-webkit-scrollbar-thumb {
+    background-color: #FFAE00;
+    border-radius: 4px;
+}
+
+/************************************************
+ *  Responsive Design
+ ************************************************/
+@media (max-width: 768px) {
+    #chatMainContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .groupSidebar {
+        /* Auf kleinen Screens Sidebar oben */
+        width: 100%;
+        height: 200px;
+        overflow-y: auto;
+        border-right: none;
+        border-bottom: 2px solid #00274d;
+    }
+
+
+    .message {
+        max-width: 80%;
+    }
+}
