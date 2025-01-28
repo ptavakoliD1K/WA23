@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Gruppenchat</title>
-    <!-- Header-CSS (unverändert) -->
+    <!-- Dein Header-CSS -->
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
-    <!-- Chat-CSS (mit minimalen Änderungen) -->
+    <!-- Dein Chat-CSS (unverändert von dir) -->
     <link rel="stylesheet" th:href="@{/css/groupChat.css}">
 
     <!-- Boxicons (Icons) -->
@@ -13,30 +13,27 @@
 </head>
 <body>
 
-<!-- Dein Header (unverändert) -->
+<!-- Dein Header -->
 <header id="responsive-header">
     <nav>
+        <!-- Hier wird dein Header-Fragment eingefügt -->
         <div th:insert="fragments/headerResponsive.html"></div>
     </nav>
 </header>
 
 <!-- Hauptcontainer für den Chat -->
 <main id="chatMainContainer">
-    <!-- Linke Spalte: Chat-Räume -->
+    <!-- Linke Spalte: Sidebar -->
     <section class="groupSidebar">
         <div class="sidebarHeader">
             <h2>Deine Chats</h2>
-            <!-- Button zum Erstellen einer Gruppe -->
             <a th:href="@{/chat/create}" class="createGroupBtn">Neue Gruppe</a>
-
             <div class="groupSearch">
                 <input type="text" placeholder="Suchen...">
                 <i class='bx bx-search'></i>
             </div>
         </div>
-
         <div class="groupList">
-            <!-- Liste aller Chatrooms des aktuellen Users -->
             <div
                     class="groupItem"
                     th:each="room : ${chatRooms}"
@@ -57,11 +54,7 @@
                 <i class='bx bx-cog' title="Einstellungen"></i>
             </div>
         </div>
-
-        <div class="chatMessages" id="chatMessagesContainer">
-            <!-- Nachrichten werden hier dynamisch (JavaScript) eingefügt -->
-        </div>
-
+        <div class="chatMessages" id="chatMessagesContainer"></div>
         <div class="chatInput">
             <input type="text" id="messageInput" placeholder="Nachricht eingeben..." disabled>
             <button type="button" id="sendMessageBtn" onclick="sendMessage()" disabled>Senden</button>
@@ -82,13 +75,31 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script th:inline="javascript">
-    /* Globale Variablen */
+    /* =========================================================
+       GLOBALE VARIABLEN
+       ========================================================= */
     let stompClient = null;
     let currentChatRoomId = null;
     let currentChatRoomName = null;
 
-    /* Funktion zum Auswählen eines Chat-Raums */
+    /* =========================================================
+       KLICK AUF EINE GRUPPE
+       ========================================================= */
+    function onRoomClicked(element) {
+        // Lies ChatRoom-ID & -Name aus data-Attributen
+        const chatRoomId = element.dataset.id;
+        const chatRoomName = element.dataset.name;
+
+        // Dann ruf die schon vorhandene selectChatRoom-Funktion
+        selectChatRoom(chatRoomId, chatRoomName);
+    }
+
+    /* =========================================================
+       CHATRAUM ÖFFNEN
+       ========================================================= */
     function selectChatRoom(chatRoomId, chatRoomName) {
         currentChatRoomId = chatRoomId;
         currentChatRoomName = chatRoomName;
@@ -111,7 +122,9 @@
         subscribeToChatRoom(chatRoomId);
     }
 
-    /* Nachrichten via REST laden */
+    /* =========================================================
+       NACHRICHTEN PER REST LADEN
+       ========================================================= */
     function fetchMessages(chatRoomId) {
         fetch('/chat/' + chatRoomId + '/messages')
             .then(response => response.json())
@@ -124,7 +137,9 @@
             .catch(error => console.error('Error fetching messages:', error));
     }
 
-    /* Nachricht per STOMP versenden */
+    /* =========================================================
+       NACHRICHT SENDEN
+       ========================================================= */
     function sendMessage() {
         if (!currentChatRoomId) return;
         const messageInput = document.getElementById('messageInput');
@@ -138,12 +153,15 @@
         }
     }
 
-    /* Neue Nachricht anzeigen */
+    /* =========================================================
+       NEUE NACHRICHT IM UI ANZEIGEN
+       ========================================================= */
     function addMessageToChat(messageDTO) {
         // messageDTO = { id, content, senderUsername, chatRoomId, chatRoomName, createdAt }
         const container = document.getElementById('chatMessagesContainer');
 
         // Wer hat geschrieben? (incoming vs. outgoing)
+        // Ggf. mit Thymeleaf den echten eingeloggten Usernamen einbinden
         const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du'; // Fallback
         const msgClass = (messageDTO.senderUsername === loggedInUsername)
             ? 'message outgoing'
@@ -178,21 +196,28 @@
         container.scrollTop = container.scrollHeight;
     }
 
-    /* WebSocket-Abo aufbauen/wechseln */
-    function subscribeToChatRoom(chatRoomId) {
-        // Falls schon ein altes Abo existiert -> unsubscriben
-        if (stompClient && stompClient.connected) {
-            stompClient.unsubscribe('/topic/messages/' + chatRoomId);
-        }
+    /* =========================================================
+       CHATRAUM PER WEBSOCKET ABONNIEREN
+       ========================================================= */
+   let currentSubscription = null;
 
-        // Neu abonnieren
-        stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
-            const msgDTO = JSON.parse(message.body);
-            addMessageToChat(msgDTO);
-        });
+function subscribeToChatRoom(chatRoomId) {
+    // Falls noch ein altes Subscription-Objekt existiert, unsubscriben
+    if (currentSubscription) {
+        currentSubscription.unsubscribe();
+        currentSubscription = null;
     }
 
-    /* Modal zum Hinzufügen von Usern öffnen */
+    // Neu subscriben und das Objekt aufbewahren
+    currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
+        const msgDTO = JSON.parse(message.body);
+        addMessageToChat(msgDTO);
+    });
+}
+
+    /* =========================================================
+       NUTZER HINZUFÜGEN / MODAL
+       ========================================================= */
     function openAddUsersModal() {
         const modal = document.getElementById('addUsersModal');
         if (!currentChatRoomId) {
@@ -202,12 +227,10 @@
         modal.style.display = 'block';
     }
 
-    /* Modal schließen */
     function closeAddUsersModal() {
         document.getElementById('addUsersModal').style.display = 'none';
     }
 
-    /* Nutzer hinzufügen */
     function submitAddUsers() {
         const usernames = document.getElementById('usernames').value.trim();
         if (!usernames) {
@@ -241,9 +264,10 @@
         });
     }
 
-    /* STOMP/WebSocket-Verbindung */
+    /* =========================================================
+       STOMP/WEBSOCKET-VERBINDUNG AUFBAUEN
+       ========================================================= */
     function connectWebSocket() {
-        // SocketJS + STOMP
         var socket = new SockJS('/ws');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
@@ -252,7 +276,9 @@
         });
     }
 
-    /* Seite initialisieren */
+    /* =========================================================
+       BEI SEITENAUFRUF
+       ========================================================= */
     document.addEventListener("DOMContentLoaded", function() {
         connectWebSocket();
     });
