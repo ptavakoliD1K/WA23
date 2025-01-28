@@ -22,7 +22,50 @@ html, body {
     top: 0px;
 }
 
+/* Letzte Stelle für neue Regeln, damit sie nichts überschreibt */
 
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background: #ffffff;
+    width: 450px;
+    padding: 25px;
+    border-radius: 10px;
+    position: relative;
+    border: 2px solid #FFAE00;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    animation: scaleIn 0.3s ease-out;
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes scaleIn {
+    0%   { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+}
 
 /************************************************
  *  Seitenleiste (Gruppen)
@@ -59,19 +102,25 @@ html, body {
 
 /* Button zum Erstellen einer Gruppe */
 .createGroupBtn {
+    display: inline-flex;      /* Damit Icon + Text schön zentriert sind */
+    align-items: center;
+    justify-content: center;   /* Falls du nur ein Icon nutzt */
+
     background-color: #ffae00;
     color: #333;
-    padding: 8px 12px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s;
-    text-align: center;
+    border: none;             /* kein Standard-Rahmen */
+    border-radius: 50%;       /* runder Button! (Kreis) */
+    width: 50px;              /* fixe Breite/Höhe, damit es rund wird */
+    height: 50px;
+    font-size: 24px;          /* Icon-Größe anpassen */
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    margin-bottom: 10px;      /* Abstand zum nächsten Element */
 }
 
 .createGroupBtn:hover {
     background-color: #ffc847;
+    transform: scale(1.05);
 }
 
 .groupSearch {
@@ -220,25 +269,78 @@ html, body {
     font-size: 14px;
 }
 
-/* eingehende Nachrichten: links */
+/************************************************
+ *  Eingehende Nachrichten (von anderen)
+ ************************************************/
 .incoming {
-    align-self: flex-start;
+    align-self: flex-start;    /* linksbündig */
     text-align: left;
 }
 
 .incoming .textBubble {
-    background-color: #fff;
+    background-color: #f1f0f0; /* hellgrauer Hintergrund */
+    color: #333;
 }
 
-/* ausgehende Nachrichten: rechts */
+/************************************************
+ *  Ausgehende Nachrichten (aktuell eingeloggter User)
+ ************************************************/
 .outgoing {
-    align-self: flex-end;
+    align-self: flex-end;      /* rechtsbündig */
     text-align: right;
 }
 
 .outgoing .textBubble {
-    background-color: #00274d;
+    background-color: #3f51b5; /* z.B. dunkleres Blau */
     color: #ffffff;
+}
+
+/************************************************
+ *  Optional: Abstände / Rundung / Pfeile
+ ************************************************/
+/* Hier könnte man z.B. leichte "Pfeile" an der Seite hinzufügen. Beispiel: */
+.incoming .textBubble {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px; /* oder 0, falls du eine Ecke willst */
+}
+
+.outgoing .textBubble {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/************************************************
+ *  (Optional) Abstände anpassen, um Abgrenzung
+ ************************************************/
+.incoming {
+    margin-right: auto;
+    /* Du könntest z.B. margin-left: 10px; */
+}
+
+.outgoing {
+    margin-left: auto;
+    /* Du könntest z.B. margin-right: 10px; */
+}
+
+/************************************************
+ *  Name + Timestamp
+ ************************************************/
+/* Der Sendername ist schon in .senderName, Timestamp in .timestamp */
+.senderName {
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.timestamp {
+    display: block;  /* oder inline-block, je nach Geschmack */
+    font-size: 10px;
+    margin-top: 3px;
+    color: #666;
 }
 
 /************************************************
@@ -327,3 +429,4 @@ html, body {
         max-width: 80%;
     }
 }
+
