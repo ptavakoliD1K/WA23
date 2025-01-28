@@ -97,7 +97,7 @@ public class ChatController {
         User user = userService.findByUsername(principal.getName());
         List<ChatRoom> chatRooms = chatService.getUserChatRooms(user);
         model.addAttribute("chatRooms", chatRooms);
-        return "chatRooms";
+        return "chatRooms"; // => chatRooms.html
     }
 
     @PostMapping("/{chatRoomId}/addUsers")

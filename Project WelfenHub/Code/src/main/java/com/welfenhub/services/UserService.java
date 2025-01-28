@@ -46,8 +46,8 @@ public class UserService implements UserDetailsService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        Role userRole = roleRepository.findByName("ROLE_USER");
-        user.setRole(UserRole.ROLE_USER);
+        Role userRole = roleRepository.findByName("ROLE_ADMIN");
+        user.setRole(UserRole.ROLE_ADMIN);
         try {
             logger.info("Encoded password for user: {}", user.getUsername());
             userRepository.save(user);
