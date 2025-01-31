@@ -1,6 +1,7 @@
 package com.welfenhub.controllers;
 
 import com.welfenhub.services.EvaluationService;
+import com.welfenhub.services.SendEvaluationByEmailService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,6 @@ public class EvaluationController {
             @RequestParam("text") String text) throws IOException {
 
         EvaluationService.generateHtml(feedbackValues, text);
-
-        System.out.println(feedbackValues + "\n" + text);
 
     }
 }

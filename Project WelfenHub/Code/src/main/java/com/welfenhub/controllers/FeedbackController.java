@@ -1,10 +1,9 @@
 package com.welfenhub.controllers;
 
-import com.welfenhub.services.sendFeedbackEmailService;
+import com.welfenhub.services.SendFeedbackEmailService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +40,7 @@ public class FeedbackController {
             @RequestParam("message") String message
     ) throws MessagingException, SQLException {
 
-        sendFeedbackEmailService.sendEmail(senderEmail, name, message, myAccount, myPassword);
+        SendFeedbackEmailService.sendEmail(senderEmail, name, message, myAccount, myPassword);
 
         return "Feedback erfolgreich empfangen!";
     }

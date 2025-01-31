@@ -22,6 +22,9 @@ document.querySelectorAll('label').forEach((label) => {
     });
 });
 
+/**
+ * event listener which submits all information of lecturer evaluation to back end
+ */
 
 formular.addEventListener('submit', (e) => {
     feedbackValues["Lehrveranstaltung"] = lehrveranstaltung.value;
@@ -44,7 +47,7 @@ formular.addEventListener('submit', (e) => {
 
     xhr.onload = () => {
         if (xhr.status !== 200) {
-            console.error("Fehler: E-Mail wurde nicht gesendet");
+            console.error("Fehler: Nachricht wurde nicht gesendet");
         } else if (xhr.status === 200) {
             alert("Die Nachricht wurde erfolgreich an gesendet. Vielen Dank für Ihr Feedback");
         }

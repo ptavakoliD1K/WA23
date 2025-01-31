@@ -8,17 +8,33 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
+/**
+ * Service, which edits to html to match the lecturer rating which is done
+ */
+
 @Service
 public class EvaluationService {
 
+    /**
+     * private constructor for clean code
+     */
+
     EvaluationService() {
     }
+
+    /**
+     * generates html which right values of the lecturer rating and start convertToPdf
+     * @param valueJson
+     * @param text
+     * @throws IOException
+     */
 
     public static void generateHtml(String valueJson, String text) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> mapValues = objectMapper.readValue(valueJson, Map.class);
 
+        // TODO in Datenbank auslagern
         String htmlTemplate = new String(Files.readAllBytes(Path.of("X:/git_repository/welfenhub_repo2/WA23/Project WelfenHub/Code/src/main/resources/templates/fragments/dozentenEvaluationWADokument.html")));
 
         String valueLehrveranstaltung = mapValues.get("Lehrveranstaltung");
@@ -108,9 +124,6 @@ public class EvaluationService {
             htmlTemplate = htmlTemplate.replace("{{checked18" + i + "}}", checked18);
 
         }
-
-
-        System.out.println(htmlTemplate);
 
         ConvertToPDFService.convertToPdf(htmlTemplate);
 
