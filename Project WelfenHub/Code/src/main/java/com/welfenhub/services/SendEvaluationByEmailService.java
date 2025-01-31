@@ -14,7 +14,9 @@ public class SendEvaluationByEmailService {
         try {
             InputStream inputStream = new FileInputStream("X:/git_repository/welfenhub_repo2/WA23/Project WelfenHub/pdfTest/test.pdf");
 
-        } catch (FileNotFoundException e) {
+
+            inputStream.close();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
