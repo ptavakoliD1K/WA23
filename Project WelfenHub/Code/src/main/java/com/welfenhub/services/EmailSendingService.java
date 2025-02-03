@@ -2,16 +2,16 @@ package com.welfenhub.services;
 
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
-import jakarta.mail.util.ByteArrayDataSource;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -29,13 +29,13 @@ public class EmailSendingService {
      *
      * @param myAccount
      * @param myPassword
-     * @param pdfInputStream
+     * @param file
      * @param pdfFileName
      * @throws MessagingException
      * @throws IOException
      */
 
-    public static void sendEmail(String myAccount, String myPassword, InputStream pdfInputStream, String pdfFileName) throws MessagingException, IOException {
+    public static void sendEmail(String myAccount, String myPassword, File file, String pdfFileName) throws MessagingException, IOException {
 
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -51,7 +51,7 @@ public class EmailSendingService {
         });
 
         // create and send email
-        Message message = prepareMessageWithPdf(session, myAccount, "dennis.abel@swisslife.de", pdfInputStream, pdfFileName);
+        Message message = prepareMessageWithPdf(session, myAccount, "dennis.abel@swisslife.de", file, pdfFileName);
         Transport.send(message);
         System.out.println("E-Mail erfolgreich versendet an " + myAccount);
     }
@@ -62,14 +62,14 @@ public class EmailSendingService {
      * @param session
      * @param myAccount
      * @param receiver
-     * @param pdfInputStream
+     * @param file
      * @param pdfFileName
      * @return message
      * @throws MessagingException
      * @throws IOException
      */
 
-    private static Message prepareMessageWithPdf(Session session, String myAccount, String receiver, InputStream pdfInputStream, String pdfFileName) throws MessagingException, IOException {
+    private static Message prepareMessageWithPdf(Session session, String myAccount, String receiver, File file, String pdfFileName) throws MessagingException {
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccount));
@@ -78,10 +78,10 @@ public class EmailSendingService {
 
         Multipart multipart = new MimeMultipart();
         BodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setText("Guten Tag, \n \nanbei befindet sich eine neue Dozentenevaluation \n\nFreundliche Grüße \nDein WelfenHub Team");
+        messageBodyPart.setText("Guten Tag, \n \nanbei befindet sich eine neue Dozentenevaluation. \n\nFreundliche Grüße \nDein WelfenHub Team");
         multipart.addBodyPart(messageBodyPart);
         MimeBodyPart attachmentPart = new MimeBodyPart();
-        DataSource source = new ByteArrayDataSource(pdfInputStream, "application/pdf");
+        DataSource source = new FileDataSource(file);
         attachmentPart.setDataHandler(new DataHandler(source));
         attachmentPart.setFileName(pdfFileName);
         multipart.addBodyPart(attachmentPart);

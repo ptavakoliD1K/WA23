@@ -1,6 +1,7 @@
 package com.welfenhub.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,6 +23,9 @@ public class EvaluationService {
     EvaluationService() {
     }
 
+     @Autowired
+     ConvertToPDFService convertToPDFService;
+
     /**
      * generates html which right values of the lecturer rating and start convertToPdf
      * @param valueJson
@@ -29,12 +33,11 @@ public class EvaluationService {
      * @throws IOException
      */
 
-    public static void generateHtml(String valueJson, String text) throws IOException {
+    public void generateHtml(String valueJson, String text) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> mapValues = objectMapper.readValue(valueJson, Map.class);
 
-        // TODO in Datenbank auslagern
         String htmlTemplate = new String(Files.readAllBytes(Path.of("X:/git_repository/welfenhub_repo2/WA23/Project WelfenHub/Code/src/main/resources/templates/fragments/dozentenEvaluationWADokument.html")));
 
         String valueLehrveranstaltung = mapValues.get("Lehrveranstaltung");
@@ -68,64 +71,66 @@ public class EvaluationService {
         htmlTemplate = htmlTemplate.replace("{{fachrichtung}}", valueFachrichtung);
         htmlTemplate = htmlTemplate.replace("{{text}}", text);
 
+        final String CHECKED_TRUE = "checked=\"true\"";
+
         for (int i = 1; i <= 5; i++) {
-            String checked1 = (i == valueGesamtEindruck) ? "checked=\"true\"" : "";
+            String checked1 = (i == valueGesamtEindruck) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked1" + i + "}}", checked1);
 
-            String checked2 = (i == valueVergleich) ? "checked=\"true\"" : "";
+            String checked2 = (i == valueVergleich) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked2" + i + "}}", checked2);
 
-            String checked3 = (i == valueKlima) ? "checked=\"true\"" : "";
+            String checked3 = (i == valueKlima) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked3" + i + "}}", checked3);
 
-            String checked4 = (i == valueStrukturierung) ? "checked=\"true\"" : "";
+            String checked4 = (i == valueStrukturierung) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked4" + i + "}}", checked4);
 
-            String checked5 = (i == valueDetail) ? "checked=\"true\"" : "";
+            String checked5 = (i == valueDetail) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked5" + i + "}}", checked5);
 
-            String checked6 = (i == valueDetailInformation) ? "checked=\"true\"" : "";
+            String checked6 = (i == valueDetailInformation) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked6" + i + "}}", checked6);
 
-            String checked7 = (i == valueUmfang) ? "checked=\"true\"" : "";
+            String checked7 = (i == valueUmfang) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked7" + i + "}}", checked7);
 
-            String checked8 = (i == valueSach) ? "checked=\"true\"" : "";
+            String checked8 = (i == valueSach) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked8" + i + "}}", checked8);
 
-            String checked9 = (i == valuePraxis) ? "checked=\"true\"" : "";
+            String checked9 = (i == valuePraxis) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked9" + i + "}}", checked9);
 
-            String checked10 = (i == valueInteresseWecken) ? "checked=\"true\"" : "";
+            String checked10 = (i == valueInteresseWecken) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked10" + i + "}}", checked10);
 
-            String checked11 = (i == valuePresentation) ? "checked=\"true\"" : "";
+            String checked11 = (i == valuePresentation) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked11" + i + "}}", checked11);
 
-            String checked12 = (i == valueExplanation) ? "checked=\"true\"" : "";
+            String checked12 = (i == valueExplanation) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked12" + i + "}}", checked12);
 
-            String checked13 = (i == valueQuestion) ? "checked=\"true\"" : "";
+            String checked13 = (i == valueQuestion) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked13" + i + "}}", checked13);
 
-            String checked14 = (i == valueActiveBeteiligung) ? "checked=\"true\"" : "";
+            String checked14 = (i == valueActiveBeteiligung) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked14" + i + "}}", checked14);
 
-            String checked15 = (i == valueKompetent) ? "checked=\"true\"" : "";
+            String checked15 = (i == valueKompetent) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked15" + i + "}}", checked15);
 
-            String checked16 = (i == valueThema) ? "checked=\"true\"" : "";
+            String checked16 = (i == valueThema) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked16" + i + "}}", checked16);
 
-            String checked17 = (i == valueBeteiligung) ? "checked=\"true\"" : "";
+            String checked17 = (i == valueBeteiligung) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked17" + i + "}}", checked17);
 
-            String checked18 = (i == valueLernerfolg) ? "checked=\"true\"" : "";
+            String checked18 = (i == valueLernerfolg) ? CHECKED_TRUE : "";
             htmlTemplate = htmlTemplate.replace("{{checked18" + i + "}}", checked18);
 
         }
 
-        ConvertToPDFService.convertToPdf(htmlTemplate);
+        convertToPDFService.convertToPdf(htmlTemplate);
 
     }
 }

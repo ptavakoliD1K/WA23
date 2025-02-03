@@ -1,14 +1,15 @@
 package com.welfenhub.services;
 
+import com.welfenhub.repositories.EvaluationFilesRepository;
 import jakarta.mail.MessagingException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * sends evaluation by email
@@ -16,6 +17,9 @@ import java.io.InputStream;
 
 @Service
 public class SendEvaluationByEmailService {
+
+    @Autowired
+    EvaluationFilesRepository evaluationFilesRepository;
 
     @Value("${spring.mail.username}")
     private String myAccount;
@@ -39,18 +43,36 @@ public class SendEvaluationByEmailService {
 
     /**
      * starts sending process of email with pdf as input stream
+     * @param date date of creation of rating
      * @throws FileNotFoundException
      */
 
-    public static void sendEvaluationMail() throws FileNotFoundException {
+    public void sendEvaluationMail(String date) throws FileNotFoundException {
+
+        LocalDateTime creationDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
+        String creationDateVisible = formatter.format(creationDate).toString();
+        String fileName = "Dozenten_Evaluation_" + creationDateVisible + ".pdf";
+
         try {
-            // TODO Daten aus Datenbank abfragen
-            InputStream inputStream = new FileInputStream("X:/git_repository/welfenhub_repo2/WA23/Project WelfenHub/pdfTest/test.pdf");
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(evaluationFilesRepository.getFileFromDatabase(date).get(0));
 
-            EmailSendingService.sendEmail(myAccountStatic, myPasswordStatic, inputStream, "test.pdf");
+            File pdfRating = new File("Dozenten_Evaluation.pdf");
 
-            inputStream.close();
-        } catch (IOException | MessagingException e) {
+            try(FileOutputStream fileOutputStream = new FileOutputStream(pdfRating)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while((bytesRead = byteArrayInputStream.read(buffer)) != -1) {
+                    fileOutputStream.write(buffer, 0, bytesRead);
+                }
+                EmailSendingService.sendEmail(myAccountStatic, myPasswordStatic, pdfRating, fileName);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
