@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #ffffff;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -77,24 +77,22 @@ body {
 }
 
 .chooseProps select{
-    border: none;
+    border: 2px solid transparent;
     width: 80%;
     height: 50px;
-    color: black;
-    background-color: #bcd6ff;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+    padding-left: 0.8em;
+    outline: none;
+    overflow: hidden;
+    background-color: #F3F3F3;
+    border-radius: 10px;
+    transition: all 0.5s;
+    margin-top: 1%;
 }
 
-.chooseProps:active, .chooseProps:focus, .chooseProps:focus-within, .chooseProps:target, chooseProps:focus-visible {
-    border: none;
-    outline: none;
-}
-
-.chooseProps select:focus-visible {
-    border: none;
-    outline: none;
+.chooseProps select:hover, .chooseProps select:focus {
+    border: 2px solid #00274d;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
 }
 
 .drop_zone {
@@ -183,7 +181,7 @@ h3 {
     grid-row: 2;
     margin-left: 0px;
     padding-left: 0px;
-    margin-top: 60px;
+    margin-top: 70px;
 }
 
 .lineDiv {
@@ -239,14 +237,19 @@ h3 {
 #searchQuery {
     width: 60%;
     height: 40px;
-    background-color: #bcd6ff;
+    border: 2px solid transparent;
+    padding-left: 0.8em;
     outline: none;
-    border: none;
+    overflow: hidden;
+    background-color: #F3F3F3;
+    border-radius: 10px;
+    transition: all 0.5s;
 }
 
 #searchQuery:hover, #searchQuery:focus {
-    border: none;
-    outline: none;
+    border: 2px solid #00274d;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
 }
 
 .modal {
@@ -285,7 +288,7 @@ h3 {
 }
 
 footer {
-    margin-top: 100px !important;
+    margin-top: 560px !important;
 }
 
 @media (max-width: 768px) {
@@ -316,7 +319,8 @@ footer {
     }
 
     #searchQuery {
-        width: 100%
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .chooseProps select{

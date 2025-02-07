@@ -8,7 +8,10 @@ const textInput = document.getElementById('hints');
 
 const feedbackValues = {};
 
-// Sammle alle Labels mit den zugehörigen Inputs dynamisch
+/**
+ * sammelt alle values der Labels dynamisch
+ */
+
 document.querySelectorAll('label').forEach((label) => {
     label.addEventListener('click', () => {
         // Finde den ersten ausgewählten Input innerhalb des Labels
@@ -18,7 +21,6 @@ document.querySelectorAll('label').forEach((label) => {
         } else {
             delete feedbackValues[label.id];
         }
-        console.log(feedbackValues);
     });
 });
 
@@ -60,6 +62,10 @@ formular.addEventListener('submit', (e) => {
     xhr.send(formData);
 });
 
+/**
+ * event listener to set max year to current year
+ */
+
 document.addEventListener('DOMContentLoaded', (e) => {
    const date = new Date();
 
@@ -67,6 +73,11 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
    inputYear.max = year;
 });
+
+/**
+ * function to get Csrf-Token
+ * @returns {string}
+ */
 
 function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);

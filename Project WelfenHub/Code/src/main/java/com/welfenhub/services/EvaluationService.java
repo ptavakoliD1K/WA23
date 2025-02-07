@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.util.Map;
 
 /**
- * Service, which edits to html to match the lecturer rating which is done
+ * Service, which edits to html to match the lecturer rating
  */
 
 @Service
