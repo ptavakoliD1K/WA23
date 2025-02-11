@@ -5,7 +5,7 @@
     <title>Gruppenchat</title>
     <!-- Dein Header-CSS -->
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
-    <!-- Dein Chat-CSS (unverändert von dir) -->
+    <!-- Dein Chat-CSS  -->
     <link rel="stylesheet" th:href="@{/css/groupChat.css}">
 
     <!-- Boxicons (Icons) -->
@@ -27,7 +27,7 @@
     <section class="groupSidebar">
         <div class="sidebarHeader">
             <h2>Deine Chats</h2>
-            <a th:href="@{/chat/create}" class="createGroupBtn">Neue Gruppe</a>
+            <button class="createGroupBtn" onclick="openCreateGroupModal()">Neue Gruppe</button>
             <div class="groupSearch">
                 <input type="text" placeholder="Suchen...">
                 <i class='bx bx-search'></i>
@@ -75,6 +75,23 @@
     </div>
 </div>
 
+<!-- Modal zum Erstellen einer Gruppe -->
+<div id="createGroupModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeCreateGroupModal()">&times;</span>
+        <h2>Neue Gruppe erstellen</h2>
+
+        <label for="groupNameInput">Gruppenname:</label>
+        <input type="text" id="groupNameInput" placeholder="z.B. Projektteam A">
+
+        <!-- Liste von Benutzern als Checkboxen oder so -->
+        <div id="groupUsersCheckboxList"></div>
+
+        <button type="button" onclick="createGroup()">Gruppe erstellen</button>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script th:inline="javascript">
@@ -96,6 +113,52 @@
         // Dann ruf die schon vorhandene selectChatRoom-Funktion
         selectChatRoom(chatRoomId, chatRoomName);
     }
+
+    function openCreateGroupModal() {
+    console.log("openCreateGroupModal aufgerufen!");
+    document.getElementById('createGroupModal').style.display = 'block';
+}
+
+function closeCreateGroupModal() {
+    document.getElementById('createGroupModal').style.display = 'none';
+}
+
+function createGroup() {
+    // Lies den Gruppennamen aus:
+    const groupName = document.getElementById('groupNameInput').value.trim();
+    if (!groupName) {
+        alert("Bitte einen Gruppennamen eingeben.");
+        return;
+    }
+
+    // Falls du per Checkbox User auswählst, hier gesammelt:
+    // const selectedUsernames = ...
+
+    // POST an /chat/group => @RequestParam "name", @RequestParam "usernames"
+    const formData = new FormData();
+    formData.append("name", groupName);
+    // formData.append("usernames", "alice"); (für jeden User, z. B.)
+
+    fetch("/chat/group", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            return response.text();
+        }
+    })
+    .then(data => {
+        // Modal schließen
+        closeCreateGroupModal();
+        // Optional: Seite neu laden, damit neue Gruppe in groupList auftaucht
+        // location.reload();
+    })
+    .catch(err => console.error("Fehler beim Erstellen der Gruppe:", err));
+}
+
 
     /* =========================================================
        CHATRAUM ÖFFNEN
@@ -174,7 +237,7 @@
         // Sender
         const senderSpan = document.createElement('span');
         senderSpan.className = 'senderName';
-        senderSpan.textContent = messageDTO.senderUsername;
+        senderSpan.textContent = messageDTO.username;
 
         // Inhalt
         const textDiv = document.createElement('div');
