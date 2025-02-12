@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -83,10 +83,11 @@ body {
     padding-left: 0.8em;
     outline: none;
     overflow: hidden;
-    background-color: #F3F3F3;
+    background-color: white;
     border-radius: 10px;
     transition: all 0.5s;
     margin-top: 1%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chooseProps select:hover, .chooseProps select:focus {
@@ -198,18 +199,21 @@ h3 {
 
 #fileList div button {
     grid-column: auto;
-    width: 50px;
+    width: 40px;
     height: 20px;
-    border: none;
-    border-radius: 2px;
+    border-radius: 4px;
     cursor: pointer;
-    background-color: #bcd6ff;
+    background-color: #333;
     justify-self: end;
+    color: #fff;
+    transition: transform 0.1s;
 }
 
 #fileList div button:hover {
+    outline: none;
     cursor: pointer;
-    background-color: #72a7fb;
+    transform: scale(1.02);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.25s;
 }
 
@@ -241,9 +245,10 @@ h3 {
     padding-left: 0.8em;
     outline: none;
     overflow: hidden;
-    background-color: #F3F3F3;
+    background-color: white;
     border-radius: 10px;
     transition: all 0.5s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #searchQuery:hover, #searchQuery:focus {

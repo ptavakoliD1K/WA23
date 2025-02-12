@@ -5,6 +5,7 @@ const semester = document.getElementById('semester');
 const dozent = document.getElementById('dozent');
 const lehrveranstaltung = document.getElementById('lehrveranstaltung');
 const textInput = document.getElementById('hints');
+const status = document.getElementById('status');
 
 const feedbackValues = {};
 
@@ -37,6 +38,11 @@ formular.addEventListener('submit', (e) => {
 
     e.preventDefault();
 
+    if (semester.value === "blocked") {
+        alert("Bitte wähle ein Semester aus.");
+        return;
+    }
+
     const formData = new FormData();
     formData.append('feedbackList', JSON.stringify(feedbackValues));
     formData.append('text', textInput.value);
@@ -47,11 +53,17 @@ formular.addEventListener('submit', (e) => {
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
 
+    status.textContent = "Nachricht wird gesendet...";
+    status.style.color = "orange";
+
     xhr.onload = () => {
         if (xhr.status !== 200) {
             console.error("Fehler: Nachricht wurde nicht gesendet");
+            status.textContent = "Nachricht wurde nicht gesendet"
+            status.style.color = "red";
         } else if (xhr.status === 200) {
-            alert("Die Nachricht wurde erfolgreich an gesendet. Vielen Dank für Ihr Feedback");
+            status.textContent = "Nachricht wurde gesendet. Vielen Dank für Dein Feedback.";
+            status.style.color = "green";
         }
     };
 

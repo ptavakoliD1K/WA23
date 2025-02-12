@@ -162,8 +162,15 @@ dropZone.addEventListener('drop', (e) => {
 uploadForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    if (dropdownValue.value === "blocked" || moduleValue.value === "blocked" || fachrichtungValue.value === "blocked" || tag.value === "blocked") {
+        message.textContent = "Bitte wähle bei allen Dropdown-Menüs einen Wert";
+        message.style.color = "red";
+        return;
+    }
+
     if (!fileUploadInput.files.length) {
-        alert('Bitte wähle Dateien zum Hochladen aus');
+        message.textContent = "Bitte wähle mindestens eine Datei zum hochladen aus";
+        message.style.color = "red";
         return;
     }
 
@@ -181,7 +188,7 @@ uploadForm.addEventListener('submit', (e) => {
     xhr.open('POST', `http://localhost:8080/upload`, true);
 
     const csrfToken = getCsrfToken();
-    xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken); // Hier den Header setzen
+    xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
 
     xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -199,20 +206,20 @@ uploadForm.addEventListener('submit', (e) => {
 
     xhr.onload = () => {
         if (xhr.status === 200) {
-            message.textContent = 'Dateien erfolgreich hochgeladen!';
-            message.style.color = '#28a745';
+            message.textContent = 'Datei(en) erfolgreich hochgeladen!';
+            message.style.color = "green";
             fetchFileList();
         } else {
-            message.textContent = 'Hochladen der Datei fehlgeschlagen!';
-            message.style.color = '#dc3545';
+            message.textContent = 'Hochladen der Datei(en) fehlgeschlagen!';
+            message.style.color = "red";
         }
         progressBarContainer.style.display = 'none';
     };
 
     xhr.onerror = () => {
         console.error('Fehler:', xhr.responseText);
-        message.textContent = 'Hochladen der Datei fehlgeschlagen!';
-        message.style.color = '#dc3545';
+        message.textContent = 'Hochladen der Datei(en) fehlgeschlagen!';
+        message.style.color = "red";
         progressBarContainer.style.display = 'none';
     };
 

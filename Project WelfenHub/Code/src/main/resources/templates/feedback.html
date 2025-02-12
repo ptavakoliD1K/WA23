@@ -20,15 +20,16 @@
     <h1>Feedback</h1>
 
     <form action="/feedback" method="post" id="formFeedback">
-        <div>
+        <div id="first">
             <input type="text" id="name" name="name" placeholder="Vollständiger Name (freiwillig)" maxlength="60">
         </div>
-        <div>
+        <div id="second">
             <input type="email" id="email" name="email" placeholder="E-Mail (freiwillig)" maxlength="120">
         </div>
-        <div>
-            <textarea id="message" name="message" rows="5" required placeholder="Ihre Nachricht..." maxlength="5000"></textarea>
+        <div id="third">
+            <textarea id="message" name="message" rows="5" required placeholder="Deine Nachricht..." maxlength="5000"></textarea>
         </div>
+        <p id="status"></p>
         <button type="submit">Feedback senden</button>
     </form>
 
