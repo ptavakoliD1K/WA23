@@ -35,4 +35,9 @@ public class HomeController {
     public String dozentenBewertung() {
         return "dozentenFeedback";
     }
+
+    @GetMapping("/ereignisse")
+    public String ereignisse() {
+        return "ereignisse";
+    }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/ereignisse.css"/>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Ereignisse</title>
+</head>
+<body>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+<main>
+    <h1>Ereignisse</h1>
+    <form action="" id="createNewNews" sec:authorize="hasRole('MODERATOR')">
+        <button id="newEventButton">Neues Ereignis erstellen</button>
+    </form>
+    <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <form action="" id="publishForm">
+            <input type="text" maxlength="60" placeholder="Titel" id="title" required>
+            <textarea maxlength="500" placeholder="Inhalt" id="content" required></textarea>
+            <button>Veröffentlichen</button>
+        </form>
+        <p id="status"></p>
+    </div>
+</main>
+
+
+<div th:insert="fragments/footer.html"></div>
+<script src="/js/scriptEreignisse.js"></script>
+</body>
+</html>
