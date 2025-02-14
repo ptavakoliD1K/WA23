@@ -1,9 +1,10 @@
 const newEventPopUp = document.getElementById('createEventPopUp');
-const createNewNews = document.getElementById('createNewNews');
 const title = document.getElementById('title');
 const content = document.getElementById('content');
-const publish = document.getElementById('publishForm');
 const status = document.getElementById('status');
+const newsArea = document.getElementById('newsArea');
+const removeEvent = document.getElementById('removeEventPopUp');
+const removeList = document.getElementById('toRemoveList');
 
 const csrfToken = getCsrfToken();
 
@@ -11,25 +12,81 @@ const csrfToken = getCsrfToken();
  *  shows or removes pop up to create event if button is pressed
  */
 
-createNewNews.addEventListener("submit", (e) => {
-    e.preventDefault();
-
+function showAddEvent() {
     if (newEventPopUp.style.display === "block") {
         newEventPopUp.style.display = "none";
     } else {
         newEventPopUp.style.display = "block";
     }
-});
+}
+
+/**
+ * shows or removes pop up to remove event
+ */
+
+async function showRemoveEvent() {
+    if (removeEvent.style.display === "block") {
+        removeEvent.style.display = "none";
+    } else {
+        removeEvent.style.display = "block";
+    }
+
+    removeList.innerHTML = "";
+
+    const response = await fetch("http://localhost:8080/event/get-event", {
+        method: "GET",
+        headers: {
+            "X-XSRF-TOKEN": csrfToken,
+        }
+    });
+
+    const data =  await response.json();
+
+    for (let i = data.length - 1; i >= 0; i--) {
+        const removeLi = document.createElement('span');
+
+        removeLi.className = "removeList";
+
+        removeLi.textContent = data[i].title;
+        removeLi.title = "Entfernen";
+        removeLi.onclick = function() {
+            removeEventFunc(data[i].title, data[i].content, data[i].date);
+        }
+
+        removeList.appendChild(removeLi);
+    }
+}
+
+async function removeEventFunc(title, content, date) {
+    const response = await fetch("http://localhost:8080/event/remove", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify({
+            "title": title,
+            "content": content,
+            "date": date
+        }),
+    });
+}
 
 /**
  *  sends new event to back end
  */
 
-publish.addEventListener("submit", async (e) => {
-    e.preventDefault();
+async function publishEvent() {
 
     const titleValue = title.value;
     const contentValue = content.value;
+
+    if (titleValue === "" || contentValue === "") {
+        status.textContent = "Bitte fülle die Felder aus";
+        status.style.color = "red";
+
+        return;
+    }
 
     const response = await fetch("http://localhost:8080/event/post", {
         method: "POST",
@@ -55,11 +112,14 @@ publish.addEventListener("submit", async (e) => {
 
     newEventPopUp.style.display = "none";
 
-    await getEvents();
-
-});
+}
 
 document.addEventListener("DOMContentLoaded", getEvents);
+
+/**
+ * gets all events from back end and shows them on page
+ * @returns {Promise<void>}
+ */
 
 async function getEvents() {
     const response = await fetch("http://localhost:8080/event/get-event", {
@@ -71,13 +131,27 @@ async function getEvents() {
 
     const data = await response.json();
 
-    console.log(data)
-    console.log(data.length);
-    console.log(data[2])
-    console.log(data[2].title)
 
-    for (let i = data.length; i <= 0; i--) {
+    for (let i = data.length - 1; i >= 0; i--) {
+        const newsDiv = document.createElement('div');
+        const newsH3 = document.createElement('H3');
+        const newsText = document.createElement('span');
+        const newsDate = document.createElement('p');
 
+        newsDiv.className = "newsDiv";
+
+        const date = data[i].date;
+        const dateFront = date.replace("-", ".");
+        const dateFrontFinal = dateFront.replace("-", ".");
+
+        newsH3.textContent = data[i].title;
+        newsText.textContent = data[i].content;
+        newsDate.textContent = dateFrontFinal;
+
+        newsArea.appendChild(newsDiv);
+        newsDiv.appendChild(newsH3);
+        newsDiv.appendChild(newsText);
+        newsDiv.appendChild(newsDate);
     }
 }
 

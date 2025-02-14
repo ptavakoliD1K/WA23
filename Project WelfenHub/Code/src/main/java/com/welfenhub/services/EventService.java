@@ -41,7 +41,7 @@ public class EventService {
         return eventRepository.getEvent();
     }
 
-    public int getCountOfEvents() {
-        return eventRepository.getCount();
+    public void removeEventFromDatabase() {
+
     }
 }

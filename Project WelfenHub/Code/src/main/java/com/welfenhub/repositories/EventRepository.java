@@ -19,7 +19,4 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e")
     List<EventDTO> getEvent();
-
-    @Query(value = "SELECT COUNT(*) FROM events", nativeQuery = true)
-    int getCount();
 }

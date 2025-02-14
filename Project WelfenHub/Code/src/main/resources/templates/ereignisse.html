@@ -19,17 +19,18 @@
 </header>
 <main>
     <h1>Ereignisse</h1>
-    <form action="" id="createNewNews" sec:authorize="hasRole('MODERATOR')">
-        <button id="newEventButton">Neues Ereignis erstellen</button>
-    </form>
+    <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Neues Ereignis erstellen</button>
+    <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
-        <form action="" id="publishForm">
-            <input type="text" maxlength="60" placeholder="Titel" id="title" required>
-            <textarea maxlength="500" placeholder="Inhalt" id="content" required></textarea>
-            <button>Veröffentlichen</button>
-        </form>
+        <input type="text" maxlength="100" placeholder="Titel" id="title">
+        <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
+        <button onclick="publishEvent()" id="publishButton">Veröffentlichen</button>
         <p id="status"></p>
     </div>
+    <div id="removeEventPopUp" sec:authorize="hasRole('MODERATOR')" >
+        <ul id="toRemoveList"></ul>
+    </div>
+    <div id="newsArea"></div>
 </main>
 
 

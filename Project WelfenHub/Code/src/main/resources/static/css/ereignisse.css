@@ -4,10 +4,60 @@ body {
     background-color: #f4f4f4;
 }
 
+main {
+    margin: 1% 1% 1% 1%;
+    height: fit-content;
+    min-height: 1100px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    color: #fff;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#newEventButton {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1%;
+}
+
+#removeEvent {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 1%;
+}
+
+#removeEvent:hover, #removeEvent:focus {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+button:hover, button:focus {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
 #createEventPopUp {
     display: none;
     z-index: 1000;
-    position: absolute;
+    position: fixed;
     justify-self: anchor-center;
     background-color: #fff;
     width: 70%;
@@ -16,18 +66,67 @@ body {
     border-radius: 4px;
 }
 
-input {
+#removeEventPopUp {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    justify-self: anchor-center;
+    background-color: #fff;
+    width: 70%;
+    height: fit-content;
+    min-height: 150px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
+}
+
+input {
     outline: none;
+    height: 2.5rem;
+    padding-left: 0.8em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+input:hover, input:focus {
+    box-shadow: rgba(74, 157, 236, 0.2) 0px 0px 0px 7px;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 39, 77);
+    border-image: initial;
 }
 
 textarea {
+    outline: none;
+    height: 100px;
+    padding: 0.8em 0.4em 0.8em 0.4em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
     font-family: Arial, sans-serif;
     resize: vertical;
-    padding: 5px 3px 5px 3px;
-    border-radius: 4px;
-    box-sizing: border-box;
-    outline: none;
+}
+
+textarea:hover, textarea:focus {
+    box-shadow: rgba(74, 157, 236, 0.2) 0px 0px 0px 7px;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 39, 77);
+    border-image: initial;
 }
 
 #createEventPopUp input, #createEventPopUp textarea {
@@ -51,7 +150,52 @@ textarea {
     margin: 10px auto 10px auto;
 }
 
+#publishButton {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 #status {
     text-align: center;
     margin-bottom: 10px;
 }
+
+#toRemoveList span {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: fit-content;
+    justify-self: center;
+}
+
+#toRemoveList span:hover, #toRemoveList span:focus {
+    color: red;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.newsDiv {
+    width: 60%;
+    height: fit-content;
+    min-height: 150px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: auto;
+    margin-left: auto;
+    box-sizing: border-box;
+    padding: 1px 5px 1px 5px;
+    margin-bottom: 1%;
+}
+
+.newsDiv span {
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.newsDiv p {
+    color: #adadad;
+}
+
