@@ -19,4 +19,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e")
     List<EventDTO> getEvent();
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM events WHERE title = :title AND content = :content AND date = :date", nativeQuery = true)
+    void removeEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
 }

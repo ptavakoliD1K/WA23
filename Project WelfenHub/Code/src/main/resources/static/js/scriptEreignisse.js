@@ -16,6 +16,7 @@ function showAddEvent() {
     if (newEventPopUp.style.display === "block") {
         newEventPopUp.style.display = "none";
     } else {
+        removeEvent.style.display = "none";
         newEventPopUp.style.display = "block";
     }
 }
@@ -24,15 +25,25 @@ function showAddEvent() {
  * shows or removes pop up to remove event
  */
 
-async function showRemoveEvent() {
+function showRemoveEvent() {
     if (removeEvent.style.display === "block") {
         removeEvent.style.display = "none";
     } else {
+        newEventPopUp.style.display = "none";
         removeEvent.style.display = "block";
     }
 
     removeList.innerHTML = "";
 
+    getToRemoveEvents();
+}
+
+/**
+ * gets all events which can be removed
+ * @returns {Promise<void>}
+ */
+
+async function getToRemoveEvents() {
     const response = await fetch("http://localhost:8080/event/get-event", {
         method: "GET",
         headers: {
@@ -47,7 +58,7 @@ async function showRemoveEvent() {
 
         removeLi.className = "removeList";
 
-        removeLi.textContent = data[i].title;
+        removeLi.textContent = '"' + data[i].title + '"' + " vom " + data[i].date.replace(/-/g, ".");
         removeLi.title = "Entfernen";
         removeLi.onclick = function() {
             removeEventFunc(data[i].title, data[i].content, data[i].date);
@@ -56,6 +67,14 @@ async function showRemoveEvent() {
         removeList.appendChild(removeLi);
     }
 }
+
+/**
+ * sends http request to remove event
+ * @param title
+ * @param content
+ * @param date
+ * @returns {Promise<void>}
+ */
 
 async function removeEventFunc(title, content, date) {
     const response = await fetch("http://localhost:8080/event/remove", {
@@ -70,6 +89,16 @@ async function removeEventFunc(title, content, date) {
             "date": date
         }),
     });
+
+
+    newsArea.innerHTML = "";
+
+    removeList.innerHTML = "";
+
+    await getEvents();
+
+    await getToRemoveEvents();
+
 }
 
 /**
@@ -104,13 +133,19 @@ async function publishEvent() {
         status.textContent = "Das Ereignis wurde erstellt";
         status.style.color = "green";
         await wait(2000);
+        status.innerHTML = "";
     } else {
         status.textContent = "Technischer Fehler: Ereignis wurde nicht erstellt";
         status.style.color = "red";
+        status.innerHTML = ""
         await wait(6000);
     }
 
     newEventPopUp.style.display = "none";
+
+    newsArea.innerHTML = "";
+
+    await getEvents();
 
 }
 
@@ -136,17 +171,16 @@ async function getEvents() {
         const newsDiv = document.createElement('div');
         const newsH3 = document.createElement('H3');
         const newsText = document.createElement('span');
-        const newsDate = document.createElement('p');
+        const newsDate = document.createElement('div');
 
         newsDiv.className = "newsDiv";
 
         const date = data[i].date;
-        const dateFront = date.replace("-", ".");
-        const dateFrontFinal = dateFront.replace("-", ".");
+        const dateFront = date.replace(/-/g, ".");
 
         newsH3.textContent = data[i].title;
-        newsText.textContent = data[i].content;
-        newsDate.textContent = dateFrontFinal;
+        newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
+        newsDate.textContent = dateFront;
 
         newsArea.appendChild(newsDiv);
         newsDiv.appendChild(newsH3);

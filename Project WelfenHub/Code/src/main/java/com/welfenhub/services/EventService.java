@@ -41,7 +41,7 @@ public class EventService {
         return eventRepository.getEvent();
     }
 
-    public void removeEventFromDatabase() {
-
+    public void removeEventFromDatabase(String content, String title, String date) {
+        eventRepository.removeEvent(title, content, date);
     }
 }

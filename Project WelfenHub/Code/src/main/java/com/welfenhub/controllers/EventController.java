@@ -2,9 +2,7 @@ package com.welfenhub.controllers;
 
 import com.welfenhub.dto.EventDTO;
 import com.welfenhub.services.EventService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,12 +33,7 @@ public class EventController {
 
     @DeleteMapping("/remove")
     public void removeEvent(@RequestBody EventDTO event) {
-        System.out.println(event.getContent());
-        System.out.println(event.getTitle());
-        System.out.println(event.getDate());
 
-        // TODO: Parameter weitergeben, über DB eintrag löschen
-
-        eventService.removeEventFromDatabase();
+        eventService.removeEventFromDatabase(event.getContent(), event.getTitle(), event.getDate());
     }
 }

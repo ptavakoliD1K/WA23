@@ -22,12 +22,16 @@
     <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Neues Ereignis erstellen</button>
     <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <button class="close-button" onclick="showAddEvent()">&times;</button>
+        <span class="headerPopUp">Ereignis hinzufügen</span>
         <input type="text" maxlength="100" placeholder="Titel" id="title">
         <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
         <button onclick="publishEvent()" id="publishButton">Veröffentlichen</button>
         <p id="status"></p>
     </div>
     <div id="removeEventPopUp" sec:authorize="hasRole('MODERATOR')" >
+        <button class="close-button" onclick="showRemoveEvent()">&times;</button>
+        <span class="headerPopUp">Ereignis löschen</span>
         <ul id="toRemoveList"></ul>
     </div>
     <div id="newsArea"></div>
