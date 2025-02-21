@@ -3,6 +3,9 @@ package com.welfenhub.services;
 import com.welfenhub.dto.EventDTO;
 import com.welfenhub.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,6 +43,37 @@ public class EventService {
 
         return eventRepository.getEvent();
     }
+
+    /**
+     * gets number of events
+     *
+     * @return
+     */
+
+    public int getEventCount() {
+        return eventRepository.getEventCount();
+    }
+
+    /**
+     * gets events for each page
+     *
+     * @param page
+     * @return
+     */
+
+    public List<EventDTO> showEventsByPage(int page) {
+        Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "id"));
+
+        return eventRepository.showEvent(pageable);
+    }
+
+    /**
+     * removes event in database
+     *
+     * @param content
+     * @param title
+     * @param date
+     */
 
     public void removeEventFromDatabase(String content, String title, String date) {
         eventRepository.removeEvent(title, content, date);

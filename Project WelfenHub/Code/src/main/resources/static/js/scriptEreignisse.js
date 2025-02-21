@@ -5,6 +5,7 @@ const status = document.getElementById('status');
 const newsArea = document.getElementById('newsArea');
 const removeEvent = document.getElementById('removeEventPopUp');
 const removeList = document.getElementById('toRemoveList');
+const pages = document.getElementById('page');
 
 const csrfToken = getCsrfToken();
 
@@ -51,7 +52,7 @@ async function getToRemoveEvents() {
         }
     });
 
-    const data =  await response.json();
+    const data = await response.json();
 
     for (let i = data.length - 1; i >= 0; i--) {
         const removeLi = document.createElement('span');
@@ -60,7 +61,7 @@ async function getToRemoveEvents() {
 
         removeLi.textContent = '"' + data[i].title + '"' + " vom " + data[i].date.replace(/-/g, ".");
         removeLi.title = "Entfernen";
-        removeLi.onclick = function() {
+        removeLi.onclick = function () {
             removeEventFunc(data[i].title, data[i].content, data[i].date);
         }
 
@@ -95,9 +96,11 @@ async function removeEventFunc(title, content, date) {
 
     removeList.innerHTML = "";
 
-    await getEvents();
+    await showFirstPage();
 
     await getToRemoveEvents();
+
+    await showPage();
 
 }
 
@@ -145,19 +148,23 @@ async function publishEvent() {
 
     newsArea.innerHTML = "";
 
-    await getEvents();
+    await showPage();
+
+    await showFirstPage();
 
 }
 
-document.addEventListener("DOMContentLoaded", getEvents);
-
 /**
- * gets all events from back end and shows them on page
+ * shows page section and function to change page
  * @returns {Promise<void>}
  */
 
-async function getEvents() {
-    const response = await fetch("http://localhost:8080/event/get-event", {
+
+async function showPage() {
+
+    pages.innerHTML = "";
+
+    const response = await fetch("http://localhost:8080/event/get-event-count", {
         method: "GET",
         headers: {
             "X-XSRF-TOKEN": csrfToken,
@@ -166,26 +173,46 @@ async function getEvents() {
 
     const data = await response.json();
 
+    let numPages = data / 5;
 
-    for (let i = data.length - 1; i >= 0; i--) {
-        const newsDiv = document.createElement('div');
-        const newsH3 = document.createElement('H3');
-        const newsText = document.createElement('span');
-        const newsDate = document.createElement('div');
+    numPages = Math.ceil(numPages);
 
-        newsDiv.className = "newsDiv";
+    // TODO: hinzufügen, dass Seitenzahlen bold sind, wenn man auf der jeweiligen Seite ist
 
-        const date = data[i].date;
-        const dateFront = date.replace(/-/g, ".");
+    for (let i = 1; i <= numPages; i++) {
+        const page = document.createElement('span');
+        page.className = "page";
+        page.textContent = " " + i.toString() + " ";
+        page.onclick = async function () {
 
-        newsH3.textContent = data[i].title;
-        newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-        newsDate.textContent = dateFront;
+            newsArea.innerHTML = "";
 
-        newsArea.appendChild(newsDiv);
-        newsDiv.appendChild(newsH3);
-        newsDiv.appendChild(newsText);
-        newsDiv.appendChild(newsDate);
+            const response = await fetch(`http://localhost:8080/event/show?page=${encodeURIComponent(i)}`);
+
+            const data = await response.json();
+
+            for (let i = 0; i < data.length; i++) {
+                const newsDiv = document.createElement('div');
+                const newsH3 = document.createElement('H3');
+                const newsText = document.createElement('span');
+                const newsDate = document.createElement('div');
+
+                newsDiv.className = "newsDiv";
+
+                const date = data[i].date;
+                const dateFront = date.replace(/-/g, ".");
+
+                newsH3.textContent = data[i].title;
+                newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
+                newsDate.textContent = dateFront;
+
+                newsArea.appendChild(newsDiv);
+                newsDiv.appendChild(newsH3);
+                newsDiv.appendChild(newsText);
+                newsDiv.appendChild(newsDate);
+            }
+        }
+        pages.appendChild(page);
     }
 }
 
@@ -209,3 +236,40 @@ function getCsrfToken() {
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+document.addEventListener('DOMContentLoaded', showPage);
+
+/**
+ * shows first page
+ * @returns {Promise<void>}
+ */
+
+async function showFirstPage() {
+    const response = await fetch(`http://localhost:8080/event/show?page=1`);
+
+    const data = await response.json();
+
+
+    for (let i = 0; i < data.length; i++) {
+        const newsDiv = document.createElement('div');
+        const newsH3 = document.createElement('H3');
+        const newsText = document.createElement('span');
+        const newsDate = document.createElement('div');
+
+        newsDiv.className = "newsDiv";
+
+        const date = data[i].date;
+        const dateFront = date.replace(/-/g, ".");
+
+        newsH3.textContent = data[i].title;
+        newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
+        newsDate.textContent = dateFront;
+
+        newsArea.appendChild(newsDiv);
+        newsDiv.appendChild(newsH3);
+        newsDiv.appendChild(newsText);
+        newsDiv.appendChild(newsDate);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', showFirstPage);

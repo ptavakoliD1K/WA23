@@ -19,8 +19,10 @@
 </header>
 <main>
     <h1>Ereignisse</h1>
-    <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Neues Ereignis erstellen</button>
-    <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
+    <div id="buttons" sec:authorize="hasRole('MODERATOR')">
+        <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Ereignis erstellen</button>
+        <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
+    </div>
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
         <button class="close-button" onclick="showAddEvent()">&times;</button>
         <span class="headerPopUp">Ereignis hinzufügen</span>
@@ -35,9 +37,8 @@
         <ul id="toRemoveList"></ul>
     </div>
     <div id="newsArea"></div>
+    <div id="page"></div>
 </main>
-
-
 <div th:insert="fragments/footer.html"></div>
 <script src="/js/scriptEreignisse.js"></script>
 </body>

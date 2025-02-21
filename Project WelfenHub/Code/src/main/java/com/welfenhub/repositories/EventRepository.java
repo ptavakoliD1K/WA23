@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -19,6 +22,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e")
     List<EventDTO> getEvent();
+
+    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e ORDER BY e.id DESC")
+    List<EventDTO> showEvent(Pageable pageable);
+
+    @Query(value = "SELECT count(*) FROM events", nativeQuery = true)
+    int getEventCount();
 
     @Transactional
     @Modifying

@@ -28,7 +28,7 @@ public class SecurityConfig {
 
                 // Authorization Rules
                 .authorizeRequests(auth -> auth
-                        .antMatchers("/register", "/login", "/css/**", "/images/**", "/static/**", "/templates/**", "/passwordreset", "/upload", "/js/**", "/passwordResetProcess", "/reset-password**", "/setNewPassword**","/posts/**", "/event/get-event", "/event/get-count").permitAll()
+                        .antMatchers("/register", "/login", "/css/**", "/images/**", "/static/**", "/templates/**", "/passwordreset", "/upload", "/js/**", "/passwordResetProcess", "/reset-password**", "/setNewPassword**","/posts/**", "/event/get-event", "/event/get-event-count", "/event/show**").permitAll()
                         .antMatchers("/event/**").hasAuthority("ROLE_MODERATOR")
                         .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                         .antMatchers("/moderator/**", "/event/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")

@@ -25,15 +25,50 @@ public class EventController {
         eventService.saveEventToDatabase(event.getTitle(), event.getContent());
     }
 
+    /**
+     * gets events from database
+     *
+     * @return
+     */
+
     @GetMapping("/get-event")
     public List<EventDTO> getEvent() {
         return eventService.getEventFromDatabase();
     }
 
+    /**
+     * gets number of events
+     *
+     * @return
+     */
+
+    @GetMapping("/get-event-count")
+    public int getEventCount() {
+        return eventService.getEventCount();
+    }
+
+    /**
+     * gets events for each page
+     *
+     * @param page
+     * @return
+     */
+
+    @GetMapping("/show")
+    public List<EventDTO> showEventByPage(@RequestParam("page") int page) {
+        return eventService.showEventsByPage(page);
+    }
+
+    /**
+     * deletes event in database
+     *
+     * @param event
+     */
 
     @DeleteMapping("/remove")
     public void removeEvent(@RequestBody EventDTO event) {
 
         eventService.removeEventFromDatabase(event.getContent(), event.getTitle(), event.getDate());
     }
+
 }
