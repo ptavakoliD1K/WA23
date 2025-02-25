@@ -6,6 +6,9 @@ const newsArea = document.getElementById('newsArea');
 const removeEvent = document.getElementById('removeEventPopUp');
 const removeList = document.getElementById('toRemoveList');
 const pages = document.getElementById('page');
+const showEditEventPage = document.getElementById('editEventPopUp');
+const editList = document.getElementById('toEditList');
+const editSelected = document.getElementById('editSelectedEventPopUp');
 
 const csrfToken = getCsrfToken();
 
@@ -37,6 +40,70 @@ function showRemoveEvent() {
     removeList.innerHTML = "";
 
     getToRemoveEvents();
+}
+
+/**
+ * shows pop up to select event which should be edited
+ */
+
+function showEditEvent() {
+    if (showEditEventPage.style.display === "block") {
+        showEditEventPage.style.display = "none";
+    } else {
+        showEditEventPage.style.display = "block";
+    }
+
+    editList.innerHTML = "";
+
+    removeEvent.style.display = "none";
+    newEventPopUp.style.display = "none";
+
+    getToEditEvents();
+}
+
+/**
+ * shows pop up in which you can edit the selected event
+ */
+
+function showEventToEdit() {
+    if (editSelected.style.display === "none") {
+        editSelected.style.display = "block";
+    } else {
+        editSelected.style.display = "none";
+    }
+
+    removeEvent.style.display = "none";
+    newEventPopUp.style.display = "none";
+}
+
+/**
+ * gets all function which can be edited
+ * @returns {Promise<void>}
+ */
+
+async function getToEditEvents() {
+    const response = await fetch("http://localhost:8080/event/get-event", {
+        method: "GET",
+        headers: {
+            "X-XSRF-TOKEN": csrfToken,
+        }
+    });
+
+    const data = await response.json();
+
+    for (let i = data.length - 1; i >= 0; i--) {
+        const removeLi = document.createElement('span');
+
+        removeLi.className = "removeList";
+
+        removeLi.textContent = '"' + data[i].title + '"' + " vom " + data[i].date.replace(/-/g, ".");
+        removeLi.title = "Bearbeiten";
+        removeLi.onclick = function () {
+            showEventToEdit();
+        }
+
+        editList.appendChild(removeLi);
+    }
 }
 
 /**
@@ -210,6 +277,8 @@ async function showPage() {
                 newsDiv.appendChild(newsH3);
                 newsDiv.appendChild(newsText);
                 newsDiv.appendChild(newsDate);
+
+                window.scrollTo(0, 0);
             }
         }
         pages.appendChild(page);
@@ -273,3 +342,7 @@ async function showFirstPage() {
 }
 
 document.addEventListener('DOMContentLoaded', showFirstPage);
+
+document.addEventListener("DOMContentLoaded", function () {
+    editSelected.style.display = "none";
+});
