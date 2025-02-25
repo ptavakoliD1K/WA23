@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
 
         Role userRole = roleRepository.findByName("ROLE_ADMIN");
         // TODO: auf ROLE_USER ändern, bevor live geht
-        user.setRole(UserRole.ROLE_ADMIN); // WICHTIG: hier darf am Ende standardmäßig NICHT mehr ROLE_ADMIN sein
+        user.setRole(UserRole.ROLE_USER); // WICHTIG: hier darf am Ende standardmäßig NICHT mehr ROLE_ADMIN sein
         try {
             logger.info("Encoded password for user: {}", user.getUsername());
             userRepository.save(user);

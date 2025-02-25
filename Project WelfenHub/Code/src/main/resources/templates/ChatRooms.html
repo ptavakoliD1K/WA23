@@ -5,7 +5,7 @@
     <title>Gruppenchat</title>
     <!-- Dein Header-CSS -->
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
-    <!-- Dein Chat-CSS  -->
+    <!-- Dein Chat-CSS (unverändert von dir) -->
     <link rel="stylesheet" th:href="@{/css/groupChat.css}">
 
     <!-- Boxicons (Icons) -->
@@ -27,11 +27,12 @@
     <section class="groupSidebar">
         <div class="sidebarHeader">
             <h2>Deine Chats</h2>
-            <button class="createGroupBtn" onclick="openCreateGroupModal()">Neue Gruppe</button>
-            <div class="groupSearch">
-                <input type="text" placeholder="Suchen...">
-                <i class='bx bx-search'></i>
-            </div>
+            <button class="createGroupBtn" onclick="openCreateGroupModal()">
+                <i class='bx bx-plus'></i>
+            </button>            <div class="groupSearch">
+            <input type="text" placeholder="Suchen...">
+            <i class='bx bx-search'></i>
+        </div>
         </div>
         <div class="groupList">
             <div
@@ -75,22 +76,25 @@
     </div>
 </div>
 
-<!-- Modal zum Erstellen einer Gruppe -->
 <div id="createGroupModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeCreateGroupModal()">&times;</span>
         <h2>Neue Gruppe erstellen</h2>
 
-        <label for="groupNameInput">Gruppenname:</label>
-        <input type="text" id="groupNameInput" placeholder="z.B. Projektteam A">
+        <div>
+            <label for="groupNameInput">Gruppenname</label>
+            <input type="text" id="groupNameInput" placeholder="z.B. Projektteam A">
+        </div>
 
-        <!-- Liste von Benutzern als Checkboxen oder so -->
-        <div id="groupUsersCheckboxList"></div>
+        <div>
+            <h4>Mitglieder wählen</h4>
+            <!-- Hier laden wir per JS die Liste aller User (Checkboxen) -->
+            <div id="groupUsersCheckboxList"></div>
+        </div>
 
         <button type="button" onclick="createGroup()">Gruppe erstellen</button>
     </div>
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
@@ -113,53 +117,92 @@
         // Dann ruf die schon vorhandene selectChatRoom-Funktion
         selectChatRoom(chatRoomId, chatRoomName);
     }
+    function loadAllUsersForGroup() {
+    fetch('/chat/users')
+        .then(response => response.json())
+        .then(users => {
+            // Optional: eigenen User filtern
+            // Hier nimmst du den eingeloggten User, falls du ihn NICHT auswählen willst
+            const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du';
+            const filteredUsers = users.filter(u => u.username !== loggedInUsername);
+
+            const container = document.getElementById('groupUsersCheckboxList');
+            filteredUsers.forEach(user => {
+                const label = document.createElement('label');
+                label.style.display = 'block'; // Jede Zeile
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.value = user.username; // Username
+                // kein name="usernames" nötig, wir sammeln das in JS
+
+                label.appendChild(checkbox);
+                label.append(' ' + user.username);
+                container.appendChild(label);
+            });
+        })
+        .catch(error => console.error("Fehler beim Laden der Benutzer:", error));
+    }
 
     function openCreateGroupModal() {
+
     console.log("openCreateGroupModal aufgerufen!");
+
+    document.getElementById('groupNameInput').value = '';
+    document.getElementById('groupUsersCheckboxList').innerHTML = '';
+
+    // Modal anzeigen
     document.getElementById('createGroupModal').style.display = 'block';
-}
 
-function closeCreateGroupModal() {
+    // User-Liste laden und als Checkboxen einfügen
+    loadAllUsersForGroup();
+    }
+
+    function closeCreateGroupModal() {
     document.getElementById('createGroupModal').style.display = 'none';
-}
+    }
 
-function createGroup() {
-    // Lies den Gruppennamen aus:
+    function createGroup() {
     const groupName = document.getElementById('groupNameInput').value.trim();
     if (!groupName) {
-        alert("Bitte einen Gruppennamen eingeben.");
+        alert("Bitte Gruppenname eingeben.");
         return;
     }
 
-    // Falls du per Checkbox User auswählst, hier gesammelt:
-    // const selectedUsernames = ...
+    // Checkboxen sammeln
+    const checkboxes = document.querySelectorAll('#groupUsersCheckboxList input[type="checkbox"]:checked');
+    const selectedUsernames = Array.from(checkboxes).map(cb => cb.value);
 
-    // POST an /chat/group => @RequestParam "name", @RequestParam "usernames"
+    // FormData erstellen, da dein Controller @RequestParam nutzt
     const formData = new FormData();
     formData.append("name", groupName);
-    // formData.append("usernames", "alice"); (für jeden User, z. B.)
+    selectedUsernames.forEach(username => {
+        formData.append("usernames", username);
+    });
 
-    fetch("/chat/group", {
-        method: "POST",
+    fetch('/chat/group', {
+        method: 'POST',
         body: formData
     })
     .then(response => {
         if (response.redirected) {
+            // Erwarte: return "redirect:/chat"
             window.location.href = response.url;
         } else {
+            // falls kein Redirect
             return response.text();
         }
     })
-    .then(data => {
+    .then(() => {
         // Modal schließen
         closeCreateGroupModal();
-        // Optional: Seite neu laden, damit neue Gruppe in groupList auftaucht
-        // location.reload();
+        // optional: location.reload();
     })
-    .catch(err => console.error("Fehler beim Erstellen der Gruppe:", err));
-}
-
-
+    .catch(error => {
+        console.error("Fehler beim Erstellen der Gruppe:", error);
+        alert("Fehler: " + error);
+    });
+    }
     /* =========================================================
        CHATRAUM ÖFFNEN
        ========================================================= */
@@ -220,13 +263,16 @@ function createGroup() {
        NEUE NACHRICHT IM UI ANZEIGEN
        ========================================================= */
     function addMessageToChat(messageDTO) {
-        // messageDTO = { id, content, senderUsername, chatRoomId, chatRoomName, createdAt }
+        // messageDTO = { id, content, username, chatRoomId, chatRoomName, createdAt }
         const container = document.getElementById('chatMessagesContainer');
 
-        // Wer hat geschrieben? (incoming vs. outgoing)
-        // Ggf. mit Thymeleaf den echten eingeloggten Usernamen einbinden
         const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du'; // Fallback
-        const msgClass = (messageDTO.senderUsername === loggedInUsername)
+
+        console.log("Sender:", messageDTO.username,
+                "LoggedIn:", loggedInUsername);
+
+
+        const msgClass = (messageDTO.username === loggedInUsername)
             ? 'message outgoing'
             : 'message incoming';
 

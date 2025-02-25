@@ -8,7 +8,7 @@ public class DatabaseInitializer {
 
     public static void main(String[] args) {
         // Der Pfad zur SQLite-Datenbankdatei
-        String url = "jdbc:sqlite:C:/Users/eikef/Desktop/maventestneu/Project WelfenHub/database/users.db";
+        String url = "jdbc:sqlite:C:/Users/Admin/IdeaProjects/WA23/Project WelfenHub/database/users.db";
 
         // SQL-Befehl zum Erstellen der Tabelle
         String createTableSQL = """
