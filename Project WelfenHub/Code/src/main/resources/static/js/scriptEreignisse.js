@@ -23,6 +23,9 @@ function showAddEvent() {
         removeEvent.style.display = "none";
         newEventPopUp.style.display = "block";
     }
+
+    showEditEventPage.style.display = "none";
+    editSelected.style.display = "none";
 }
 
 /**
@@ -38,6 +41,9 @@ function showRemoveEvent() {
     }
 
     removeList.innerHTML = "";
+
+    showEditEventPage.style.display = "none";
+    editSelected.style.display = "none";
 
     getToRemoveEvents();
 }
