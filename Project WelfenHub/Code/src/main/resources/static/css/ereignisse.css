@@ -75,6 +75,15 @@ button:hover, button:focus {
     border-radius: 4px;
 }
 
+#editSelectedEventPopUp .close-button {
+    display: inline-block;
+    left: 1%;
+}
+
+#editSelectedEventPopUp span {
+    margin-left: 1%;
+}
+
 input {
     outline: none;
     height: 2.5rem;
@@ -191,7 +200,7 @@ textarea:hover, textarea:focus {
 }
 
 .newsDiv {
-    width: 60%;
+    width: 70%;
     height: fit-content;
     min-height: 150px;
     background-color: #fff;

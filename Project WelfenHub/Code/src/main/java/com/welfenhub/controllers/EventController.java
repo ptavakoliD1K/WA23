@@ -71,4 +71,14 @@ public class EventController {
         eventService.removeEventFromDatabase(event.getContent(), event.getTitle(), event.getDate());
     }
 
+    /**
+     * endpoint to update event
+     * @param event
+     */
+
+    @PutMapping("/update-event")
+    public void editEvent(@RequestBody EventDTO event) {
+        eventService.editEventInDatabase(event.getTitle(), event.getContent());
+    }
+
 }
