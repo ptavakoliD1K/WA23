@@ -21,6 +21,7 @@
     <h1>Ereignisse</h1>
     <div id="buttons" sec:authorize="hasRole('MODERATOR')">
         <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Ereignis erstellen</button>
+        <button id="editEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showEditEvent()">Ereignis bearbeiten</button>
         <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
     </div>
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
@@ -30,6 +31,18 @@
         <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
         <button onclick="publishEvent()" id="publishButton">Veröffentlichen</button>
         <p id="status"></p>
+    </div>
+    <div id="editEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <button class="close-button" onclick="showEditEvent()">&times;</button>
+        <span class="headerPopUp">Ereignis bearbeiten</span>
+        <ul id="toEditList"></ul>
+    </div>
+    <div id="editSelectedEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <button class="close-button" onclick="showEventToEdit()">&times;</button>
+        <span class="headerPopUp">Ereignis bearbeiten</span>
+        <input id="editInput" disabled>
+        <textarea id="editTextarea"></textarea>
+        <button id="submitUpdate" onclick="submitUpdate()">Abschicken</button>
     </div>
     <div id="removeEventPopUp" sec:authorize="hasRole('MODERATOR')" >
         <button class="close-button" onclick="showRemoveEvent()">&times;</button>

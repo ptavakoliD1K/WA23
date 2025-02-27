@@ -78,4 +78,19 @@ public class EventService {
     public void removeEventFromDatabase(String content, String title, String date) {
         eventRepository.removeEvent(title, content, date);
     }
+
+    /**
+     * updates event
+     * @param title
+     * @param content
+     */
+
+    public void editEventInDatabase(String title, String content) {
+        LocalDateTime creationDate = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        String date = formatter.format(creationDate);
+
+        eventRepository.updateEvent(title, content, date);
+    }
 }

@@ -40,4 +40,9 @@ public class HomeController {
     public String ereignisse() {
         return "ereignisse";
     }
+
+    @GetMapping("/impressum")
+    public String impressum() {
+        return "impressum";
+    }
 }

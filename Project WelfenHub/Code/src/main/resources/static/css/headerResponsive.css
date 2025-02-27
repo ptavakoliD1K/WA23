@@ -84,7 +84,7 @@
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.1s;
     align-self: center;
-    color: black;
+    color: white;
     font-weight: normal;
     font-size: 1rem;
 }

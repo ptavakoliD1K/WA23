@@ -28,18 +28,18 @@ button {
 
 #newEventButton {
     display: block;
-    margin-right: auto;
     margin-bottom: 1%;
-    width: 30%;
-    margin-left: 50%;
+    margin-left: 25%;
+}
+
+#editEventButton {
+    margin-bottom: 2%;
 }
 
 #removeEvent {
     display: block;
-    margin-left: auto;
     margin-bottom: 2%;
-    width: 30%;
-    margin-right: 50%;
+    margin-right: 25%;
 }
 
 #removeEvent:hover, #removeEvent:focus {
@@ -59,11 +59,11 @@ button:hover, button:focus {
 #buttons {
     display: grid;
     grid-template-rows: 1fr;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     place-items: center;
 }
 
-#createEventPopUp {
+#createEventPopUp, #removeEventPopUp, #editEventPopUp, #editSelectedEventPopUp {
     display: none;
     z-index: 1000;
     position: fixed;
@@ -75,17 +75,13 @@ button:hover, button:focus {
     border-radius: 4px;
 }
 
-#removeEventPopUp {
-    display: none;
-    z-index: 1000;
-    position: fixed;
-    justify-self: anchor-center;
-    background-color: #fff;
-    width: 70%;
-    height: fit-content;
-    min-height: 150px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
+#editSelectedEventPopUp .close-button {
+    display: inline-block;
+    left: 1%;
+}
+
+#editSelectedEventPopUp span {
+    margin-left: 1%;
 }
 
 input {
@@ -142,7 +138,7 @@ textarea:hover, textarea:focus {
     font-weight: bold;
 }
 
-#createEventPopUp input, #createEventPopUp textarea {
+#createEventPopUp input, #createEventPopUp textarea, #editSelectedEventPopUp input, #editSelectedEventPopUp textarea {
     width: 80%;
     display: block;
     margin-left: auto;
@@ -150,15 +146,15 @@ textarea:hover, textarea:focus {
     margin-right: auto;
 }
 
-#createEventPopUp input {
+#createEventPopUp input, #editSelectedEventPopUp input {
     height: 40px;
 }
 
-#createEventPopUp textarea {
+#createEventPopUp textarea, #editSelectedEventPopUp textarea {
     min-height: 200px;
 }
 
-#createEventPopUp form button {
+#createEventPopUp form button, #editSelectedEventPopUp button {
     display: block;
     margin: 10px auto 10px auto;
 }
@@ -174,7 +170,7 @@ textarea:hover, textarea:focus {
     margin-bottom: 10px;
 }
 
-#toRemoveList span {
+#toRemoveList span, #toEditList span {
     text-align: center;
     display: grid;
     grid-template-columns: 1fr;
@@ -189,6 +185,12 @@ textarea:hover, textarea:focus {
     cursor: pointer;
 }
 
+#toEditList span:hover, #toEditList span:focus {
+    color: orange;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
 .close-button {
     width: 50px;
     height: 50px;
@@ -198,7 +200,7 @@ textarea:hover, textarea:focus {
 }
 
 .newsDiv {
-    width: 60%;
+    width: 70%;
     height: fit-content;
     min-height: 150px;
     background-color: #fff;
@@ -236,11 +238,11 @@ textarea:hover, textarea:focus {
 @media (max-width: 650px) {
     #buttons {
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
         place-items: center;
     }
 
-    #removeEvent, #newEventButton {
+    #removeEvent, #newEventButton, #editEventButton {
         margin: 0;
         margin-bottom: 2%;
         width: 60%;

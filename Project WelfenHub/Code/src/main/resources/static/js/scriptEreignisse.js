@@ -6,6 +6,11 @@ const newsArea = document.getElementById('newsArea');
 const removeEvent = document.getElementById('removeEventPopUp');
 const removeList = document.getElementById('toRemoveList');
 const pages = document.getElementById('page');
+const showEditEventPage = document.getElementById('editEventPopUp');
+const editList = document.getElementById('toEditList');
+const editSelected = document.getElementById('editSelectedEventPopUp');
+const editInput = document.getElementById('editInput');
+const editTextarea = document.getElementById('editTextarea');
 
 const csrfToken = getCsrfToken();
 
@@ -20,6 +25,9 @@ function showAddEvent() {
         removeEvent.style.display = "none";
         newEventPopUp.style.display = "block";
     }
+
+    showEditEventPage.style.display = "none";
+    editSelected.style.display = "none";
 }
 
 /**
@@ -36,7 +44,104 @@ function showRemoveEvent() {
 
     removeList.innerHTML = "";
 
+    showEditEventPage.style.display = "none";
+    editSelected.style.display = "none";
+
     getToRemoveEvents();
+}
+
+/**
+ * shows pop up to select event which should be edited
+ */
+
+function showEditEvent() {
+    if (showEditEventPage.style.display === "block") {
+        showEditEventPage.style.display = "none";
+    } else {
+        showEditEventPage.style.display = "block";
+    }
+
+    editList.innerHTML = "";
+
+    removeEvent.style.display = "none";
+    newEventPopUp.style.display = "none";
+
+    getToEditEvents();
+}
+
+/**
+ * shows pop up in which you can edit the selected event
+ */
+
+function showEventToEdit() {
+    if (editSelected.style.display === "none") {
+        editSelected.style.display = "block";
+    } else {
+        editSelected.style.display = "none";
+    }
+
+    removeEvent.style.display = "none";
+    newEventPopUp.style.display = "none";
+}
+
+/**
+ * gets all function which can be edited
+ * @returns {Promise<void>}
+ */
+
+async function getToEditEvents() {
+    const response = await fetch("http://localhost:8080/event/get-event", {
+        method: "GET",
+        headers: {
+            "X-XSRF-TOKEN": csrfToken,
+        }
+    });
+
+    const data = await response.json();
+
+    for (let i = data.length - 1; i >= 0; i--) {
+        const removeLi = document.createElement('span');
+
+        removeLi.className = "removeList";
+
+        removeLi.textContent = '"' + data[i].title + '"' + " vom " + data[i].date.replace(/-/g, ".");
+        removeLi.title = "Bearbeiten";
+        removeLi.onclick = function () {
+            showEventToEdit();
+            editInput.value = data[i].title;
+            editTextarea.textContent = data[i].content;
+        }
+        editList.appendChild(removeLi);
+    }
+}
+
+/**
+ * submits update
+ * @returns {Promise<void>}
+ */
+
+async function submitUpdate() {
+    const textAreaValue = editTextarea.value;
+    const editInputValue = editInput.value;
+
+    const response = await fetch("http://localhost:8080/event/update-event", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify({
+            "title": editInputValue,
+            "content": textAreaValue
+        }),
+    });
+
+    showEditEventPage.style.display = "none";
+    editSelected.style.display = "none";
+
+    newsArea.innerHTML = "";
+
+    showFirstPage();
 }
 
 /**
@@ -204,12 +309,14 @@ async function showPage() {
 
                 newsH3.textContent = data[i].title;
                 newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-                newsDate.textContent = dateFront;
+                newsDate.textContent = "Zuletzt bearbeitet am " + dateFront;
 
                 newsArea.appendChild(newsDiv);
                 newsDiv.appendChild(newsH3);
                 newsDiv.appendChild(newsText);
                 newsDiv.appendChild(newsDate);
+
+                window.scrollTo(0, 0);
             }
         }
         pages.appendChild(page);
@@ -263,7 +370,7 @@ async function showFirstPage() {
 
         newsH3.textContent = data[i].title;
         newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-        newsDate.textContent = dateFront;
+        newsDate.textContent = "Zuletzt bearbeitet am " + dateFront;
 
         newsArea.appendChild(newsDiv);
         newsDiv.appendChild(newsH3);
@@ -273,3 +380,7 @@ async function showFirstPage() {
 }
 
 document.addEventListener('DOMContentLoaded', showFirstPage);
+
+document.addEventListener("DOMContentLoaded", function () {
+    editSelected.style.display = "none";
+});
