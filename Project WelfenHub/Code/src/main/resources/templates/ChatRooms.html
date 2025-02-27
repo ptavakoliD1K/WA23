@@ -81,18 +81,18 @@
         <span class="close" onclick="closeCreateGroupModal()">&times;</span>
         <h2>Neue Gruppe erstellen</h2>
 
-        <div>
-            <label for="groupNameInput">Gruppenname</label>
+        <div class="Groupname">
+            <label for="groupNameInput">Gruppenname: </label>
             <input type="text" id="groupNameInput" placeholder="z.B. Projektteam A">
         </div>
 
-        <div>
-            <h4>Mitglieder wählen</h4>
+        <div class="Groupname">
+            <h4>Mitglieder auswählen</h4>
             <!-- Hier laden wir per JS die Liste aller User (Checkboxen) -->
             <div id="groupUsersCheckboxList"></div>
         </div>
 
-        <button type="button" onclick="createGroup()">Gruppe erstellen</button>
+        <button type="button" class="button" onclick="createGroup()">Gruppe erstellen</button>
     </div>
 </div>
 
