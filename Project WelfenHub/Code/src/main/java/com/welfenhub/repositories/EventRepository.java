@@ -33,4 +33,9 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Modifying
     @Query(value = "DELETE FROM events WHERE title = :title AND content = :content AND date = :date", nativeQuery = true)
     void removeEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE events SET content = :content, date = :date WHERE title = :title", nativeQuery = true)
+    void updateEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
 }

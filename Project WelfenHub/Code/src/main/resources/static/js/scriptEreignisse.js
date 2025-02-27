@@ -9,6 +9,8 @@ const pages = document.getElementById('page');
 const showEditEventPage = document.getElementById('editEventPopUp');
 const editList = document.getElementById('toEditList');
 const editSelected = document.getElementById('editSelectedEventPopUp');
+const editInput = document.getElementById('editInput');
+const editTextarea = document.getElementById('editTextarea');
 
 const csrfToken = getCsrfToken();
 
@@ -106,10 +108,40 @@ async function getToEditEvents() {
         removeLi.title = "Bearbeiten";
         removeLi.onclick = function () {
             showEventToEdit();
+            editInput.value = data[i].title;
+            editTextarea.textContent = data[i].content;
         }
-
         editList.appendChild(removeLi);
     }
+}
+
+/**
+ * submits update
+ * @returns {Promise<void>}
+ */
+
+async function submitUpdate() {
+    const textAreaValue = editTextarea.value;
+    const editInputValue = editInput.value;
+
+    const response = await fetch("http://localhost:8080/event/update-event", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken,
+        },
+        body: JSON.stringify({
+            "title": editInputValue,
+            "content": textAreaValue
+        }),
+    });
+
+    showEditEventPage.style.display = "none";
+    editSelected.style.display = "none";
+
+    newsArea.innerHTML = "";
+
+    showFirstPage();
 }
 
 /**
@@ -277,7 +309,7 @@ async function showPage() {
 
                 newsH3.textContent = data[i].title;
                 newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-                newsDate.textContent = dateFront;
+                newsDate.textContent = "Zuletzt bearbeitet am " + dateFront;
 
                 newsArea.appendChild(newsDiv);
                 newsDiv.appendChild(newsH3);
@@ -338,7 +370,7 @@ async function showFirstPage() {
 
         newsH3.textContent = data[i].title;
         newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-        newsDate.textContent = dateFront;
+        newsDate.textContent = "Zuletzt bearbeitet am " + dateFront;
 
         newsArea.appendChild(newsDiv);
         newsDiv.appendChild(newsH3);
