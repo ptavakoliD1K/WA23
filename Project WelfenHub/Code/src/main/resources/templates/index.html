@@ -6,6 +6,7 @@
     <title>Startseite</title>
     <link rel="stylesheet" th:href="@{/css/Startseite_test.css}" />
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
@@ -63,8 +64,7 @@
     </div>
 </div>
 
-<footer>
-    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a></p>
-</footer>
+<div th:insert="fragments/footerResponsive.html"></div>
+
 </body>
 </html>
