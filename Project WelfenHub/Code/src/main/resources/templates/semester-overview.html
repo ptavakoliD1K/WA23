@@ -4,31 +4,17 @@
     <meta charset="UTF-8">
     <title>Semester Übersicht</title>
     <link rel="stylesheet" th:href="@{/css/Semesteroverview.css}" />
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<header>
-    <nav class="navbar">
-        <div class="navdiv">
-            <div class="name">WelfenHUB - wenn Welfen helfen</div>
-            <ul>
-                <li><a th:href="@{/}" class="active">Startseite</a></li>
-                <li><a th:href="@{/posts}">Forum</a></li>
-                <li><a th:href="@{/news}">News</a></li>
-                <li><a th:href="@{/feedback}">Feedback</a></li>
-                <li><a th:href="@{/impressum}">Impressum</a></li>
-                <li sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                        <button type="submit">Abmelden</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
     </nav>
 </header>
+
 <div class="semester-overview-container">
     <!-- Zentrierter Titel -->
     <div class="semester-overview-header">
@@ -53,6 +39,6 @@
     </div>
 </div>
 
-<footer th:insert="fragments/footer :: footer"></footer>
+<div th:insert="fragments/footerResponsive.html"></div>
 </body>
 </html>

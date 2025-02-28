@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Fach Auswahl</title>
     <link rel="stylesheet" th:href="@{/css/start.css}" />
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <header id="responsive-header">
@@ -27,6 +29,6 @@
     </div>
 </div>
 
-<footer th:insert="fragments/footer :: footer"></footer>
+<div th:insert="fragments/footerResponsive.html"></div>
 </body>
 </html>
