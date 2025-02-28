@@ -18,13 +18,24 @@
     <h1>Fachbereich Auswahl</h1>
     <div class="subjects-container">
         <div class="subject-box">
-            <a th:href="@{/forum/bwl}" class="subject-link">BWL</a>
+            <a th:href="@{/forum/bwl}" class="subject-link">
+                <img th:src="@{/images/StudiengangBWL.jpg}" alt="BWL" class="subject-image">
+                <span class="subject-text">BWL</span>
+            </a>
         </div>
+
         <div class="subject-box">
-            <a th:href="@{/forum/wirtschaftsinformatik}" class="subject-link">Wirtschaftsinformatik</a>
+            <a th:href="@{/forum/wirtschaftsinformatik}" class="subject-link">
+                <img th:src="@{/images/StudiengangWINF.jpg}" alt="Wirtschaftsinformatik" class="subject-image">
+                <span class="subject-text">Wirtschaftsinformatik</span>
+            </a>
         </div>
+
         <div class="subject-box">
-            <a th:href="@{/forum/sonstiges}" class="subject-link">Sonstiges</a>
+            <a th:href="@{/forum/sonstiges}" class="subject-link">
+                <img th:src="@{/images/Sonstiges2.png}" alt="Sonstiges" class="subject-image">
+                <span class="subject-text">Sonstiges</span>
+            </a>
         </div>
     </div>
 </div>

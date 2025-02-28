@@ -7,22 +7,24 @@ import java.sql.Statement;
 public class DatabaseInitializer {
 
     public static void main(String[] args) {
-        // Der Pfad zur SQLite-Datenbankdatei
-        String url = "jdbc:sqlite:C:/Users/cheat/IdeaProjects/WA23/Project WelfenHub/database/users.db";
+        // PostgreSQL-Verbindungsdetails
+        String url = "jdbc:postgresql://217.160.18.102:5432/welfenhub";
+        String user = "welfenadmin";
+        String password = "meinSicheresPasswort";
 
-        // SQL-Befehl zum Erstellen der Tabelle
+        // SQL-Befehl zum Erstellen der Tabelle (angepasst für PostgreSQL)
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS files (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id SERIAL PRIMARY KEY,
                 name TEXT NOT NULL,
-                content BLOB NOT NULL,
+                content BYTEA NOT NULL,
                 semester TEXT NOT NULL,
                 module TEXT NOT NULL,
                 fachrichtung TEXT NOT NULL
             );
             """;
 
-        try (Connection conn = DriverManager.getConnection(url);
+        try (Connection conn = DriverManager.getConnection(url, user, password);
              Statement stmt = conn.createStatement()) {
 
             // Verbindung und Tabelle erstellen
