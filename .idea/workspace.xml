@@ -5,18 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Final improvements of FileShare">
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/PasswordResetController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptChangePasswordAfterReset.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/errorPasswordReset.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/resetPassword.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/cosmoStyle.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/cosmoScript.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetLinkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetLinkService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptPasswordReset.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptPasswordReset.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/database/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/database/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +93,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "#3 on Merging developement",
+    "git-widget-placeholder": "#3 on developement",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/PorjektFH/Welfenhub2/Project WelfenHub",
     "node.js.selected.package.tslint": "(autodetect)",
