@@ -1,6 +1,5 @@
 /* Global Styles */
 * {
-    margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     text-decoration: none;
@@ -17,6 +16,7 @@ html, body {
 
 /* Body und Layout-Anpassungen */
 body {
+    margin: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* Stellt sicher, dass die Seite die gesamte Höhe des Viewports einnimmt */
