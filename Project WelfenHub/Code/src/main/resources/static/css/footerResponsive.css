@@ -38,7 +38,8 @@ footer img {
     top: auto;
 }
 
-footer #imprint {
+footer #imprint,
+footer #privacy {
     text-align: center;
     color: #ffffff;
     display: inline-block;

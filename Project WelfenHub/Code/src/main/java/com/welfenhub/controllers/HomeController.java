@@ -45,4 +45,9 @@ public class HomeController {
     public String impressum() {
         return "impressum";
     }
+
+    @GetMapping("/datenschutz")
+    public String datenschutz() {
+        return "datenschutz";
+    }
 }
