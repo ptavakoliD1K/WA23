@@ -35,78 +35,6 @@ body {
     justify-content: space-between;
 }
 
-.navbar {
-    background: var(--primary-color);
-    padding: 30px 20px;
-    overflow: hidden;
-}
-
-.navbar a:hover {
-    color: rgb(57, 117, 173);
-}
-
-.navbar a:active {
-    color: gray;
-}
-
-.navdiv {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.name {
-    font-size: 35px;
-    font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 10px;
-    margin-left: 50px;
-}
-
-li {
-    list-style: none;
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-li a {
-    color: var(--text-color);
-    font-size: 20px;
-    margin-right: 20px;
-}
-
-button {
-    background-color: var(--secondary-color);
-    margin-left: 10px;
-    border-radius: 5px;
-    padding: 10px 20px;
-    border: none;
-    box-shadow: var(--box-shadow);
-    cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.1s;
-    position: relative;
-}
-
-button:hover {
-    background-color: var(--hover-color);
-    transform: scale(1.05);
-    box-shadow: var(--hover-box-shadow);
-}
-
-button:active {
-    transform: scale(0.95);
-    box-shadow: var(--active-box-shadow);
-}
-
-button a {
-    color: var(--text-color);
-    font-size: 20px;
-    text-decoration: none;
-    display: block;
-    text-align: center;
-}
-
 .center-image {
     display: flex;
     justify-content: center;
@@ -125,7 +53,6 @@ h1 {
     text-align: center;
     font-size: 40px;
     padding: 10px;
-    margin-top: 0;
 }
 
 hr {
