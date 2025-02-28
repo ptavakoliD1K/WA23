@@ -7,9 +7,10 @@
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
     <!-- Dein Chat-CSS (unverändert von dir) -->
     <link rel="stylesheet" th:href="@{/css/groupChat.css}">
-
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
     <!-- Boxicons (Icons) -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
@@ -392,6 +393,8 @@ function subscribeToChatRoom(chatRoomId) {
         connectWebSocket();
     });
 </script>
+
+<div th:insert="fragments/footerResponsive.html"></div>
 
 </body>
 </html>

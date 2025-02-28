@@ -6,7 +6,7 @@ html, body {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* Scrollen innerhalb des Chatbereichs ermöglichen */
+    /* overflow: hidden; /* Scrollen innerhalb des Chatbereichs ermöglichen */
 }
 
 #chatMainContainer {
