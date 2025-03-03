@@ -84,7 +84,7 @@ public class ChatService {
     public List<ChatRoom> getUserChatRooms(User user) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByUsersContaining(user);
         logger.info("Found {} chat rooms for user {}", chatRooms.size(), user.getUsername());
-        return ChatRooms;
+        return chatRooms;
     }
 
     @Transactional(readOnly = true)
