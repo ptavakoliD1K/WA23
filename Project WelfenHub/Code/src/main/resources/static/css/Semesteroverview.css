@@ -60,7 +60,6 @@ li {
 li a {
     color: white;
     font-size: 20px;
-    margin-right: 20px;
     transition: color 0.3s;
     cursor: pointer;
 
@@ -129,6 +128,7 @@ button:hover {
 
 .course-list ul li:hover {
     background-color: #d0e4f7;
+    cursor: pointer;
 }
 
 .course-list a {

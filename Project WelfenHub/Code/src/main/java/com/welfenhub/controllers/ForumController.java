@@ -67,7 +67,7 @@ public class ForumController {
                         3, List.of("Anwendungsrealisierung", "Datenbank Programmierung", "Secruity Engineering", "Projektumsetzung", "BWL II"),
                         4, List.of("Alternative Daten- und Programmieransätze", "Sicherheit verteilter Systeme", "Secruity Management", "Projektumsetzung", "BWL II", "Development Engineering"),
                         5, List.of("IT-gestütztes Management", "Verknüpfung der Wirtschaftsinformatik", "Geschäftliche Kommunikation", "Developement Practice", "Vertiefungen"),
-                        6, List.of("ITSM", "Geschäftliche Kommunikation?", "Developement Test", "Bachelorarbeit", "Vertiefungen")
+                        6, List.of("ITSM", "Geschäftliche Kommunikation", "Development Test", "Bachelorarbeit", "Vertiefungen")
                         ));
             case "sonstiges":
                 return new TreeMap<>(Map.of(

@@ -334,13 +334,14 @@ position: relative;
 
 .search-bar {
     position: absolute;
-    top: 30px;
+    top: 45px;
     right: 0;
     background-color: white;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 310px;
 }
 
 .search-bar input {
@@ -456,4 +457,10 @@ position: relative;
 .course-list {
     list-style-type: none;
     padding: 0;
+}
+
+@media (max-width: 1020px) {
+     .search-container {
+         margin-top: 35px;
+     }
 }
