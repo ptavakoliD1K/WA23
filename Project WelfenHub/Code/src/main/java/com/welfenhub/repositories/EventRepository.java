@@ -17,13 +17,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO events (title, content, date) VALUES (:title, :content, :date)", nativeQuery = true)
-    void saveEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
+    @Query(value = "INSERT INTO events (title, content, date, author) VALUES (:title, :content, :date, :author)", nativeQuery = true)
+    void saveEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date, @Param("author") String author);
 
-    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e")
+    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date, e.author) FROM Event e")
     List<EventDTO> getEvent();
 
-    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e ORDER BY e.id DESC")
+    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date, e.author) FROM Event e ORDER BY e.id DESC")
     List<EventDTO> showEvent(Pageable pageable);
 
     @Query(value = "SELECT count(*) FROM events", nativeQuery = true)

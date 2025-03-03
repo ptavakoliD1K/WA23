@@ -22,7 +22,7 @@ public class EventController {
 
     @PostMapping("/post")
     public void postEvent(@RequestBody EventDTO event) {
-        eventService.saveEventToDatabase(event.getTitle(), event.getContent());
+        eventService.saveEventToDatabase(event.getTitle(), event.getContent(), event.getAuthor());
     }
 
     /**

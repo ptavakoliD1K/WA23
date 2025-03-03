@@ -11,6 +11,7 @@ const editList = document.getElementById('toEditList');
 const editSelected = document.getElementById('editSelectedEventPopUp');
 const editInput = document.getElementById('editInput');
 const editTextarea = document.getElementById('editTextarea');
+const eventName = document.getElementById('eventName');
 
 const csrfToken = getCsrfToken();
 
@@ -217,6 +218,7 @@ async function publishEvent() {
 
     const titleValue = title.value;
     const contentValue = content.value;
+    const nameValue = eventName.value;
 
     if (titleValue === "" || contentValue === "") {
         status.textContent = "Bitte fülle die Felder aus";
@@ -233,7 +235,8 @@ async function publishEvent() {
         },
         body: JSON.stringify({
             "title": titleValue,
-            "content": contentValue
+            "content": contentValue,
+            "name": nameValue
         }),
     });
 
@@ -299,22 +302,25 @@ async function showPage() {
             for (let i = 0; i < data.length; i++) {
                 const newsDiv = document.createElement('div');
                 const newsH3 = document.createElement('H3');
-                const newsText = document.createElement('span');
+                const newsText = document.createElement('p');
                 const newsDate = document.createElement('div');
+                const newsAuthor = document.createElement('div');
 
                 newsDiv.className = "newsDiv";
 
                 const date = data[i].date;
                 const dateFront = date.replace(/-/g, ".");
 
+                newsAuthor.textContent = data[i].author;
                 newsH3.textContent = data[i].title;
                 newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-                newsDate.textContent = "Zuletzt bearbeitet am " + dateFront;
+                newsDate.textContent = dateFront;
 
                 newsArea.appendChild(newsDiv);
+                newsDiv.appendChild(newsAuthor);
+                newsDiv.appendChild(newsDate);
                 newsDiv.appendChild(newsH3);
                 newsDiv.appendChild(newsText);
-                newsDiv.appendChild(newsDate);
 
                 window.scrollTo(0, 0);
             }
@@ -356,26 +362,31 @@ async function showFirstPage() {
 
     const data = await response.json();
 
+    console.log(data);
 
     for (let i = 0; i < data.length; i++) {
         const newsDiv = document.createElement('div');
         const newsH3 = document.createElement('H3');
-        const newsText = document.createElement('span');
+        const newsText = document.createElement('p');
         const newsDate = document.createElement('div');
+        const newsAuthor = document.createElement('div');
 
         newsDiv.className = "newsDiv";
+
 
         const date = data[i].date;
         const dateFront = date.replace(/-/g, ".");
 
+        newsAuthor.textContent = data[i].author;
         newsH3.textContent = data[i].title;
         newsText.innerHTML = data[i].content.replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br>");
-        newsDate.textContent = "Zuletzt bearbeitet am " + dateFront;
+        newsDate.textContent = dateFront;
 
         newsArea.appendChild(newsDiv);
+        newsDiv.appendChild(newsAuthor);
+        newsDiv.appendChild(newsDate);
         newsDiv.appendChild(newsH3);
         newsDiv.appendChild(newsText);
-        newsDiv.appendChild(newsDate);
     }
 }
 
