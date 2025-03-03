@@ -77,24 +77,23 @@ body {
 }
 
 .chooseProps select{
-    border: none;
+    border: 2px solid transparent;
     width: 80%;
     height: 50px;
-    color: black;
-    background-color: #bcd6ff;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+    padding-left: 0.8em;
+    outline: none;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.5s;
+    margin-top: 1%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.chooseProps:active, .chooseProps:focus, .chooseProps:focus-within, .chooseProps:target, chooseProps:focus-visible {
-    border: none;
-    outline: none;
-}
-
-.chooseProps select:focus-visible {
-    border: none;
-    outline: none;
+.chooseProps select:hover, .chooseProps select:focus {
+    border: 2px solid #00274d;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
 }
 
 .drop_zone {
@@ -183,7 +182,7 @@ h3 {
     grid-row: 2;
     margin-left: 0px;
     padding-left: 0px;
-    margin-top: 60px;
+    margin-top: 70px;
 }
 
 .lineDiv {
@@ -200,18 +199,21 @@ h3 {
 
 #fileList div button {
     grid-column: auto;
-    width: 50px;
+    width: 40px;
     height: 20px;
-    border: none;
-    border-radius: 2px;
+    border-radius: 4px;
     cursor: pointer;
-    background-color: #bcd6ff;
+    background-color: #333;
     justify-self: end;
+    color: #fff;
+    transition: transform 0.1s;
 }
 
 #fileList div button:hover {
+    outline: none;
     cursor: pointer;
-    background-color: #72a7fb;
+    transform: scale(1.02);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.25s;
 }
 
@@ -239,14 +241,20 @@ h3 {
 #searchQuery {
     width: 60%;
     height: 40px;
-    background-color: #bcd6ff;
+    border: 2px solid transparent;
+    padding-left: 0.8em;
     outline: none;
-    border: none;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.5s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #searchQuery:hover, #searchQuery:focus {
-    border: none;
-    outline: none;
+    border: 2px solid #00274d;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
 }
 
 .modal {
@@ -285,7 +293,7 @@ h3 {
 }
 
 footer {
-    margin-top: 100px !important;
+    margin-top: 560px !important;
 }
 
 @media (max-width: 768px) {
@@ -316,7 +324,8 @@ footer {
     }
 
     #searchQuery {
-        width: 100%
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .chooseProps select{

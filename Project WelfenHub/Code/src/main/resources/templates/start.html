@@ -3,30 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Fach Auswahl</title>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
     <link rel="stylesheet" th:href="@{/css/start.css}" />
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<header>
-    <nav class="navbar">
-        <div class="navdiv">
-            <div class="name">WelfenHUB - wenn Welfen helfen</div>
-            <ul>
-                <li><a th:href="@{/}" class="active">Startseite</a></li>
-                <li><a th:href="@{/posts}">Forum</a></li>
-                <li><a th:href="@{/news}">News</a></li>
-                <li><a th:href="@{/feedback}">Feedback</a></li>
-                <li><a th:href="@{/impressum}">Impressum</a></li>
-                <li sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                        <button type="submit">Abmelden</button>
-                    </form>
-                </li>
-            </ul>
-        </div>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
     </nav>
 </header>
 
@@ -34,17 +19,38 @@
     <h1>Fachbereich Auswahl</h1>
     <div class="subjects-container">
         <div class="subject-box">
-            <a th:href="@{/forum/bwl}" class="subject-link">BWL</a>
+            <a th:href="@{/forum/bwl}" class="subject-link">
+                <img th:src="@{/images/StudiengangBWL.jpg}" alt="BWL" class="subject-image">
+                <span class="subject-text">BWL</span>
+            </a>
+
+            <a th:href="@{/forum/bwl/all}" class="btn-show-all">
+                Alle BWL-Beiträge (neueste zuerst)
+            </a>
         </div>
+
         <div class="subject-box">
-            <a th:href="@{/forum/wirtschaftsinformatik}" class="subject-link">Wirtschaftsinformatik</a>
+            <a th:href="@{/forum/wirtschaftsinformatik}" class="subject-link">
+                <img th:src="@{/images/StudiengangWINF.jpg}" alt="Wirtschaftsinformatik" class="subject-image">
+                <span class="subject-text">Wirtschaftsinformatik</span>
+            </a>
+
+            <a th:href="@{/forum/wirtschaftsinformatik/all}">Alle WiInf-Beiträge (neueste zuerst)</a>
+
         </div>
+
         <div class="subject-box">
-            <a th:href="@{/forum/sonstiges}" class="subject-link">Sonstiges</a>
+            <a th:href="@{/forum/sonstiges}" class="subject-link">
+                <img th:src="@{/images/Sonstiges2.png}" alt="Sonstiges" class="subject-image">
+                <span class="subject-text">Sonstiges</span>
+            </a>
+
+            <a th:href="@{/forum/sonstiges/all}">Alle Sonstiges-Beiträge (neueste zuerst)</a>
+
         </div>
     </div>
 </div>
 
-<footer th:insert="fragments/footer :: footer"></footer>
+<div th:insert="fragments/footerResponsive.html"></div>
 </body>
 </html>

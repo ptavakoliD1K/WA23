@@ -53,7 +53,7 @@ public class FileUploadController {
     }
 
     /**
-     * reads data of inputStream and uploads it into byte[]
+     * reads data of inputStream and puts it into byte[] array
      * @param inputStream
      * @return
      * @throws IOException

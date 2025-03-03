@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'Alle Posts zu ' + ${currentSubject}">Alle Posts</title>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/subject-posts.css}" />
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+</head>
+<body>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+
+<h1 th:text="'Alle Posts in ' + ${currentSubject} + ' (neueste zuerst)'">Alle Posts</h1>
+
+<!-- Ein Container für alle Posts -->
+<div class="posts-container">
+    <div th:each="post : ${posts}" class="post-item">
+        <!-- Titel -->
+        <h2 th:text="${post.title}">Titel</h2>
+
+        <!-- Inhalt -->
+        <p th:text="${post.content}">Beispiel-Inhalt</p>
+
+        <!-- Datum -->
+        <small>
+            Erstellt am:
+            <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+        </small>
+
+        <!-- Optional: Link zur Detailseite -->
+        <br/>
+        <a class="details-link"
+           th:href="@{/posts/{id}(id=${post.id})}">
+            Zum Post
+        </a>
+    </div>
+</div>
+
+<!-- Falls du einen Footer hast -->
+<footer>
+    <div th:insert="fragments/footerResponsive.html"></div>
+</footer>
+</body>
+</html>

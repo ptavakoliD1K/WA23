@@ -35,4 +35,19 @@ public class HomeController {
     public String dozentenBewertung() {
         return "dozentenFeedback";
     }
+
+    @GetMapping("/ereignisse")
+    public String ereignisse() {
+        return "ereignisse";
+    }
+
+    @GetMapping("/impressum")
+    public String impressum() {
+        return "impressum";
+    }
+
+    @GetMapping("/datenschutz")
+    public String datenschutz() {
+        return "datenschutz";
+    }
 }

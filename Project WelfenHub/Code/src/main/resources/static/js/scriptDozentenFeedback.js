@@ -5,10 +5,14 @@ const semester = document.getElementById('semester');
 const dozent = document.getElementById('dozent');
 const lehrveranstaltung = document.getElementById('lehrveranstaltung');
 const textInput = document.getElementById('hints');
+const status = document.getElementById('status');
 
 const feedbackValues = {};
 
-// Sammle alle Labels mit den zugehörigen Inputs dynamisch
+/**
+ * sammelt alle values der Labels dynamisch
+ */
+
 document.querySelectorAll('label').forEach((label) => {
     label.addEventListener('click', () => {
         // Finde den ersten ausgewählten Input innerhalb des Labels
@@ -18,10 +22,12 @@ document.querySelectorAll('label').forEach((label) => {
         } else {
             delete feedbackValues[label.id];
         }
-        console.log(feedbackValues);
     });
 });
 
+/**
+ * event listener which submits all information of lecturer evaluation to back end
+ */
 
 formular.addEventListener('submit', (e) => {
     feedbackValues["Lehrveranstaltung"] = lehrveranstaltung.value;
@@ -31,6 +37,11 @@ formular.addEventListener('submit', (e) => {
     feedbackValues["Fachrichtung"] = fachrichtung.value;
 
     e.preventDefault();
+
+    if (semester.value === "blocked") {
+        alert("Bitte wähle ein Semester aus.");
+        return;
+    }
 
     const formData = new FormData();
     formData.append('feedbackList', JSON.stringify(feedbackValues));
@@ -42,11 +53,17 @@ formular.addEventListener('submit', (e) => {
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
 
+    status.textContent = "Nachricht wird gesendet...";
+    status.style.color = "orange";
+
     xhr.onload = () => {
         if (xhr.status !== 200) {
-            console.error("Fehler: E-Mail wurde nicht gesendet");
+            console.error("Fehler: Nachricht wurde nicht gesendet");
+            status.textContent = "Nachricht wurde nicht gesendet"
+            status.style.color = "red";
         } else if (xhr.status === 200) {
-            alert("Die Nachricht wurde erfolgreich an gesendet. Vielen Dank für Ihr Feedback");
+            status.textContent = "Nachricht wurde gesendet. Vielen Dank für Dein Feedback.";
+            status.style.color = "green";
         }
     };
 
@@ -57,6 +74,10 @@ formular.addEventListener('submit', (e) => {
     xhr.send(formData);
 });
 
+/**
+ * event listener to set max year to current year
+ */
+
 document.addEventListener('DOMContentLoaded', (e) => {
    const date = new Date();
 
@@ -64,6 +85,11 @@ document.addEventListener('DOMContentLoaded', (e) => {
 
    inputYear.max = year;
 });
+
+/**
+ * function to get Csrf-Token
+ * @returns {string}
+ */
 
 function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);

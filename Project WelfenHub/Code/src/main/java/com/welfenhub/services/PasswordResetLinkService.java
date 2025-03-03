@@ -1,5 +1,10 @@
 package com.welfenhub.services;
 
+import com.welfenhub.models.User;
+import com.welfenhub.repositories.PasswordResetTokensRepository;
+import com.welfenhub.repositories.UserRepository;
+import net.bytebuddy.asm.Advice;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,18 +23,20 @@ import java.util.UUID;
 @Service
 public class PasswordResetLinkService {
 
-    @Value("${spring.datasource.url}")
-    private String databaseUrl;
+    private static PasswordResetTokensRepository passwordResetTokensRepository;
 
-    private static String staticDatabaseUrl;
-
-    /**
-     * sets staticDatabaseUrl to databaseUrl
-     */
-    @PostConstruct
-    private void initStaticFields() {
-        staticDatabaseUrl = databaseUrl;
+    @Autowired
+    public void setPasswordResetTokensRepository(PasswordResetTokensRepository repository) {
+        passwordResetTokensRepository = repository;
     }
+
+    private static UserRepository userRepository;
+
+    @Autowired
+    public void setUserRepository(UserRepository repository) {
+        userRepository = repository;
+    }
+
 
     /**
      * Private constructor -> no instance can be created
@@ -51,30 +58,15 @@ public class PasswordResetLinkService {
      * @return random link with random token
      */
     public static String linkGeneratorAndSaver(String receiver) throws SQLException {
-        int userId;
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         String token = randomToken();
         LocalDateTime dateTime = LocalDateTime.now();
 
-        try (Connection conn = DriverManager.getConnection(staticDatabaseUrl)) {
-            String insertSQL = "INSERT INTO password_reset_tokens(token, UserID, expires_at) VALUES (?, ?, ?)";
-            String selectSQL = "SELECT id FROM user WHERE email = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
-                pstmt.setString(1, receiver);
-                try(ResultSet rs = pstmt.executeQuery()) {
-                    userId = rs.getInt(1);
-                }
-            }
+        Long userId = (userRepository.findByEmail(receiver)).getId();
 
-            try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
-                pstmt.setString(1, token);
-                pstmt.setInt(2, userId);
-                pstmt.setString(3, (dateTime.plusMinutes(15)).format(formatter));
-                pstmt.executeUpdate();
-            }
-        }
+        passwordResetTokensRepository.insertToken(token, userId, dateTime.plusMinutes(15).format(formatter), 0);
 
         return "http://localhost:8080/reset-password?token=" + token;
     }
@@ -86,25 +78,20 @@ public class PasswordResetLinkService {
      * @throws SQLException
      */
 
-    public static boolean validateToken(String token) throws SQLException {
+    public static boolean validateToken(String token){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         LocalDateTime dateTime = LocalDateTime.now();
 
-        try (Connection conn = DriverManager.getConnection(staticDatabaseUrl)) {
-            String selectSQL = "SELECT expires_at FROM password_reset_tokens WHERE token = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
-                pstmt.setString(1, token);
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    String expireDateStr = rs.getString(1);
-                    LocalDateTime dbExpireTime = LocalDateTime.parse(expireDateStr, formatter);
-                    if (dbExpireTime.isBefore(dateTime)) {
-                        return false;
-                    }
-                }
-            }
+        String expireTime = (passwordResetTokensRepository.selectExpiresAt(token)).get(0);
+
+        LocalDateTime dbExpireTime = LocalDateTime.parse(expireTime, formatter);
+
+        if (dbExpireTime.isBefore(dateTime)) {
+            return false;
         }
+
         return true;
     }
 }

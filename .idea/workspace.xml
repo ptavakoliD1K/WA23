@@ -4,19 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Final improvements of FileShare">
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/PasswordResetController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptChangePasswordAfterReset.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/errorPasswordReset.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/resetPassword.html" afterDir="false" />
+    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Gruppenchat erstellen Box">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/FileController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/controllers/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetLinkService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetLinkService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/java/com/WelfenHub/services/PasswordResetService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptPasswordReset.js" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/js/scriptPasswordReset.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/database/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/database/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/groupChat.css" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/groupChat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/ChatRooms.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/ChatRooms.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +67,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/ptavakoliD1K/WA23.git&quot;,
-    &quot;accountId&quot;: &quot;0887fb6b-2ec1-4a88-a223-45a7f1339c8b&quot;
+    &quot;accountId&quot;: &quot;7475d6e2-0e30-4e31-ae1e-a20c8252886f&quot;
   }
 }</component>
   <component name="MarkdownSettingsMigration">
@@ -91,26 +82,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.DatabaseInitializer.executor": "Run",
-    "Application.PasswordResetLinkService.executor": "Run",
-    "Application.Welfenhub.executor": "Run",
-    "Attach to process.pid 3108.executor": "ProcessAttachDebug",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "git-widget-placeholder": "#3 on Merging developement",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/PorjektFH/Welfenhub2/Project WelfenHub",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.DatabaseInitializer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PasswordResetLinkService.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Welfenhub.executor&quot;: &quot;Run&quot;,
+    &quot;Attach to process.pid 3108.executor&quot;: &quot;ProcessAttachDebug&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#3 on developement&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/PorjektFH/Welfenhub2/Project WelfenHub&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\database" />
@@ -201,7 +192,31 @@
       <option name="project" value="LOCAL" />
       <updated>1734595396913</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740751114628</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1740751114628</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740751361326</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740751361330</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740994420218</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740994420218</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -223,7 +238,8 @@
     <MESSAGE value="Fixed Filesharing with CSRF" />
     <MESSAGE value="Test" />
     <MESSAGE value="Final improvements of FileShare" />
-    <option name="LAST_COMMIT_MESSAGE" value="Final improvements of FileShare" />
+    <MESSAGE value="Gruppenchat erstellen Box" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gruppenchat erstellen Box" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

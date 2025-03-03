@@ -1,0 +1,41 @@
+package com.welfenhub.repositories;
+
+import com.welfenhub.dto.EventDTO;
+import com.welfenhub.models.Event;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import javax.transaction.Transactional;
+
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
+public interface EventRepository extends JpaRepository<Event, Long> {
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO events (title, content, date, author) VALUES (:title, :content, :date, :author)", nativeQuery = true)
+    void saveEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date, @Param("author") String author);
+
+    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date, e.author) FROM Event e")
+    List<EventDTO> getEvent();
+
+    @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date, e.author) FROM Event e ORDER BY e.id DESC")
+    List<EventDTO> showEvent(Pageable pageable);
+
+    @Query(value = "SELECT count(*) FROM events", nativeQuery = true)
+    int getEventCount();
+
+    @Transactional
+    @Modifying
+    @Query(value = "DELETE FROM events WHERE title = :title AND content = :content AND date = :date", nativeQuery = true)
+    void removeEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE events SET content = :content, date = :date WHERE title = :title", nativeQuery = true)
+    void updateEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
+}

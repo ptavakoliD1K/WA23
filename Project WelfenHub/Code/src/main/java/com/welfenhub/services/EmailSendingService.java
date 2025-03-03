@@ -1,5 +1,8 @@
 package com.welfenhub.services;
 
+import jakarta.activation.DataHandler;
+import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeBodyPart;
@@ -7,28 +10,32 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeMultipart;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
 import java.util.Properties;
 
 /**
- * sends email to itself to receive feedback of the formular
+ * sends email
  */
 
 @Service
-public class sendFeedbackEmailService {
+public class EmailSendingService {
+
+    EmailSendingService() {
+    }
 
     /**
-     * sends email and receives value of prepareMessage
-     * @param senderEmail
-     * @param name
-     * @param feedbackMessage
+     * sends prepared email
+     *
      * @param myAccount
      * @param myPassword
+     * @param file
+     * @param pdfFileName
      * @throws MessagingException
-     * @throws SQLException
+     * @throws IOException
      */
 
-    public static void sendEmail(String senderEmail, String name, String feedbackMessage, String myAccount, String myPassword) throws MessagingException, SQLException {
+    public static void sendEmail(String myAccount, String myPassword, File file, String pdfFileName) throws MessagingException, IOException {
 
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -44,36 +51,41 @@ public class sendFeedbackEmailService {
         });
 
         // create and send email
-        Message message = prepareMessage(session, myAccount, senderEmail, feedbackMessage, name, myAccount);
+        Message message = prepareMessageWithPdf(session, myAccount, "dennis.abel@swisslife.de", file, pdfFileName);
         Transport.send(message);
         System.out.println("E-Mail erfolgreich versendet an " + myAccount);
     }
 
     /**
-     * prepares message and sets content
+     * prepares email with pdf
+     *
      * @param session
      * @param myAccount
-     * @param senderEmail
-     * @param feedbackMessage
-     * @param name
      * @param receiver
-     * @return
+     * @param file
+     * @param pdfFileName
+     * @return message
      * @throws MessagingException
-     * @throws SQLException
+     * @throws IOException
      */
 
-    private static Message prepareMessage(Session session, String myAccount, String senderEmail, String feedbackMessage, String name, String receiver) throws MessagingException, SQLException {
+    private static Message prepareMessageWithPdf(Session session, String myAccount, String receiver, File file, String pdfFileName) throws MessagingException {
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(myAccount));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
-        message.setSubject("Eine neue Feedback-Nachricht von " + name + ", E-Mail: " + senderEmail);
+        message.setSubject("Eine neue Dozentenevaluation");
 
-        // Erstellen und Hinzufügen des Inhalts der E-Mail
         Multipart multipart = new MimeMultipart();
         BodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setText(feedbackMessage);
+        messageBodyPart.setText("Guten Tag, \n \nanbei befindet sich eine neue Dozentenevaluation. \n\nFreundliche Grüße \nDein WelfenHub Team");
         multipart.addBodyPart(messageBodyPart);
+        MimeBodyPart attachmentPart = new MimeBodyPart();
+        DataSource source = new FileDataSource(file);
+        attachmentPart.setDataHandler(new DataHandler(source));
+        attachmentPart.setFileName(pdfFileName);
+        multipart.addBodyPart(attachmentPart);
+
         message.setContent(multipart);
 
         return message;

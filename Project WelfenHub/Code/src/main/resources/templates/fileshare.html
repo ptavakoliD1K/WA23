@@ -5,6 +5,7 @@
     <title>WelfenHUB - Fileshare</title>
     <link rel="stylesheet" href="/css/fileshareStyle.css">
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
@@ -27,7 +28,13 @@
     </div>
 
     <div class="chooseProps">
-        <select name="semester" id="semesterDropDown">
+        <select name="fachrichtung" id="fachrichtung" required>
+            <option hidden selected value="blocked">Studiengang</option>
+            <option value="bwl">Betriebswirtschaftslehre</option>
+            <option value="winf">Wirtschaftsinformatik</option>
+        </select>
+        <select name="semester" id="semesterDropDown" required>
+            <option hidden selected value="blocked">Semester</option>
             <option value="1">Semester 1</option>
             <option value="2">Semester 2</option>
             <option value="3">Semester 3</option>
@@ -35,21 +42,55 @@
             <option value="5">Semester 5</option>
             <option value="6">Semester 6</option>
         </select>
-        <select name="module" id="moduleDropDown">
-            <option value="informatik">Informatik</option>
-            <option value="bwl">BWL</option>
-            <option value="softskills">Soft-Skills</option>
+        <select name="module" id="moduleDropDown" required>
+            <option hidden selected value="blocked">Modul</option>
+            <option value="" disabled>Grundlagen der Computertechnik</option>
+            <option value="informatik">Grundlagen der Informatik</option>
+            <option value="winfUnternehmen">Wirtschaftsinformatik im Unternehmen</option>
+            <option disabled>Grundlagen der Mathematik</option>
+            <option value="linAlgebra">Lineare Algebra</option>
+            <option value="analysis">Analysis</option>
+            <option disabled>Technische Kommunikation</option>
+            <option value="techEnglisch">Technisches Englisch</option>
+            <option value="softskills_kreativ_gruppen">Soft Skills - Kreativität & Gruppenarbeit</option>
+            <option value="" disabled>Engineering Management</option>
+            <option value="softwareEng">Software Engineering</option>
+            <option value="reqEng">Requirements Engineering</option>
+            <option value="" disabled>Soft Skills</option>
+            <option value="gespraechsfuehrung">Gesprächsführung und Rhetorik im beruflichen Kontext</option>
+            <option value="" disabled>Grundlagen sicherer Programmierung</option>
+            <option value="grundlagen_programmierung">Grundlagen der Programmierung (Python)</option>
+            <option value="netzwerkmanagement_systemintegration">Netzwerkmanagement in der Systemintegration</option>
+            <option value="transaction">Transaktion und Datensicherheit</option>
+            <option value="" disabled>Einstieg in die Projektarbeit</option>
+            <option value="controlling">Anwendung IT-Projektcontrolling</option>
+            <option value="praktisches_management_projekten">Praktisches Management von Projekten</option>
+            <option value="" disabled>Betriebswirtschaftslehre I</option>
+            <option value="buchfuehrung">Buchführung</option>
+            <option value="internes_rewe">Internes Rechnungswesen</option>
+            <option value="grundlagen_bwl">Grundlagen der BWL</option>
+            <option value="" disabled>Programmstrukturen</option>
+            <option value="algorithmen">Algorithmen und Datenstrukturen</option>
+            <option value="oo_programmierung">Einführung in die objektorientierte Programmierung (Java)</option>
+            <option value="" disabled>Spezielle Mathematik</option>
+            <option value="statistik">Angewandte Statistik</option>
+            <option value="or">Operations Research</option>
+            <option value="finanzmathe">Finanzmathematik</option>
+            <option value="" disabled>SW-Anwendungsrealisierung</option>
+            <option value="anwendung_programmierung">Anwendung der Programmierung</option>
+            <option value="datenkommunikation">Datenkommunikation</option>
+            <option value="" disabled>Sonstiges</option>
+            <option value="sonstiges">Sonstiges</option>
+            <!-- hier weitere Module einfügen, vor allem BWL -->
         </select>
-        <select name="tag" id="tag">
+        <select name="tag" id="tag" required>
+            <option hidden selected value="blocked">Dokumenttyp</option>
             <option value="script">Skript</option>
             <option value="studyNotes">Lernzettel</option>
             <option value="conclusion">Zusammenfassung</option>
+            <option value="altklausur">Altklausur</option>
+            <option value="sonstiges">Sonstiges</option>
         </select>
-        <select name="fachrichtung" id="fachrichtung">
-            <option value="bwl">Betriebswirtschaftslehre</option>
-            <option value="winf">Wirtschaftsinformatik</option>
-        </select>
-
     </div>
 
 
@@ -81,12 +122,7 @@
     </div>
 </div>
 
-<footer xmlns:th="http://www.w3.org/1999/xhtml">
-    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a>
-    </p>
-    <img th:src="@{/images/logo_white.png}" alt="WelfenHub Logo">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
-</footer>
+<div th:insert="fragments/footerResponsive.html"></div>
 
 <script src="/js/scriptDataTransfer.js"></script>
 </body>

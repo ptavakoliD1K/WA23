@@ -4,6 +4,7 @@ const feedbackForm = document.getElementById("formFeedback");
 const nameInput = document.getElementById("name");
 const emailInput = document.getElementById("email");
 const messageInput = document.getElementById("message")
+const status = document.getElementById('status');
 
 /**
  * event-listener, which sends POST request when submit
@@ -38,11 +39,17 @@ feedbackForm.addEventListener("submit", (e) => {
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
 
+    status.textContent = "Nachricht wird gesendet...";
+    status.style.color = "orange";
+
     xhr.onload = () => {
         if (xhr.status !== 200) {
             console.error("Fehler: E-Mail wurde nicht gesendet");
+            status.textContent = "Nachricht wurde nicht gesendet";
+            status.style.color = "red";
         } else if (xhr.status === 200) {
-            alert("Die Nachricht wurde erfolgreich gesendet. Vielen Dank für Ihr Feedback");
+            status.textContent = "Nachricht wurde gesendet. Vielen Dank für Dein Feedback.";
+            status.style.color = "green";
         }
     };
 

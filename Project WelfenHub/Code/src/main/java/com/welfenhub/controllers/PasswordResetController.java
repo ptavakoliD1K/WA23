@@ -1,9 +1,10 @@
 package com.welfenhub.controllers;
 
 
+import com.welfenhub.repositories.PasswordResetTokensRepository;
+import com.welfenhub.repositories.UserRepository;
 import com.welfenhub.services.PasswordResetLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,18 +23,11 @@ import java.util.Map;
 @RestController
 public class PasswordResetController {
 
-    @Value("${spring.datasource.url}")
-    private String databaseUrl;
+    @Autowired
+    PasswordResetTokensRepository passwordResetTokensRepository;
 
-    private static String staticDatabaseUrl;
-
-    /**
-     * sets staticDatabaseUrl to databaseUrl
-     */
-    @PostConstruct
-    private void initStaticFields() {
-        staticDatabaseUrl = databaseUrl;
-    }
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -48,19 +41,9 @@ public class PasswordResetController {
      */
 
     @GetMapping("reset-password")
-    public ModelAndView showResetPasswordPage(@RequestParam("token") String token) throws SQLException {
+    public ModelAndView showResetPasswordPage(@RequestParam("token") String token) {
 
-        int isPasswordChanged;
-
-        try (Connection conn = DriverManager.getConnection(staticDatabaseUrl)) {
-            String selectSQL = "SELECT isPasswordChanged FROM password_reset_tokens WHERE token = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
-                pstmt.setString(1, token);
-                try (ResultSet rs = pstmt.executeQuery()) {
-                    isPasswordChanged = rs.getInt(1);
-                }
-            }
-        }
+        int isPasswordChanged = passwordResetTokensRepository.selectIsPasswordChanged(token).get(0);
 
         boolean isValid = PasswordResetLinkService.validateToken(token);
         if (!isValid || isPasswordChanged == 1) {
@@ -73,6 +56,7 @@ public class PasswordResetController {
 
     /**
      * sets new password for user
+     *
      * @param newPassword
      * @param token
      * @return response if success or not
@@ -83,8 +67,7 @@ public class PasswordResetController {
     @PostMapping("setNewPassword")
     public Map<String, String> setNewPassword(
             @RequestParam("newPassword") String newPassword,
-            @RequestParam("token") String token
-    ) throws SQLException {
+            @RequestParam("token") String token) {
         Map<String, String> response = new HashMap<>();
 
         boolean isValid = PasswordResetLinkService.validateToken(token);
@@ -95,25 +78,14 @@ public class PasswordResetController {
             return response;
         }
 
+        userRepository.updateUserPassword(token, passwordEncoder.encode(newPassword));
 
-        try (Connection conn = DriverManager.getConnection(staticDatabaseUrl)) {
-            String updateSQL = "UPDATE user SET password = ? WHERE id = (SELECT UserID FROM password_reset_tokens WHERE token = ?)";
-            String updateSQLChanged = "UPDATE password_reset_tokens SET isPasswordChanged = 1 WHERE token = ?";
-            try (PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
-                pstmt.setString(1, passwordEncoder.encode(newPassword));
-                pstmt.setString(2, token);
-                pstmt.executeUpdate();
-            }
-            try (PreparedStatement pstmt = conn.prepareStatement(updateSQLChanged)) {
-                pstmt.setString(1, token);
-                pstmt.executeUpdate();
-            }
-        }
+        passwordResetTokensRepository.updateIsPasswordChanged(token);
 
-                response.put("status", "success");
-                response.put("message", "Das Passwort wurde erfolgreich geändert");
-                response.put("redirectUrl", "/login");
-                return response;
-            }
-        }
+        response.put("status", "success");
+        response.put("message", "Das Passwort wurde erfolgreich geändert");
+        response.put("redirectUrl", "/login");
+        return response;
+    }
+}
 

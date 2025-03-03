@@ -67,7 +67,7 @@ public class ForumController {
                         3, List.of("Anwendungsrealisierung", "Datenbank Programmierung", "Secruity Engineering", "Projektumsetzung", "BWL II"),
                         4, List.of("Alternative Daten- und Programmieransätze", "Sicherheit verteilter Systeme", "Secruity Management", "Projektumsetzung", "BWL II", "Development Engineering"),
                         5, List.of("IT-gestütztes Management", "Verknüpfung der Wirtschaftsinformatik", "Geschäftliche Kommunikation", "Developement Practice", "Vertiefungen"),
-                        6, List.of("ITSM", "Geschäftliche Kommunikation?", "Developement Test", "Bachelorarbeit", "Vertiefungen")
+                        6, List.of("ITSM", "Geschäftliche Kommunikation", "Development Test", "Bachelorarbeit", "Vertiefungen")
                         ));
             case "sonstiges":
                 return new TreeMap<>(Map.of(
@@ -93,6 +93,17 @@ public class ForumController {
 
         // Return the correct template, for example, "subject" if it displays the posts
         return "subject";
+    }
+
+    @GetMapping("/forum/{subject}/all")
+    public String viewAllPostsBySubjectDescending(@PathVariable("subject") String subject, Model model) {
+        // Posts holen, absteigend nach createdAt sortiert
+        List<Post> sortedPosts = postService.getPostsBySubjectDescending(subject);
+        model.addAttribute("posts", sortedPosts);
+        // Für den Seitentitel oder Anzeige:
+        model.addAttribute("currentSubject", subject);
+        // Zeige ein eigenes Template "subject-posts.html"
+        return "subject-posts";
     }
 
 }

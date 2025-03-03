@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.time.LocalDateTime;
+
 
 @Entity
 public class Post {
@@ -36,7 +38,7 @@ public class Post {
     @JsonManagedReference
     private List<Comment> comments;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     // Getter und Setter
     public String getSubject() {
@@ -58,7 +60,7 @@ public class Post {
         return user;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
@@ -74,7 +76,7 @@ public class Post {
         this.user = user;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

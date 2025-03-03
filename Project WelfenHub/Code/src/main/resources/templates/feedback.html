@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Feedback</title>
-    <link rel="stylesheet" href="/css/feedbackStyle.css" />
+    <link rel="stylesheet" href="/css/feedbackStyle.css"/>
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -17,23 +17,42 @@
     </nav>
 </header>
 
-    <h1>Feedback</h1>
+<h1>Feedback</h1>
 
-    <form action="/feedback" method="post" id="formFeedback">
-        <div>
-            <input type="text" id="name" name="name" placeholder="Vollständiger Name (freiwillig)" maxlength="60">
-        </div>
-        <div>
-            <input type="email" id="email" name="email" placeholder="E-Mail (freiwillig)" maxlength="120">
-        </div>
-        <div>
-            <textarea id="message" name="message" rows="5" required placeholder="Ihre Nachricht..." maxlength="5000"></textarea>
-        </div>
-        <button type="submit">Feedback senden</button>
-    </form>
+<form action="/feedback" method="post" id="formFeedback">
+    <div id="first">
+        <input type="text" id="name" name="name" placeholder="Vollständiger Name (freiwillig)" maxlength="60">
+    </div>
+    <div id="second">
+        <input type="email" id="email" name="email" placeholder="E-Mail (freiwillig)" maxlength="120">
+    </div>
+    <div id="third">
+        <textarea id="message" name="message" rows="5" required placeholder="Deine Nachricht..."
+                  maxlength="5000"></textarea>
+    </div>
+    <div class="stars">
+        <input class="star star-5" id="star-5-2" type="radio" name="star"/>
+        <label class="star star-5" for="star-5-2"></label>
+
+        <input class="star star-4" id="star-4-2" type="radio" name="star"/>
+        <label class="star star-4" for="star-4-2"></label>
+
+        <input class="star star-3" id="star-3-2" type="radio" name="star"/>
+        <label class="star star-3" for="star-3-2"></label>
+
+        <input class="star star-2" id="star-2-2" type="radio" name="star"/>
+        <label class="star star-2" for="star-2-2"></label>
+
+        <input class="star star-1" id="star-1-2" type="radio" name="star"/>
+        <label class="star star-1" for="star-1-2"></label>
+    </div>
+
+    <p id="status"></p>
+    <button type="submit">Feedback senden</button>
+</form>
 
 
-    <div th:insert="fragments/footer.html"></div>
+<div th:insert="fragments/footerResponsive.html"></div>
 <script src="/js/scriptFeedback.js"></script>
 </body>
 </html>

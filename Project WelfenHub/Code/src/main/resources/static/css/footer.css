@@ -4,6 +4,8 @@ footer {
     text-align: center;
     padding: 20px;
     margin-top: auto;
+    z-index: 1; /* Niedriger als der Chatbot */
+
 }
 
 footer p {
