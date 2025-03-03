@@ -95,4 +95,15 @@ public class ForumController {
         return "subject";
     }
 
+    @GetMapping("/forum/{subject}/all")
+    public String viewAllPostsBySubjectDescending(@PathVariable("subject") String subject, Model model) {
+        // Posts holen, absteigend nach createdAt sortiert
+        List<Post> sortedPosts = postService.getPostsBySubjectDescending(subject);
+        model.addAttribute("posts", sortedPosts);
+        // Für den Seitentitel oder Anzeige:
+        model.addAttribute("currentSubject", subject);
+        // Zeige ein eigenes Template "subject-posts.html"
+        return "subject-posts";
+    }
+
 }

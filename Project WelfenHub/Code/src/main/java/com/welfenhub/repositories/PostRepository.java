@@ -10,6 +10,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByCourse(String course); // Methode zum Abrufen von Posts nach Kurs
     Post findTopByCourseOrderByCreatedAtDesc(String course);
 
+    List<Post> findBySubjectOrderByCreatedAtDesc(String subject);
+
+
     List<Post> findByTitleContainingIgnoreCase(String title);
 
 }

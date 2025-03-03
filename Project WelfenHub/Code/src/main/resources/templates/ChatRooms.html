@@ -395,6 +395,21 @@ function subscribeToChatRoom(chatRoomId) {
     document.addEventListener("DOMContentLoaded", function() {
         connectWebSocket();
     });
+
+       document.addEventListener("DOMContentLoaded", function() {
+        const messageInput = document.getElementById('messageInput');
+
+        // Event-Listener für "Enter" im Eingabefeld
+        messageInput.addEventListener("keydown", function(e) {
+            // Wenn Enter gedrückt wird ...
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();      // Verhindert ggf. Zeilenumbruch/Submit
+                sendMessage();          // Aufruf der existierenden Funktion
+            }
+        });
+
+        connectWebSocket();  // War schon vorhanden
+    });
 </script>
 
 <div th:insert="fragments/footerResponsive.html"></div>

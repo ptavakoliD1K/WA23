@@ -45,7 +45,7 @@ public class PostService {
         post.setSemester(semester);
         post.setSubject(subject); // subject hinzufügen
         post.setUser(user);
-        post.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        post.setCreatedAt(LocalDateTime.now());
         return postRepository.save(post);
     }
 
@@ -114,5 +114,12 @@ public class PostService {
         return postRepository.findByTitleContainingIgnoreCase(query);
     }
 
+    public List<Post> getPostsBySubjectDescending(String subject) {
+        return postRepository.findBySubjectOrderByCreatedAtDesc(subject);
+    }
+
+    public List<Post> getAllPostsDescending() {
+        return postRepository.findAllByOrderByCreatedAtDesc();
+    }
 
 }
