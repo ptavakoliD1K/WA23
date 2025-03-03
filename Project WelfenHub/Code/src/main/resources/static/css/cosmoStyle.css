@@ -14,7 +14,7 @@
     border-radius: 50%;
     background: #135194;
     transition: all 0.2s ease;
-    z-index: 1000;
+    z-index: 998;
 }
 
 body.show-chatbot #chatbot-toggler {
@@ -120,6 +120,7 @@ body.show-chatbot .chatbot-popup {
     flex-direction: column;
     scrollbar-width: thin;
     scrollbar-color: #e2f3fc transparent;
+    z-index: 999;
 }
 
 .chat-body .message {
