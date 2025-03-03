@@ -33,6 +33,10 @@ public class PostService {
         return postRepository.findByCourse(course);
     }
 
+    public long getTotalPostCount() {
+        return postRepository.count();
+    }
+
     public Post createPost(String title, String content, String course, int semester, String subject, User user) {
         Post post = new Post();
         post.setTitle(title);

@@ -2,10 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/adminDashboard.css}" />
 </head>
 <body>
+
 <h1>Admin Dashboard</h1>
-<p>Total Users: <span th:text="${userCount}"></span></p>
+
+<!-- Statistiken -->
+<div class="stats-container">
+    <div class="stat-box">
+        <h3>👥 Gesamtanzahl der Nutzer</h3>
+        <p th:text="${userCount}"></p>
+    </div>
+    <div class="stat-box">
+        <h3>🟢 Nutzer aktuell online</h3>
+        <p th:text="${onlineUsers}"></p>
+    </div>
+    <div class="stat-box">
+        <h3>📝 Beiträge im Forum</h3>
+        <p th:text="${postCount}"></p>
+    </div>
+</div>
 
 <h2>User Management</h2>
 <table>
@@ -26,6 +43,8 @@
                     <option value="ROLE_ADMIN">Admin</option>
                     <option value="ROLE_MODERATOR">Moderator</option>
                     <option value="ROLE_USER">User</option>
+                    <option value="ROLE_GOMMEMODE">Gommemode</option>
+
                 </select>
                 <button type="submit">Update Role</button>
             </form>
@@ -38,5 +57,6 @@
         </td>
     </tr>
 </table>
+
 </body>
 </html>
