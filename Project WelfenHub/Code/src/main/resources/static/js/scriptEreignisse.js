@@ -220,7 +220,7 @@ async function publishEvent() {
     const contentValue = content.value;
     const nameValue = eventName.value;
 
-    if (titleValue === "" || contentValue === "") {
+    if (titleValue === "" || contentValue === "" || nameValue === "") {
         status.textContent = "Bitte fülle die Felder aus";
         status.style.color = "red";
 
@@ -236,7 +236,7 @@ async function publishEvent() {
         body: JSON.stringify({
             "title": titleValue,
             "content": contentValue,
-            "name": nameValue
+            "author": nameValue
         }),
     });
 
