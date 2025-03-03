@@ -1,20 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap');
 
+/* Chatbot Button */
 #chatbot-toggler {
-    position: fixed;
-    bottom: 30px;
-    right: 35px;
+    position: fixed; /* Fixiert am Bildschirmrand */
+    bottom: 20px; /* Abstand von unten */
+    right: 20px; /* Abstand von rechts */
+    width: 60px;
+    height: 60px;
+    color: white;
     border: none;
-    height: 50px;
-    width: 50px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 24px;
     cursor: pointer;
-    border-radius: 50%;
-    background: #135194;
-    transition: all 0.2s ease;
-    z-index: 998;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s, transform 0.2s;
+    z-index: 9999; /* Ganz oben */
 }
 
 body.show-chatbot #chatbot-toggler {
@@ -35,7 +38,9 @@ body.show-chatbot #chatbot-toggler span:last-child {
     opacity: 1;
 }
 
+/* Chatbot-Fenster */
 .chatbot-popup {
+    z-index: 998;
     position: fixed;
     right: 35px;
     bottom: 90px;
