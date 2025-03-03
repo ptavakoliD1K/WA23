@@ -8,11 +8,24 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 public class SecurityConfig {
 
     private static final String REMEMBER_ME_KEY = "uniqueAndSecretKey"; // Key für "Remember Me"
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
