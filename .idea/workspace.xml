@@ -4,17 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Final improvements of FileShare">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_25_02_2025_13_48_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_25_02_2025_13_48_[Changes]/users.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_25_02_2025_13_48__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_01_2025_21_08_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_01_2025_21_08_[Changes]/users.db" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_28_01_2025_21_08__Changes_.xml" beforeDir="false" />
+    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Gruppenchat erstellen Box">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/Startseite_test.css" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/Startseite.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/cosmoStyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/cosmoStyle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/groupChat.css" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/static/css/groupChat.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/ChatRooms.html" beforeDir="false" afterPath="$PROJECT_DIR$/Project WelfenHub/Code/src/main/resources/templates/ChatRooms.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -215,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740751361330</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740994420218</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740994420218</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +238,8 @@
     <MESSAGE value="Fixed Filesharing with CSRF" />
     <MESSAGE value="Test" />
     <MESSAGE value="Final improvements of FileShare" />
-    <option name="LAST_COMMIT_MESSAGE" value="Final improvements of FileShare" />
+    <MESSAGE value="Gruppenchat erstellen Box" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gruppenchat erstellen Box" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
