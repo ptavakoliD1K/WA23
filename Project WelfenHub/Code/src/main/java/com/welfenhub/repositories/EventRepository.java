@@ -17,7 +17,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO events VALUES (null, :title, :content, :date, null)", nativeQuery = true)
+    @Query(value = "INSERT INTO events (title, content, date) VALUES (:title, :content, :date)", nativeQuery = true)
     void saveEvent(@Param("title") String title, @Param("content") String content, @Param("date") String date);
 
     @Query("SELECT new com.welfenhub.dto.EventDTO(e.title, e.content, e.date) FROM Event e")

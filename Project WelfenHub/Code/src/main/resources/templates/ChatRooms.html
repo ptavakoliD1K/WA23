@@ -63,18 +63,21 @@
     </section>
 </main>
 
-<!-- Optional: Modal zum Hinzufügen von Nutzern in eine Gruppe -->
+<!-- MODAL: Nutzer zu Gruppe hinzufügen -->
 <div id="addUsersModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeAddUsersModal()">&times;</span>
         <h2>Nutzer zu Gruppe hinzufügen</h2>
-        <form id="addUsersForm">
-            <label for="usernames">Usernames (durch Komma getrennt)</label>
-            <input type="text" id="usernames" name="usernames" placeholder="z.B. alice,bob">
-            <button type="button" onclick="submitAddUsers()">Hinzufügen</button>
-        </form>
+
+        <div class="Groupname">
+            <h4>Mitglieder auswählen</h4>
+            <div id="addUsersCheckboxList" class="checkbox-container"></div>
+        </div>
+
+        <button type="button" class="button" onclick="submitAddUsers()">Hinzufügen</button>
     </div>
 </div>
+
 
 <div id="createGroupModal" class="modal" style="display: none;">
     <div class="modal-content">
