@@ -8,12 +8,15 @@ public class EventDTO {
 
     private String date;
 
+    private String author;
+
     EventDTO() {}
 
-    public EventDTO(String title, String content, String date) {
+    public EventDTO(String title, String content, String date, String author) {
         this.title = title;
         this.content = content;
         this.date = date;
+        this.author = author;
     }
 
     public String getTitle() {
@@ -38,5 +41,13 @@ public class EventDTO {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 }

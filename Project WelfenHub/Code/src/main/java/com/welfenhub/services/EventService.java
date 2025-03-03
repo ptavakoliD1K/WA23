@@ -25,14 +25,14 @@ public class EventService {
      * @param content text of event
      */
 
-    public void saveEventToDatabase(String title, String content) {
+    public void saveEventToDatabase(String title, String content, String author) {
 
         LocalDateTime creationDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         String date = formatter.format(creationDate);
 
-        eventRepository.saveEvent(title, content, date);
+        eventRepository.saveEvent(title, content, date, author);
     }
 
     /**

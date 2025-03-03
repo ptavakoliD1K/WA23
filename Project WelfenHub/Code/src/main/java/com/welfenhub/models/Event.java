@@ -20,9 +20,9 @@ public class Event {
     private String date;
 
     @Column(name = "author")
-    private Integer author;
+    private String author;
 
-    public Event(Long id, String title, String content, String date, Integer author) {
+    public Event(Long id, String title, String content, String date, String author) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -64,11 +64,11 @@ public class Event {
         this.date = date;
     }
 
-    public Integer getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 }

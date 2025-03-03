@@ -11,8 +11,16 @@ main {
 }
 
 h1 {
+    letter-spacing: 1px;
+    font-size: 50px;
+    color: #00274d;
+    border: 2px ridge #0181a0;
+    padding: 10px;
+    text-transform: uppercase;
+    border-radius: 10px;
+    justify-self: center;
+    margin-bottom: 20px;
     text-align: center;
-    margin-bottom: 2%;
 }
 
 button {
@@ -47,6 +55,20 @@ button {
     transform: scale(1.05);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+}
+
+h3 {
+    color: #0181a0;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.newsDiv * {
+    text-align: center;
+    margin-left: 3%;
+    margin-right: 3%;
+    word-wrap: break-word;
 }
 
 button:hover, button:focus {
@@ -219,9 +241,16 @@ textarea:hover, textarea:focus {
 }
 
 .newsDiv div {
-    color: #adadad;
+    color: #00000080;
     margin-top: 16px;
     margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.newsDiv p {
+    color: #000000b3;
+    font-size: 1.2rem;
 }
 
 #page {

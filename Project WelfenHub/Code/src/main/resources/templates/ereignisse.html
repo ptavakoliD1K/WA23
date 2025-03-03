@@ -18,7 +18,7 @@
     </nav>
 </header>
 <main>
-    <h1>Ereignisse</h1>
+    <h1>Anstehende Ereignisse</h1>
     <div id="buttons" sec:authorize="hasRole('MODERATOR')">
         <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Ereignis erstellen</button>
         <button id="editEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showEditEvent()">Ereignis bearbeiten</button>
@@ -27,6 +27,7 @@
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
         <button class="close-button" onclick="showAddEvent()">&times;</button>
         <span class="headerPopUp">Ereignis hinzufügen</span>
+        <input type="text" maxlength="100" placeholder="Name" id="eventName">
         <input type="text" maxlength="100" placeholder="Titel" id="title">
         <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
         <button onclick="publishEvent()" id="publishButton">Veröffentlichen</button>
