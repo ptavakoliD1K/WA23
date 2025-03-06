@@ -167,3 +167,8 @@ footer a:hover {
     animation: fade-in 2s ease-in-out;
     max-width: 120px;
 }
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
+}
