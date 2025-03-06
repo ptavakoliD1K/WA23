@@ -161,19 +161,22 @@ input{
 
 /* Button zum Erstellen einer Gruppe */
 .createGroupBtn {
-    display: inline-flex;      /* Damit Icon + Text schön zentriert sind */
+    display: inline-flex;
     align-items: center;
-    justify-content: center;   /* Falls du nur ein Icon nutzt */
+    justify-content: center;
     background-color: #ffae00;
     color: #333;
-    border: none;             /* kein Standard-Rahmen */
-    border-radius: 50%;       /* runder Button! (Kreis) */
-    width: 50px;              /* fixe Breite/Höhe, damit es rund wird */
-    height: 50px;
-    font-size: 24px;          /* Icon-Größe anpassen */
+    border: none;
+    border-radius: 3px;
+    width: 240px;
+    height: 32px;
+    font-size: 15px;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.2s;
-    margin-bottom: 10px;      /* Abstand zum nächsten Element */
+}
+
+.createGroupBtn i {
+    margin: 8px;
 }
 
 .createGroupBtn:hover {
@@ -260,11 +263,11 @@ input{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #00274d9e;
+    background-color: #37445d;
     color: white;
     padding: 15px 20px;
     grid-row: 1;
-
+    box-shadow: 0px 15px 10px -15px #111;
 }
 
 .chatTitle {
@@ -296,6 +299,8 @@ input{
     padding: 20px;
     margin-bottom: 0; /* Entfernt */
     min-height: 0; /* Wichtig für korrektes Scrolling */
+    scrollbar-color: #e2f3fc transparent;
+    scrollbar-width: thin;
 }
 
 /* Grund-Styles für eine einzelne Nachricht */
@@ -445,40 +450,6 @@ input{
 .chatInput button:hover {
     background-color: #04488b;
 }
-
-/************************************************
- *  Scrollbar-Styles (optional)
- ************************************************/
-.groupList::-webkit-scrollbar,
-.chatMessages::-webkit-scrollbar {
-    width: 8px;
-}
-
-.groupList::-webkit-scrollbar-track,
-.chatMessages::-webkit-scrollbar-track {
-    background-color: #04488b;
-}
-
-.groupList::-webkit-scrollbar-thumb,
-.chatMessages::-webkit-scrollbar-thumb {
-    background-color: #FFAE00;
-    border-radius: 4px;
-}
-
-.highlight-new .textBubble {
-    border: 2px solid #ffcc00;
-    background-color: #fff9b3;
-}
-
-.unreadBadge {
-    background-color: #ff3b30;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    font-size: 0.8em;
-    margin-left: 8px;
-}
-
 
 /************************************************
  *  Responsive Design
