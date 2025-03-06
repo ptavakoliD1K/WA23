@@ -189,13 +189,15 @@ public class ChatService {
      */
     @Transactional
     public void updateLastRead(Long chatRoomId, Long userId) {
-        ChatRoomUser cru = chatRoomUserRepository
-                .findByChatRoomIdAndUserId(chatRoomId, userId)
+        ChatRoomUser cru = chatRoomUserRepository.findByChatRoomIdAndUserId(chatRoomId, userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not in chatroom"));
-
-        cru.setLastReadAt(LocalDateTime.now());
+        LocalDateTime newTime = LocalDateTime.now();
+        logger.info("Updating lastReadAt for chatRoomId {} and userId {}: {} -> {}", chatRoomId, userId, cru.getLastReadAt(), newTime);
+        cru.setLastReadAt(newTime);
         chatRoomUserRepository.save(cru);
+        chatRoomUserRepository.flush();
     }
+
 
     /**
      * Hilfsfunktion: Entity -> DTO
