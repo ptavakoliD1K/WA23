@@ -2,6 +2,8 @@ package com.welfenhub.models;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Entity
 public class ChatRoom {
@@ -25,6 +27,15 @@ public class ChatRoom {
     @Transient
     private int unreadCount;
 
+    public List<User> getUsers() {
+        if(chatRoomUsers == null) {
+            return new ArrayList<>();
+        }
+        return chatRoomUsers.stream()
+                .map(ChatRoomUser::getUser)
+                .distinct()
+                .collect(Collectors.toList());
+    }
     // Getter und Setter
     public Long getId() {
         return id;

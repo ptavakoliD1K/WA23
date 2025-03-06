@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import com.welfenhub.models.ChatRoomUser;
+import java.util.stream.Collectors;
 
 
 import java.security.Principal;
@@ -129,5 +131,31 @@ public class ChatController {
         chatService.updateLastRead(chatRoomId, user.getId());
         // Kein Redirect, wir geben nur Status 200 zurück
     }
+
+    @GetMapping("/{chatRoomId}/members")
+    public String viewGroupMembers(@PathVariable Long chatRoomId, Model model) {
+        ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
+        // Extrahiere die User aus den ChatRoomUser-Objekten
+        List<User> members = chatRoom.getChatRoomUsers().stream()
+                .map(ChatRoomUser::getUser)
+                .distinct()
+                .collect(Collectors.toList());
+        model.addAttribute("chatRoom", chatRoom);
+        model.addAttribute("members", members);
+        return "groupMembers";  // Name des Thymeleaf-Templates
+    }
+
+    @GetMapping("/{chatRoomId}/members/json")
+    @ResponseBody
+    public List<User> getMembers(@PathVariable Long chatRoomId) {
+        ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
+        // Extrahiere die User aus den ChatRoomUser-Einträgen
+        List<User> members = chatRoom.getChatRoomUsers().stream()
+                .map(ChatRoomUser::getUser)
+                .distinct()
+                .collect(Collectors.toList());
+        return members;
+    }
+
 
 }

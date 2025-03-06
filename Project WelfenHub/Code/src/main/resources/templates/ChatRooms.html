@@ -5,19 +5,59 @@
     <title>Gruppenchat</title>
     <!-- Dein Header-CSS -->
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
-    <!-- Dein Chat-CSS (unverändert von dir) -->
+    <!-- Dein Chat-CSS -->
     <link rel="stylesheet" th:href="@{/css/groupChat.css}">
     <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
-
     <!-- Boxicons (Icons) -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        /* Einfaches Modal-Styling */
+        .modal {
+            display: none; /* Versteckt standardmäßig */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto; /* Zentriert das Modal */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+        /* Unread Badge */
+        .unreadBadge {
+            background-color: #ff3b30;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            margin-left: 8px;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Dein Header -->
 <header id="responsive-header">
     <nav>
-        <!-- Hier wird dein Header-Fragment eingefügt -->
         <div th:insert="fragments/headerResponsive.html"></div>
     </nav>
 </header>
@@ -31,10 +71,11 @@
             <button class="createGroupBtn" onclick="openCreateGroupModal()">
                 <i class="fa-regular fa-user"></i>
                 Gruppe erstellen
-            </button>            <div class="groupSearch">
-            <input type="text" placeholder="Suchen...">
-            <i class='bx bx-search'></i>
-        </div>
+            </button>
+            <div class="groupSearch">
+                <input type="text" placeholder="Suchen...">
+                <i class='bx bx-search'></i>
+            </div>
         </div>
         <div class="groupList">
             <div class="groupItem"
@@ -46,7 +87,10 @@
                     <span th:text="${room.name}"></span>
                     <span class="unreadBadge" th:if="${room.unreadCount > 0}" th:text="${room.unreadCount}"></span>
                 </div>
+                <!-- Button zum Anzeigen der Mitglieder; event.stopPropagation() verhindert, dass der Chat geöffnet wird -->
+                <button th:onclick="|event.stopPropagation(); openGroupMembersModal(${room.id})|">Mitglieder</button>
             </div>
+
         </div>
     </section>
 
@@ -67,38 +111,44 @@
     </section>
 </main>
 
+<!-- Modal: Gruppenmitglieder anzeigen -->
+<div id="groupMembersModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeGroupMembersModal()">&times;</span>
+        <h2>Mitglieder der Gruppe</h2>
+        <ul id="groupMembersList">
+            <!-- Hier werden die Mitglieder per JavaScript eingefügt -->
+        </ul>
+    </div>
+</div>
+
+
 <!-- MODAL: Nutzer zu Gruppe hinzufügen -->
 <div id="addUsersModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeAddUsersModal()">&times;</span>
         <h2>Nutzer zu Gruppe hinzufügen</h2>
-
         <div class="Groupname">
             <h4>Mitglieder auswählen</h4>
             <div id="addUsersCheckboxList" class="checkbox-container"></div>
         </div>
-
         <button type="button" class="button" onclick="submitAddUsers()">Hinzufügen</button>
     </div>
 </div>
 
-
+<!-- MODAL: Gruppe erstellen -->
 <div id="createGroupModal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" onclick="closeCreateGroupModal()">&times;</span>
         <p class="GruppeTitel">Neue Gruppe erstellen</p>
-
         <div class="Groupname">
             <label for="groupNameInput" class="label">Gib deiner Gruppe einen Namen: </label>
             <input type="text" id="groupNameInput" class="groupNameInput" placeholder="z.B. Projektteam A">
         </div>
-
         <div class="Groupname">
             <p style="margin:5px 0px;"> <strong>Mitglieder auswählen </strong></p>
-            <!-- Hier laden wir per JS die Liste aller User (Checkboxen) -->
             <div id="groupUsersCheckboxList"></div>
         </div>
-
         <button type="button" class="button" onclick="createGroup()">Gruppe erstellen</button>
     </div>
 </div>
@@ -117,131 +167,102 @@
        KLICK AUF EINE GRUPPE
        ========================================================= */
     function onRoomClicked(element) {
-        // Lies ChatRoom-ID & -Name aus data-Attributen
         const chatRoomId = element.dataset.id;
         const chatRoomName = element.dataset.name;
-
-        // Dann ruf die schon vorhandene selectChatRoom-Funktion
         selectChatRoom(chatRoomId, chatRoomName);
     }
+
     function loadAllUsersForGroup() {
-    fetch('/chat/users')
-        .then(response => response.json())
-        .then(users => {
-            // Optional: eigenen User filtern
-            // Hier nimmst du den eingeloggten User, falls du ihn NICHT auswählen willst
-            const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du';
-            const filteredUsers = users.filter(u => u.username !== loggedInUsername);
-
-            const container = document.getElementById('groupUsersCheckboxList');
-            filteredUsers.forEach(user => {
-                const label = document.createElement('label');
-                label.style.display = 'block'; // Jede Zeile
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.value = user.username; // Username
-                // kein name="usernames" nötig, wir sammeln das in JS
-
-                label.appendChild(checkbox);
-                label.append(' ' + user.username);
-                container.appendChild(label);
-            });
-        })
-        .catch(error => console.error("Fehler beim Laden der Benutzer:", error));
+        fetch('/chat/users')
+            .then(response => response.json())
+            .then(users => {
+                const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du';
+                const filteredUsers = users.filter(u => u.username !== loggedInUsername);
+                const container = document.getElementById('groupUsersCheckboxList');
+                container.innerHTML = '';
+                filteredUsers.forEach(user => {
+                    const label = document.createElement('label');
+                    label.style.display = 'block';
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = user.username;
+                    label.appendChild(checkbox);
+                    label.append(' ' + user.username);
+                    container.appendChild(label);
+                });
+            })
+            .catch(error => console.error("Fehler beim Laden der Benutzer:", error));
     }
 
     function openCreateGroupModal() {
-
-    console.log("openCreateGroupModal aufgerufen!");
-
-    document.getElementById('groupNameInput').value = '';
-    document.getElementById('groupUsersCheckboxList').innerHTML = '';
-
-    // Modal anzeigen
-    document.getElementById('createGroupModal').style.display = 'block';
-
-    // User-Liste laden und als Checkboxen einfügen
-    loadAllUsersForGroup();
+        document.getElementById('groupNameInput').value = '';
+        document.getElementById('groupUsersCheckboxList').innerHTML = '';
+        document.getElementById('createGroupModal').style.display = 'block';
+        loadAllUsersForGroup();
     }
 
     function closeCreateGroupModal() {
-    document.getElementById('createGroupModal').style.display = 'none';
+        document.getElementById('createGroupModal').style.display = 'none';
     }
 
     function createGroup() {
-    const groupName = document.getElementById('groupNameInput').value.trim();
-    if (!groupName) {
-        alert("Bitte Gruppenname eingeben.");
-        return;
-    }
-
-    // Checkboxen sammeln
-    const checkboxes = document.querySelectorAll('#groupUsersCheckboxList input[type="checkbox"]:checked');
-    const selectedUsernames = Array.from(checkboxes).map(cb => cb.value);
-
-    // FormData erstellen, da dein Controller @RequestParam nutzt
-    const formData = new FormData();
-    formData.append("name", groupName);
-    selectedUsernames.forEach(username => {
-        formData.append("usernames", username);
-    });
-
-    fetch('/chat/group', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (response.redirected) {
-            // Erwarte: return "redirect:/chat"
-            window.location.href = response.url;
-        } else {
-            // falls kein Redirect
-            return response.text();
+        const groupName = document.getElementById('groupNameInput').value.trim();
+        if (!groupName) {
+            alert("Bitte Gruppenname eingeben.");
+            return;
         }
-    })
-    .then(() => {
-        // Modal schließen
-        closeCreateGroupModal();
-        // optional: location.reload();
-    })
-    .catch(error => {
-        console.error("Fehler beim Erstellen der Gruppe:", error);
-        alert("Fehler: " + error);
-    });
+        const checkboxes = document.querySelectorAll('#groupUsersCheckboxList input[type="checkbox"]:checked');
+        const selectedUsernames = Array.from(checkboxes).map(cb => cb.value);
+        const formData = new FormData();
+        formData.append("name", groupName);
+        selectedUsernames.forEach(username => {
+            formData.append("usernames", username);
+        });
+        fetch('/chat/group', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.text();
+            }
+        })
+        .then(() => {
+            closeCreateGroupModal();
+        })
+        .catch(error => {
+            console.error("Fehler beim Erstellen der Gruppe:", error);
+            alert("Fehler: " + error);
+        });
     }
+
     /* =========================================================
        CHATRAUM ÖFFNEN
        ========================================================= */
-  function selectChatRoom(chatRoomId, chatRoomName) {
-    currentChatRoomId = chatRoomId;
-    currentChatRoomName = chatRoomName;
-
-    document.getElementById('currentChatTitle').innerText = chatRoomName;
-    document.getElementById('messageInput').disabled = false;
-    document.getElementById('sendMessageBtn').disabled = false;
-    const messagesContainer = document.getElementById('chatMessagesContainer');
-    messagesContainer.innerHTML = '';
-
-    // Chat als gelesen markieren
-    fetch('/chat/' + chatRoomId + '/markAsRead', { method: 'POST' })
-       .then(() => {
-           // Nach erfolgreichem Markieren den Badge in der Sidebar entfernen.
-           const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
-           if (chatRoomElement) {
-               const badge = chatRoomElement.querySelector('.unreadBadge');
-               if (badge) {
-                   badge.style.display = 'none';
+    function selectChatRoom(chatRoomId, chatRoomName) {
+        currentChatRoomId = chatRoomId;
+        currentChatRoomName = chatRoomName;
+        document.getElementById('currentChatTitle').innerText = chatRoomName;
+        document.getElementById('messageInput').disabled = false;
+        document.getElementById('sendMessageBtn').disabled = false;
+        const messagesContainer = document.getElementById('chatMessagesContainer');
+        messagesContainer.innerHTML = '';
+        fetch('/chat/' + chatRoomId + '/markAsRead', { method: 'POST' })
+           .then(() => {
+               const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+               if (chatRoomElement) {
+                   const badge = chatRoomElement.querySelector('.unreadBadge');
+                   if (badge) {
+                       badge.style.display = 'none';
+                   }
                }
-           }
-       })
-       .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
-
-    fetchMessages(chatRoomId);
-    subscribeToChatRoom(chatRoomId);
-}
-
-
+           })
+           .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+        fetchMessages(chatRoomId);
+        subscribeToChatRoom(chatRoomId);
+    }
 
     /* =========================================================
        NACHRICHTEN PER REST LADEN
@@ -250,7 +271,6 @@
         fetch('/chat/' + chatRoomId + '/messages')
             .then(response => response.json())
             .then(data => {
-                // Array von MessageDTO
                 data.forEach(msg => {
                     addMessageToChat(msg);
                 });
@@ -266,9 +286,7 @@
         const messageInput = document.getElementById('messageInput');
         const content = messageInput.value.trim();
         if (content !== '') {
-            // Baue MessageDTO-ähnliches Objekt
             const msg = { content: content };
-            // /app/chat/{chatRoomId} -> @MessageMapping("/chat/{chatRoomId}")
             stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify(msg));
             messageInput.value = '';
         }
@@ -277,72 +295,79 @@
     /* =========================================================
        NEUE NACHRICHT IM UI ANZEIGEN
        ========================================================= */
-   function addMessageToChat(messageDTO) {
-    // messageDTO = { id, content, username, chatRoomId, chatRoomName, createdAt, isNew }
-
-    const container = document.getElementById('chatMessagesContainer');
-    const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du'; // Fallback
-
-    console.log("Sender:", messageDTO.username, "LoggedIn:", loggedInUsername);
-
-    // Grundlegende Klassen "incoming" oder "outgoing"
-    let msgClass = (messageDTO.username === loggedInUsername)
-        ? 'message outgoing'
-        : 'message incoming';
-
-    // Falls Nachricht "neu" für diesen Nutzer ist, zusätzliche CSS-Klasse
-    if (messageDTO.isNew === true) {
-        msgClass += ' highlight-new';
+    function addMessageToChat(messageDTO) {
+        const container = document.getElementById('chatMessagesContainer');
+        const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du';
+        let msgClass = (messageDTO.username === loggedInUsername)
+            ? 'message outgoing'
+            : 'message incoming';
+        if (messageDTO.isNew === true) {
+            msgClass += ' highlight-new';
+        }
+        const wrapperDiv = document.createElement('div');
+        wrapperDiv.className = msgClass;
+        const senderSpan = document.createElement('span');
+        senderSpan.className = 'senderName';
+        senderSpan.textContent = messageDTO.username;
+        const textDiv = document.createElement('div');
+        textDiv.className = 'textBubble';
+        textDiv.textContent = messageDTO.content;
+        const timestampSpan = document.createElement('span');
+        timestampSpan.className = 'timestamp';
+        const date = new Date(messageDTO.createdAt);
+        timestampSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        wrapperDiv.appendChild(senderSpan);
+        wrapperDiv.appendChild(textDiv);
+        wrapperDiv.appendChild(timestampSpan);
+        container.appendChild(wrapperDiv);
+        container.scrollTop = container.scrollHeight;
     }
-
-    // Container für eine Nachricht
-    const wrapperDiv = document.createElement('div');
-    wrapperDiv.className = msgClass;
-
-    // Sender
-    const senderSpan = document.createElement('span');
-    senderSpan.className = 'senderName';
-    senderSpan.textContent = messageDTO.username;
-
-    // Inhalt
-    const textDiv = document.createElement('div');
-    textDiv.className = 'textBubble';
-    textDiv.textContent = messageDTO.content;
-
-    // Zeitstempel
-    const timestampSpan = document.createElement('span');
-    timestampSpan.className = 'timestamp';
-    const date = new Date(messageDTO.createdAt);
-    timestampSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-    wrapperDiv.appendChild(senderSpan);
-    wrapperDiv.appendChild(textDiv);
-    wrapperDiv.appendChild(timestampSpan);
-    container.appendChild(wrapperDiv);
-
-    // Scroll nach unten
-    container.scrollTop = container.scrollHeight;
-}
-
 
     /* =========================================================
        CHATRAUM PER WEBSOCKET ABONNIEREN
        ========================================================= */
-   let currentSubscription = null;
-
-function subscribeToChatRoom(chatRoomId) {
-    // Falls noch ein altes Subscription-Objekt existiert, unsubscriben
-    if (currentSubscription) {
-        currentSubscription.unsubscribe();
-        currentSubscription = null;
+    let currentSubscription = null;
+    function subscribeToChatRoom(chatRoomId) {
+        if (currentSubscription) {
+            currentSubscription.unsubscribe();
+            currentSubscription = null;
+        }
+        currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
+            const msgDTO = JSON.parse(message.body);
+            addMessageToChat(msgDTO);
+        });
     }
 
-    // Neu subscriben und das Objekt aufbewahren
-    currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
-        const msgDTO = JSON.parse(message.body);
-        addMessageToChat(msgDTO);
-    });
+    /* =========================================================
+       MODAL FÜR GRUPPENMITGLIEDER
+       ========================================================= */
+function openGroupMembersModal(chatRoomId) {
+    // Rufe den Endpoint auf, um Mitglieder als JSON zu laden
+console.log("openGroupMembersModal aufgerufen für ChatRoomId: " + chatRoomId);
+    fetch('/chat/' + chatRoomId + '/members/json')
+        .then(response => response.json())
+        .then(members => {
+            const listContainer = document.getElementById('groupMembersList');
+            listContainer.innerHTML = ''; // Alte Einträge löschen
+            members.forEach(member => {
+                const li = document.createElement('li');
+                li.textContent = member.username + " (" + member.fullName + ")";
+                listContainer.appendChild(li);
+            });
+            // Zeige das Modal an
+            document.getElementById('groupMembersModal').style.display = 'block';
+        })
+        .catch(error => console.error("Fehler beim Laden der Mitglieder:", error));
 }
+
+function closeGroupMembersModal() {
+    document.getElementById('groupMembersModal').style.display = 'none';
+}
+
+
+    function closeGroupMembersModal() {
+        document.getElementById('groupMembersModal').style.display = 'none';
+    }
 
     /* =========================================================
        NUTZER HINZUFÜGEN / MODAL
@@ -355,11 +380,9 @@ function subscribeToChatRoom(chatRoomId) {
         }
         modal.style.display = 'block';
     }
-
     function closeAddUsersModal() {
         document.getElementById('addUsersModal').style.display = 'none';
     }
-
     function submitAddUsers() {
         const usernames = document.getElementById('usernames').value.trim();
         if (!usernames) {
@@ -367,7 +390,6 @@ function subscribeToChatRoom(chatRoomId) {
             return;
         }
         const userArray = usernames.split(',').map(u => u.trim());
-
         fetch('/chat/' + currentChatRoomId + '/addUsers', {
             method: 'POST',
             headers: {
@@ -401,30 +423,21 @@ function subscribeToChatRoom(chatRoomId) {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
             console.log("Connected: " + frame);
-            // subscription wird erst ausgelöst, wenn man einen Chat wählt
         });
     }
 
-    /* =========================================================
-       BEI SEITENAUFRUF
-       ========================================================= */
     document.addEventListener("DOMContentLoaded", function() {
         connectWebSocket();
     });
-
-       document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
         const messageInput = document.getElementById('messageInput');
-
-        // Event-Listener für "Enter" im Eingabefeld
         messageInput.addEventListener("keydown", function(e) {
-            // Wenn Enter gedrückt wird ...
             if (e.key === 'Enter' || e.keyCode === 13) {
-                e.preventDefault();      // Verhindert ggf. Zeilenumbruch/Submit
-                sendMessage();          // Aufruf der existierenden Funktion
+                e.preventDefault();
+                sendMessage();
             }
         });
-
-        connectWebSocket();  // War schon vorhanden
+        connectWebSocket();
     });
 </script>
 
