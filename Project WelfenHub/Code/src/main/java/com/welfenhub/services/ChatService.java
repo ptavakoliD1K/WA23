@@ -247,9 +247,18 @@ public class ChatService {
         LocalDateTime lastRead = (cru.getLastReadAt() != null) ? cru.getLastReadAt()
                 : LocalDateTime.of(1970, 1, 1, 0, 0);
 
-        int count = messageRepository.countByChatRoomIdAndCreatedAtAfter(chatRoomId, Timestamp.valueOf(lastRead));
+        // Hole den aktuellen Nutzer (das ist in der Join-Entity gespeichert)
+        User currentUser = cru.getUser();
+
+        // Zähle Nachrichten, die nach dem lastRead-Zeitpunkt erstellt wurden UND nicht von currentUser sind
+        int count = messageRepository.countByChatRoomIdAndCreatedAtAfterAndUserNot(
+                chatRoomId,
+                Timestamp.valueOf(lastRead),
+                currentUser
+        );
         return count;
     }
+
 
 
 
