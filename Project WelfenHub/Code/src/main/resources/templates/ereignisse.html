@@ -25,8 +25,8 @@
         <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
     </div>
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
-        <button class="close-button" onclick="showAddEvent()">&times;</button>
-        <span class="headerPopUp">Ereignis hinzufügen</span>
+        <span class="close-button" onclick="showAddEvent()">&times;</span>
+        <h4 class="headerPopUp">Ereignis hinzufügen</h4>
         <input type="text" maxlength="100" placeholder="Name" id="eventName">
         <input type="text" maxlength="100" placeholder="Titel" id="title">
         <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
@@ -34,20 +34,20 @@
         <p id="status"></p>
     </div>
     <div id="editEventPopUp" sec:authorize="hasRole('MODERATOR')">
-        <button class="close-button" onclick="showEditEvent()">&times;</button>
-        <span class="headerPopUp">Ereignis bearbeiten</span>
+        <span class="close-button" onclick="showEditEvent()">&times;</span>
+        <h4 class="headerPopUp">Ereignis bearbeiten</h4>
         <ul id="toEditList"></ul>
     </div>
     <div id="editSelectedEventPopUp" sec:authorize="hasRole('MODERATOR')">
-        <button class="close-button" onclick="showEventToEdit()">&times;</button>
-        <span class="headerPopUp">Ereignis bearbeiten</span>
+        <span class="close-button" onclick="showEventToEdit()">&times;</span>
+        <h4 class="headerPopUp">Ereignis bearbeiten</h4>
         <input id="editInput" disabled>
         <textarea id="editTextarea"></textarea>
         <button id="submitUpdate" onclick="submitUpdate()">Abschicken</button>
     </div>
     <div id="removeEventPopUp" sec:authorize="hasRole('MODERATOR')" >
-        <button class="close-button" onclick="showRemoveEvent()">&times;</button>
-        <span class="headerPopUp">Ereignis löschen</span>
+        <span class="close-button" onclick="showRemoveEvent()">&times;</span>
+        <h4 class="headerPopUp">Ereignis löschen</h4>
         <ul id="toRemoveList"></ul>
     </div>
     <div id="newsArea"></div>
