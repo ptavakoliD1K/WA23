@@ -9,6 +9,7 @@ body {
     min-height: 100vh;
     background-size: cover;
     background-position: center;
+    background-color: #f4f4f9
 }
 
 header {
@@ -149,4 +150,20 @@ footer a:hover {
     .wrapper {
         width: 98%;
     }
+}
+
+.center-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 15vh;
+    margin: 20px 0;
+}
+
+.center-image img {
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+    animation: fade-in 2s ease-in-out;
+    max-width: 120px;
 }
