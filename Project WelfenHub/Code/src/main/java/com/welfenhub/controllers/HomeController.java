@@ -50,4 +50,9 @@ public class HomeController {
     public String datenschutz() {
         return "datenschutz";
     }
+
+    @GetMapping("/jobs")
+    public String jobs() {
+        return "jobPage";
+    }
 }

@@ -1,0 +1,104 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+main {
+    margin: 1% 1% 1% 1%;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: -10px;
+    color: #fff;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.1s;
+    float: right;
+}
+
+button:hover, button:focus {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#removeStelle {
+    margin-right: 7px;
+}
+
+#createPopUp, #removePopUp {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    justify-self: anchor-center;
+    background-color: #fff;
+    width: 70%;
+    height: fit-content;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.close-button {
+    margin-top: 1%;
+    margin-left: 1%;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover, .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+textarea {
+    outline: none;
+    height: 100px;
+    padding: 0.8em 0.4em 0.8em 0.4em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+input {
+    outline: none;
+    height: 2.5rem;
+    padding-left: 0.8em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+input:hover, input:focus {
+    box-shadow: rgba(74, 157, 236, 0.2) 0px 0px 0px 7px;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 39, 77);
+    border-image: initial;
+}
+
+h4 {
+    text-align: center;
+}

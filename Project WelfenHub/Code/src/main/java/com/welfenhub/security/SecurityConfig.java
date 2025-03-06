@@ -70,7 +70,11 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/event/show**")
                         ).permitAll() // Diese Endpunkte sind für alle zugänglich
 
-                        .requestMatchers(new AntPathRequestMatcher("/event/**")).hasAuthority("ROLE_MODERATOR")
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/event/**"),
+                                new AntPathRequestMatcher("/job/**"))
+                        .hasAuthority("ROLE_MODERATOR")
+
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/moderator/**"), new AntPathRequestMatcher("/event/**"))
                         .hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")

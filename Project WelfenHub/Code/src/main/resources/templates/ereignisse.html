@@ -27,7 +27,7 @@
     <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
         <span class="close-button" onclick="showAddEvent()">&times;</span>
         <h4 class="headerPopUp">Ereignis hinzufügen</h4>
-        <input type="text" maxlength="100" placeholder="Name" id="eventName">
+        <input type="text" maxlength="100" placeholder="Dein Name" id="eventName">
         <input type="text" maxlength="100" placeholder="Titel" id="title">
         <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
         <button onclick="publishEvent()" id="publishButton">Veröffentlichen</button>

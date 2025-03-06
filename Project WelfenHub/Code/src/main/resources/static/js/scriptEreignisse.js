@@ -13,7 +13,7 @@ const editInput = document.getElementById('editInput');
 const editTextarea = document.getElementById('editTextarea');
 const eventName = document.getElementById('eventName');
 
-const csrfToken = getCsrfToken();
+let csrfToken = getCsrfToken();
 
 /**
  *  shows or removes pop up to create event if button is pressed
