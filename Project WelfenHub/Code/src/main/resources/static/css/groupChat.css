@@ -299,7 +299,7 @@ input{
     padding: 20px;
     margin-bottom: 0; /* Entfernt */
     min-height: 0; /* Wichtig für korrektes Scrolling */
-    scrollbar-color: #e2f3fc transparent; /* Design Scrollbar im Chat */
+    scrollbar-color: linear-gradient(to bottom, #001a44, #3c6dae, #7ea6f2); /* Design Scrollbar im Chat */
     scrollbar-width: thin; /* Design Scrollbar im Chat */
 }
 
