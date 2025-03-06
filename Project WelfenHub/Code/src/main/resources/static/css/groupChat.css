@@ -466,6 +466,12 @@ input{
     border-radius: 4px;
 }
 
+.highlight-new .textBubble {
+    border: 2px solid #ffcc00;
+    background-color: #fff9b3;
+}
+
+
 /************************************************
  *  Responsive Design
  ************************************************/
@@ -487,4 +493,5 @@ input{
     .message {
         max-width: 80%;
     }
+
 }

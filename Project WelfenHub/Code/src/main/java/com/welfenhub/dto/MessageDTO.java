@@ -10,10 +10,13 @@ public class MessageDTO {
     private String chatRoomName;
     private Timestamp createdAt;
 
-    // Default constructor
+    // Neues Feld, um zu markieren, ob die Nachricht "neu" ist
+    private boolean isNew;
+
+    // Standardkonstruktor
     public MessageDTO() {}
 
-    // Constructor with all fields
+    // Konstruktor mit allen Feldern
     public MessageDTO(Long id, String content, String username, Long chatRoomId, String chatRoomName, Timestamp createdAt) {
         this.id = id;
         this.content = content;
@@ -23,7 +26,7 @@ public class MessageDTO {
         this.createdAt = createdAt;
     }
 
-    // Getters and setters
+    // Getter und Setter
     public Long getId() {
         return id;
     }
@@ -70,5 +73,13 @@ public class MessageDTO {
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
     }
 }
