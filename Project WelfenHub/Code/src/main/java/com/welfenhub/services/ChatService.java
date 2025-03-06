@@ -220,7 +220,7 @@ public class ChatService {
                 .orElse(null);
         LocalDateTime lastRead = (cru != null && cru.getLastReadAt() != null)
                 ? cru.getLastReadAt()
-                : LocalDateTime.MIN;
+                : LocalDateTime.of(1970, 1, 1, 0, 0);
 
         return messages.stream()
                 .map(msg -> {
@@ -232,5 +232,23 @@ public class ChatService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public int countUnreadMessagesForChat(Long chatRoomId, Long userId) {
+        ChatRoomUser cru = chatRoomUserRepository.findByChatRoomIdAndUserId(chatRoomId, userId)
+                .orElse(null);
+        if (cru == null) {
+            return 0; // Falls der User nicht im Chat ist
+        }
+
+        // Verwende einen Default-Wert, der innerhalb des zulässigen Bereichs liegt:
+        LocalDateTime lastRead = (cru.getLastReadAt() != null) ? cru.getLastReadAt()
+                : LocalDateTime.of(1970, 1, 1, 0, 0);
+
+        int count = messageRepository.countByChatRoomIdAndCreatedAtAfter(chatRoomId, Timestamp.valueOf(lastRead));
+        return count;
+    }
+
+
 
 }

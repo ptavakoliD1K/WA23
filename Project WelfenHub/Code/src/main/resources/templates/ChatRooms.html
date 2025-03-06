@@ -36,13 +36,15 @@
         </div>
         </div>
         <div class="groupList">
-            <div
-                    class="groupItem"
-                    th:each="room : ${chatRooms}"
-                    th:id="'chatRoom_' + ${room.id}"
-                    th:attr="data-id=${room.id}, data-name=${room.name}"
-                    onclick="onRoomClicked(this)">
-                <div class="groupName" th:text="${room.name}"></div>
+            <div class="groupItem"
+                 th:each="room : ${chatRooms}"
+                 th:id="'chatRoom_' + ${room.id}"
+                 th:attr="data-id=${room.id}, data-name=${room.name}"
+                 onclick="onRoomClicked(this)">
+                <div class="groupName">
+                    <span th:text="${room.name}"></span>
+                    <span class="unreadBadge" th:if="${room.unreadCount > 0}" th:text="${room.unreadCount}"></span>
+                </div>
             </div>
         </div>
     </section>
@@ -210,32 +212,34 @@
     /* =========================================================
        CHATRAUM ÖFFNEN
        ========================================================= */
-    function selectChatRoom(chatRoomId, chatRoomName) {
+  function selectChatRoom(chatRoomId, chatRoomName) {
     currentChatRoomId = chatRoomId;
     currentChatRoomName = chatRoomName;
 
-    // Chat-Titel aktualisieren
     document.getElementById('currentChatTitle').innerText = chatRoomName;
-
-    // Eingabefelder aktivieren
     document.getElementById('messageInput').disabled = false;
     document.getElementById('sendMessageBtn').disabled = false;
-
-    // Nachrichtenliste leeren
     const messagesContainer = document.getElementById('chatMessagesContainer');
     messagesContainer.innerHTML = '';
 
-    // 1) POST an Backend -> Chat als gelesen markieren
-    fetch('/chat/' + chatRoomId + '/markAsRead', {
-        method: 'POST'
-    }).catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+    // Chat als gelesen markieren
+    fetch('/chat/' + chatRoomId + '/markAsRead', { method: 'POST' })
+       .then(() => {
+           // Nach erfolgreichem Markieren den Badge in der Sidebar entfernen.
+           const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+           if (chatRoomElement) {
+               const badge = chatRoomElement.querySelector('.unreadBadge');
+               if (badge) {
+                   badge.style.display = 'none';
+               }
+           }
+       })
+       .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
 
-    // 2) Vorhandene Nachrichten laden
     fetchMessages(chatRoomId);
-
-    // 3) WebSocket-Abo für diesen Chat
     subscribeToChatRoom(chatRoomId);
 }
+
 
 
     /* =========================================================

@@ -92,12 +92,18 @@ public class ChatController {
         messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
     }
 
-    @GetMapping
+    @GetMapping("")
     public String viewUserChats(Model model, Principal principal) {
         User user = userService.findByUsername(principal.getName());
         List<ChatRoom> chatRooms = chatService.getUserChatRooms(user);
+
+        // Berechne für jeden Chatroom den unreadCount (z. B. on the fly)
+        for (ChatRoom room : chatRooms) {
+            int count = chatService.countUnreadMessagesForChat(room.getId(), user.getId());
+            room.setUnreadCount(count);
+        }
         model.addAttribute("chatRooms", chatRooms);
-        return "ChatRooms"; // => chatRooms.html
+        return "ChatRooms";
     }
 
     @PostMapping("/{chatRoomId}/addUsers")
