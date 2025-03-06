@@ -60,7 +60,7 @@
                 <li th:each="post : ${posts}" class="post-item">
                     <h2 th:text="${post.title}">Post Title</h2>
                     <p th:text="${post.content}">Post Content</p>
-                    <p>Posted by <span th:text="${post.user.username}">User</span> on <span th:text="${post.createdAt}">Date</span></p>
+                    <p>Erstellt von <span th:text="${post.user.username}">User</span> am <span th:text="${#temporals.format(post.createdAt, 'dd-MM-YYYY HH:mm')}">Date</span></p>
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
                     <div class="comments-section" style="display: none;">
                         <h3>Kommentare:</h3>
