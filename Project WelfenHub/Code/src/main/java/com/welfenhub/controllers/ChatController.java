@@ -116,4 +116,12 @@ public class ChatController {
         return "redirect:/chat";
     }
 
+    @PostMapping("/{chatRoomId}/markAsRead")
+    @ResponseBody
+    public void markAsRead(@PathVariable Long chatRoomId, Principal principal) {
+        User user = userService.findByUsername(principal.getName());
+        chatService.updateLastRead(chatRoomId, user.getId());
+        // Kein Redirect, wir geben nur Status 200 zurück
+    }
+
 }

@@ -5,48 +5,38 @@ import java.util.List;
 
 @Entity
 public class ChatRoom {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "chat_room_user",
-            joinColumns = @JoinColumn(name = "chat_room_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users;
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatRoomUser> chatRoomUsers;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Message> messages;
 
+    // Falls du ein Transient-Feld brauchst, z.B. userNames:
     @Transient
-    private List<String> usernames; // This list is used to capture usernames from the form
+    private List<String> usernames;
 
+    // Getter und Setter
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<ChatRoomUser> getChatRoomUsers() {
+        return chatRoomUsers;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setChatRoomUsers(List<ChatRoomUser> chatRoomUsers) {
+        this.chatRoomUsers = chatRoomUsers;
     }
 
     public List<Message> getMessages() {
@@ -55,6 +45,14 @@ public class ChatRoom {
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<String> getUsernames() {

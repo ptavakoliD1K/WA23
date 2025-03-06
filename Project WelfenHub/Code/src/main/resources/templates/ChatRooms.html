@@ -211,26 +211,32 @@
        CHATRAUM ÖFFNEN
        ========================================================= */
     function selectChatRoom(chatRoomId, chatRoomName) {
-        currentChatRoomId = chatRoomId;
-        currentChatRoomName = chatRoomName;
+    currentChatRoomId = chatRoomId;
+    currentChatRoomName = chatRoomName;
 
-        // Titel im Chat aktualisieren
-        document.getElementById('currentChatTitle').innerText = chatRoomName;
+    // Chat-Titel aktualisieren
+    document.getElementById('currentChatTitle').innerText = chatRoomName;
 
-        // Eingabefelder aktivieren
-        document.getElementById('messageInput').disabled = false;
-        document.getElementById('sendMessageBtn').disabled = false;
+    // Eingabefelder aktivieren
+    document.getElementById('messageInput').disabled = false;
+    document.getElementById('sendMessageBtn').disabled = false;
 
-        // Nachrichtenliste leeren
-        const messagesContainer = document.getElementById('chatMessagesContainer');
-        messagesContainer.innerHTML = '';
+    // Nachrichtenliste leeren
+    const messagesContainer = document.getElementById('chatMessagesContainer');
+    messagesContainer.innerHTML = '';
 
-        // Vorhandene Nachrichten via REST laden
-        fetchMessages(chatRoomId);
+    // 1) POST an Backend -> Chat als gelesen markieren
+    fetch('/chat/' + chatRoomId + '/markAsRead', {
+        method: 'POST'
+    }).catch(err => console.error("Fehler beim Markieren als gelesen:", err));
 
-        // WebSocket-Abo aktualisieren
-        subscribeToChatRoom(chatRoomId);
-    }
+    // 2) Vorhandene Nachrichten laden
+    fetchMessages(chatRoomId);
+
+    // 3) WebSocket-Abo für diesen Chat
+    subscribeToChatRoom(chatRoomId);
+}
+
 
     /* =========================================================
        NACHRICHTEN PER REST LADEN
@@ -266,48 +272,53 @@
     /* =========================================================
        NEUE NACHRICHT IM UI ANZEIGEN
        ========================================================= */
-    function addMessageToChat(messageDTO) {
-        // messageDTO = { id, content, username, chatRoomId, chatRoomName, createdAt }
-        const container = document.getElementById('chatMessagesContainer');
+   function addMessageToChat(messageDTO) {
+    // messageDTO = { id, content, username, chatRoomId, chatRoomName, createdAt, isNew }
 
-        const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du'; // Fallback
+    const container = document.getElementById('chatMessagesContainer');
+    const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du'; // Fallback
 
-        console.log("Sender:", messageDTO.username,
-                "LoggedIn:", loggedInUsername);
+    console.log("Sender:", messageDTO.username, "LoggedIn:", loggedInUsername);
 
+    // Grundlegende Klassen "incoming" oder "outgoing"
+    let msgClass = (messageDTO.username === loggedInUsername)
+        ? 'message outgoing'
+        : 'message incoming';
 
-        const msgClass = (messageDTO.username === loggedInUsername)
-            ? 'message outgoing'
-            : 'message incoming';
-
-        // Container für eine Nachricht
-        const wrapperDiv = document.createElement('div');
-        wrapperDiv.className = msgClass;
-
-        // Sender
-        const senderSpan = document.createElement('span');
-        senderSpan.className = 'senderName';
-        senderSpan.textContent = messageDTO.username;
-
-        // Inhalt
-        const textDiv = document.createElement('div');
-        textDiv.className = 'textBubble';
-        textDiv.textContent = messageDTO.content;
-
-        // Zeitstempel
-        const timestampSpan = document.createElement('span');
-        timestampSpan.className = 'timestamp';
-        const date = new Date(messageDTO.createdAt);
-        timestampSpan.textContent = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-        wrapperDiv.appendChild(senderSpan);
-        wrapperDiv.appendChild(textDiv);
-        wrapperDiv.appendChild(timestampSpan);
-        container.appendChild(wrapperDiv);
-
-        // Scroll nach unten
-        container.scrollTop = container.scrollHeight;
+    // Falls Nachricht "neu" für diesen Nutzer ist, zusätzliche CSS-Klasse
+    if (messageDTO.isNew === true) {
+        msgClass += ' highlight-new';
     }
+
+    // Container für eine Nachricht
+    const wrapperDiv = document.createElement('div');
+    wrapperDiv.className = msgClass;
+
+    // Sender
+    const senderSpan = document.createElement('span');
+    senderSpan.className = 'senderName';
+    senderSpan.textContent = messageDTO.username;
+
+    // Inhalt
+    const textDiv = document.createElement('div');
+    textDiv.className = 'textBubble';
+    textDiv.textContent = messageDTO.content;
+
+    // Zeitstempel
+    const timestampSpan = document.createElement('span');
+    timestampSpan.className = 'timestamp';
+    const date = new Date(messageDTO.createdAt);
+    timestampSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    wrapperDiv.appendChild(senderSpan);
+    wrapperDiv.appendChild(textDiv);
+    wrapperDiv.appendChild(timestampSpan);
+    container.appendChild(wrapperDiv);
+
+    // Scroll nach unten
+    container.scrollTop = container.scrollHeight;
+}
+
 
     /* =========================================================
        CHATRAUM PER WEBSOCKET ABONNIEREN
