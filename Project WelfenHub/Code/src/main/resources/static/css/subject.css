@@ -229,6 +229,11 @@ button:hover {
     cursor: pointer;
 }
 
+#liComment {
+    display: block;
+    margin-top: 20px;
+}
+
 
 
 /* Media Queries */

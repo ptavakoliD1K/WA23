@@ -43,7 +43,7 @@
                 <a class="new-post-button" onclick="openModal()">+</a>
                 <div id="searchBar" class="search-bar" style="display: none;">
                     <form th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
-                        <input type="text" name="query" placeholder="Search by Title..." required/>
+                        <input type="text" name="query" placeholder="Nach Titel suchen..." required/>
                         <input type="hidden" name="subject" th:value="${subject}"/>
                         <input type="hidden" name="semester" th:value="${semester}"/>
                         <input type="hidden" name="course" th:value="${course}"/>
@@ -60,15 +60,15 @@
                 <li th:each="post : ${posts}" class="post-item">
                     <h2 th:text="${post.title}">Post Title</h2>
                     <p th:text="${post.content}">Post Content</p>
-                    <p>Posted by <span th:text="${post.user.username}">User</span> on <span th:text="${post.createdAt}">Date</span></p>
+                    <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Date</span></p>
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
                     <div class="comments-section" style="display: none;">
                         <h3>Kommentare:</h3>
                         <ul>
-                            <li th:each="comment : ${post.comments}">
+                            <li th:each="comment : ${post.comments}" id="liComment">
                                 <p th:text="${comment.user.username}">Comment User</p>
                                 <p th:text="${comment.content}">Comment Content</p>
-                                <p th:text="${comment.createdDate}">Comment Date</p>
+                                <p th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Comment Date</p>
                             </li>
                         </ul>
                         <div class="comment-form">
@@ -97,13 +97,13 @@
             <input type="hidden" name="semester" th:value="${semester}"/>
             <input type="hidden" name="course" th:value="${course}"/>
 
-            <label>Title:</label>
+            <label>Titel:</label>
             <input type="text" name="title" required/><br/>
 
-            <label>Content:</label>
+            <label>Inhalt:</label>
             <textarea name="content" required></textarea><br/>
 
-            <button type="submit">Create Post</button>
+            <button type="submit">Post erstellen</button>
         </form>
     </div>
 </div>

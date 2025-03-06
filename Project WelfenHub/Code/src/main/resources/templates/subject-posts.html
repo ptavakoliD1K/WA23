@@ -14,16 +14,23 @@
     </nav>
 </header>
 
-<h1 th:text="'Alle Posts in ' + ${currentSubject} + ' (neueste zuerst)'">Alle Posts</h1>
+<h1 th:text="'Alle Posts in ' + ${currentSubject} ">Alle Posts</h1>
 
-<!-- Ein Container für alle Posts -->
+<!-- Container für alle Posts -->
 <div class="posts-container">
     <div th:each="post : ${posts}" class="post-item">
+
         <!-- Titel -->
         <h2 th:text="${post.title}">Titel</h2>
 
         <!-- Inhalt -->
         <p th:text="${post.content}">Beispiel-Inhalt</p>
+
+        <!-- Ersteller -->
+        <p>
+            Erstellt von:
+            <span th:text="${post.user.username}">Username</span>
+        </p>
 
         <!-- Datum -->
         <small>
@@ -31,16 +38,15 @@
             <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
         </small>
 
-        <!-- Optional: Link zur Detailseite -->
+        <!-- Link führt zur Kursseite des Posts -->
         <br/>
         <a class="details-link"
-           th:href="@{/posts/{id}(id=${post.id})}">
+           th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${post.subject}, semester=${post.semester}, course=${post.course})}">
             Zum Post
         </a>
     </div>
 </div>
 
-<!-- Falls du einen Footer hast -->
 <footer>
     <div th:insert="fragments/footerResponsive.html"></div>
 </footer>
