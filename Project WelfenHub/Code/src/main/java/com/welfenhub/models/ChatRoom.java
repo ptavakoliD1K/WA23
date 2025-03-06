@@ -22,6 +22,9 @@ public class ChatRoom {
     @Transient
     private List<String> usernames;
 
+    @Transient
+    private int unreadCount;
+
     // Getter und Setter
     public Long getId() {
         return id;
@@ -61,5 +64,12 @@ public class ChatRoom {
 
     public void setUsernames(List<String> usernames) {
         this.usernames = usernames;
+    }
+
+    public int getUnreadCount() {
+        return unreadCount;
+    }
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
     }
 }
