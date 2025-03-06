@@ -46,9 +46,8 @@ input{
     top: 0%;
     left: 0%;
     width: 100vh;
-    height: 100vh;
-    padding-left: 520px;
-    padding-top: 200px;
+    height: 94vh;
+    padding: 200px 297px 0px 520.5px;
     z-index: 999;
     display: flex;
     justify-content: center;
