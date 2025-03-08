@@ -10,48 +10,10 @@
     <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
     <!-- Boxicons (Icons) -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <style>
-        /* Einfaches Modal-Styling */
-        .modal {
-            display: none; /* Versteckt standardmäßig */
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 10% auto; /* Zentriert das Modal */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-        }
-        /* Unread Badge */
-        .unreadBadge {
-            background-color: #ff3b30;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.8em;
-            margin-left: 8px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.21.2/dist/emoji-picker-element.min.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+
+
 </head>
 <body>
 
@@ -105,9 +67,21 @@
         </div>
         <div class="chatMessages" id="chatMessagesContainer"></div>
         <div class="chatInput">
-            <textarea id="messageInput" placeholder="Nachricht eingeben..."></textarea>
-            <button type="button" id="sendMessageBtn" onclick="sendMessage()" disabled>Senden</button>
+            <div class="inputContainer">
+                <button id="emojiBtn" type="button">😊</button>
+                <textarea id="messageInput" placeholder="Nachricht eingeben..."></textarea>
+            </div>
+            <div id="emojiPickerContainer" class="emoji-picker-container">
+                <emoji-picker id="emojiPicker"></emoji-picker>
+            </div>
+            <button type="button" id="sendMessageBtn" onclick="sendMessage()">Senden</button>
         </div>
+
+
+
+
+        <!-- Container für den Emoji-Picker -->
+
     </section>
 </main>
 
@@ -467,6 +441,85 @@ function submitAddUsers() {
         });
         connectWebSocket();
     });
+
+    // Gruppen filtern während des Tippens
+document.addEventListener("DOMContentLoaded", function() {
+    const searchInput = document.querySelector('.groupSearch input');
+    const groupItems = document.querySelectorAll('.groupItem');
+
+    searchInput.addEventListener('input', function() {
+        const filter = this.value.toLowerCase();
+
+        groupItems.forEach(function(item) {
+            const groupName = item.dataset.name.toLowerCase();
+
+            if (groupName.includes(filter)) {
+                item.style.display = ''; // Zeige das Element
+            } else {
+                item.style.display = 'none'; // Verstecke das Element
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("✅ DOM vollständig geladen");
+
+    // Suche nach den relevanten Elementen
+    const emojiBtn = document.getElementById('emojiBtn');
+    const emojiPickerContainer = document.getElementById('emojiPickerContainer');
+    const messageInput = document.getElementById('messageInput');
+
+    if (!emojiBtn || !emojiPickerContainer || !messageInput) {
+        console.error("❌ Fehler: Notwendige HTML-Elemente nicht gefunden!");
+        return;
+    }
+
+    console.log("🔍 Emoji-Picker-Container gefunden:", emojiPickerContainer);
+
+    // Falls bereits ein Emoji-Picker existiert, lösche ihn
+    emojiPickerContainer.innerHTML = '';
+
+    // Emoji-Picker erstellen
+    let emojiPicker = document.createElement('emoji-picker');
+    emojiPickerContainer.appendChild(emojiPicker);
+
+    console.log("✅ Emoji-Picker hinzugefügt:", emojiPicker);
+
+    // Emoji-Picker anzeigen/verstecken
+    emojiBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        emojiPickerContainer.classList.toggle('show');
+
+        console.log(emojiPickerContainer.classList.contains('show')
+            ? "👀 Picker sichtbar"
+            : "❌ Picker versteckt");
+    });
+
+    // Warte, bis der Picker geladen ist, dann das Event binden
+    emojiPicker.addEventListener('emoji-click', event => {
+        console.log("🎉 Emoji geklickt:", event.detail.unicode);
+        messageInput.value += event.detail.unicode;
+        emojiPickerContainer.classList.remove('show');
+        messageInput.focus();
+    });
+
+    console.log("✅ Event-Listener für Emoji-Klick aktiviert!");
+
+    // Falls außerhalb des Pickers geklickt wird → Picker schließen
+    document.addEventListener('click', function (e) {
+        if (!emojiBtn.contains(e.target) && !emojiPickerContainer.contains(e.target)) {
+            console.log("❌ Außerhalb geklickt – Picker schließen");
+            emojiPickerContainer.classList.remove('show');
+        }
+    });
+});
+
+
+
+
+
+
 </script>
 
 <div th:insert="fragments/footerResponsive.html"></div>
