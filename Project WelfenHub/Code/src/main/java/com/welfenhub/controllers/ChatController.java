@@ -5,6 +5,8 @@ import com.welfenhub.models.User;
 import com.welfenhub.services.ChatService;
 import com.welfenhub.services.UserService;
 import com.welfenhub.dto.MessageDTO;
+import com.welfenhub.dto.UserDTO;
+import com.welfenhub.dto.ChatRoomDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -56,19 +58,24 @@ public class ChatController {
     public String createGroupChat(@RequestParam String name, @RequestParam List<String> usernames, Principal principal) {
         logger.info("Create group request received for groupName: {}", name);
 
-        // Finde den Ersteller der Gruppe (aktueller Nutzer)
         User creator = userService.findByUsername(principal.getName());
-
-        // Finde die restlichen Benutzer anhand der Usernames
         List<User> users = userService.findByUsernames(usernames);
-        users.add(creator);  // Ersteller zur Gruppe hinzufügen
+        users.add(creator);
 
-        // Gruppe erstellen
-        chatService.createGroupChat(name, users);
+        // Korrektur: Ergebnis der Erstellung speichern
+        ChatRoom createdRoom = chatService.createGroupChat(name, users);
+
+        // Benachrichtigung aller Nutzer der neuen Gruppe
+        users.forEach(user -> messagingTemplate.convertAndSendToUser(
+                user.getUsername(),
+                "/queue/new-group",
+                new ChatRoomDTO(createdRoom.getId(), createdRoom.getName())
+        ));
 
         logger.info("Group created successfully with name: {}", name);
         return "redirect:/chat";
     }
+
 
 
     @PostMapping("/private")
@@ -156,6 +163,24 @@ public class ChatController {
                 .collect(Collectors.toList());
         return members;
     }
+
+    @GetMapping("/{chatRoomId}/non-members")
+    @ResponseBody
+    public List<UserDTO> getNonMembers(@PathVariable Long chatRoomId, Principal principal) {
+        ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
+        List<User> allUsers = userService.findAllUsers();
+        List<User> members = chatRoom.getChatRoomUsers().stream()
+                .map(ChatRoomUser::getUser)
+                .collect(Collectors.toList());
+
+        // Filtere Mitglieder heraus, die bereits im Raum sind
+        return userService.findAllUsers().stream()
+                .filter(user -> !members.contains(user))
+                .filter(user -> !user.getUsername().equals(principal.getName()))
+                .map(user -> new UserDTO(user.getUsername(), user.getFullName()))
+                .collect(Collectors.toList());
+    }
+
 
 
 }

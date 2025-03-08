@@ -122,4 +122,19 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    public List<Object[]> getPostCountByHour(LocalDateTime startDate, LocalDateTime endDate) {
+        return postRepository.countPostsPerHour(startDate, endDate);
+    }
+
+    public List<Object[]> getPostCountByDay(LocalDateTime startDate, LocalDateTime endDate) {
+        return postRepository.countPostsByDay(startDate, endDate);
+    }
+
+    public List<Object[]> getPostCountByMonth(LocalDateTime startDate, LocalDateTime endDate) {
+        return postRepository.countPostsByMonth(startDate, endDate);
+    }
+
+
+
+
 }

@@ -42,30 +42,28 @@ input{
 /* Letzte Stelle für neue Regeln, damit sie nichts überschreibt */
 
 .modal {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    width: 100vh;
-    height: 94vh;
-    padding: 200px 297px 0px 520.5px;
-    z-index: 999;
+    position: fixed; /* unbedingt fixed, damit es nichts verschiebt */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
     display: flex;
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease-out;
     background-color: rgba(0, 0, 0, 0.7);
 }
-
 .modal-content {
     background: #ffffff;
-    border: 3px soild #ccc;
+    border: 3px solid #ccc; /* Tippfehler bei "solid" korrigiert */
     width: 450px;
     padding: 25px;
     border-radius: 10px;
-    position: absolute;
     box-shadow: 0 16px 12px rgba(0,0,0,0.25);
     animation: scaleIn 0.3s ease-out;
     font-family: Arial, sans-serif;
+    position: relative; /* relative reicht hier vollkommen */
 }
 
 .button{
@@ -330,6 +328,11 @@ input{
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     font-size: 14px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    text-align: left;
+
+
 }
 
 /************************************************
@@ -410,21 +413,28 @@ input{
  *  Nachrichteneingabe
  ************************************************/
 .chatInput {
-    position: relative; /* Geändert von absolute */
-    bottom: auto; /* Entfernt */
-    left: auto; /* Entfernt */
-    right: auto; /* Entfernt */
     background-color: #ffffff;
     padding: 10px 20px;
     border-top: 2px solid #ccc;
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* sorgt für korrekte Ausrichtung */
     gap: 10px;
-    width: auto;
-    grid-row: 3;
-    z-index: 10;
+    box-sizing: border-box;
 }
 
+.chatInput textarea#messageInput {
+    flex: 1;
+    min-height: 60px;
+    max-height: 150px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 2px solid #00274d9e;
+    font-family: Arial, sans-serif;
+    resize: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
 
 .chatInput input {
     flex: 1;
@@ -450,6 +460,18 @@ input{
 .chatInput button:hover {
     background-color: #04488b;
 }
+
+#messageInput {
+    width: 100%;
+    resize: none;
+    height: 60px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 2px solid #00274d9e;
+    font-family: Arial, sans-serif;
+}
+
 
 /************************************************
  *  Responsive Design

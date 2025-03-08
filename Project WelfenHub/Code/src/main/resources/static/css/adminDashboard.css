@@ -70,3 +70,14 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+
+.time-selector {
+    margin-bottom: 20px;
+}
+
+#statsChart {
+    max-width: 80%; /* reduziert Breite auf 80% */
+    height: 300px;  /* verringert Höhe auf 300px */
+    margin: 20px auto; /* zentriert Diagramm */
+}
+

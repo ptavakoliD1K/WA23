@@ -1,5 +1,5 @@
 package com.welfenhub.controllers;
-
+/*
 import com.welfenhub.dto.JobDTO;
 import com.welfenhub.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,3 +21,4 @@ public class JobController {
     }
 
 }
+*/

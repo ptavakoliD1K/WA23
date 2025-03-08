@@ -9,6 +9,8 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -53,7 +55,49 @@ public class AdminController {
         return "redirect:/admin/AdminDashboard";
     }
 
+    @GetMapping("/admin/generateFakePosts")
+    @ResponseBody
+    public String generateFakePosts() {
+        User user = userService.findAllUsers().get(1); // nehme irgendeinen vorhandenen User
+
+        LocalDateTime startDate = LocalDateTime.now().minusMonths(12);
+
+        for (int i = 0; i < 100; i++) {
+            postService.createPost(
+                    "Testpost " + i,
+                    "Inhalt für Testpost " + i,
+                    "Testkurs",
+                    1,
+                    "Sonstiges",
+                    user
+            ).setCreatedAt(startDate.plusDays(i * 3)); // Alle 3 Tage ein neuer Post
+        }
+
+        return "100 Testposts erfolgreich generiert!";
+    }
+
+
     private int getOnlineUsersCount() {
         return sessionRegistry.getAllPrincipals().size();
     }
+
+    @GetMapping("/posts/stats")
+    @ResponseBody
+    public List<Object[]> getPostStats(@RequestParam String period) {
+        LocalDateTime now = LocalDateTime.now();
+        switch (period) {
+            case "day":
+                return postService.getPostCountByHour(now.minusDays(1), now);
+            case "week":
+                return postService.getPostCountByDay(now.minusDays(7), now);
+            case "month":
+                return postService.getPostCountByDay(now.minusDays(30), now);
+            case "year":
+                return postService.getPostCountByMonth(now.minusMonths(12), now);
+
+            default:
+                throw new IllegalArgumentException("Invalid period: " + period);
+        }
+    }
+
 }

@@ -41,7 +41,7 @@ public class ChatService {
      * Gruppenchats anlegen – jetzt mit ChatRoomUser.
      */
     @Transactional
-    public void createGroupChat(String chatRoomName, List<User> users) {
+    public ChatRoom createGroupChat(String chatRoomName, List<User> users) {
         if (chatRoomName == null || chatRoomName.trim().isEmpty()) {
             throw new IllegalArgumentException("Chat room name cannot be empty");
         }
@@ -49,28 +49,27 @@ public class ChatService {
             throw new IllegalArgumentException("User list cannot be empty");
         }
 
-        // Neues ChatRoom-Objekt
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setName(chatRoomName);
 
-        // Liste für ChatRoomUser vorbereiten
         List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
 
-        // Für jeden User ein ChatRoomUser-Objekt anlegen
         for (User user : users) {
             ChatRoomUser cru = new ChatRoomUser(chatRoom, user);
             cru.setLastReadAt(LocalDateTime.now());
             chatRoomUsers.add(cru);
         }
 
-        // ChatRoom bekommt die Join-Entities
         chatRoom.setChatRoomUsers(chatRoomUsers);
 
-        // Speichern
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
         logger.info("Created group chat room with id: {} and name: {}",
                 savedChatRoom.getId(), savedChatRoom.getName());
+
+        // Hier gibst du jetzt den gespeicherten ChatRoom zurück
+        return savedChatRoom;
     }
+
 
     /**
      * Private Chats anlegen – analog zu createGroupChat().
