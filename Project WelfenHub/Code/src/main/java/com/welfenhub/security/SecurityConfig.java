@@ -2,15 +2,16 @@ package com.welfenhub.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -41,8 +42,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .ignoringRequestMatchers(
-                                new AntPathRequestMatcher("/chat/group"), // ✅ Fix für CSRF
-                                new AntPathRequestMatcher("/chat/{chatRoomId}/addUsers"), // ✅ Fix für CSRF
+                                new AntPathRequestMatcher("/chat/group"),
+                                new AntPathRequestMatcher("/chat/{chatRoomId}/addUsers"),
                                 new AntPathRequestMatcher("/chat/{chatRoomId}/markAsRead")
                         )
                 )
@@ -68,18 +69,18 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/event/get-event"),
                                 new AntPathRequestMatcher("/event/get-event-count"),
                                 new AntPathRequestMatcher("/event/show**")
-                        ).permitAll() // Diese Endpunkte sind für alle zugänglich
-
+                        ).permitAll()
                         .requestMatchers(
                                 new AntPathRequestMatcher("/event/**"),
-                                new AntPathRequestMatcher("/job/**"))
-                        .hasAuthority("ROLE_MODERATOR")
-
+                                new AntPathRequestMatcher("/job/**")
+                        ).hasAuthority("ROLE_MODERATOR")
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(new AntPathRequestMatcher("/moderator/**"), new AntPathRequestMatcher("/event/**"))
-                        .hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
-
-                        .anyRequest().authenticated() // Alle anderen Endpunkte nur für authentifizierte Nutzer
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/moderator/**"),
+                                new AntPathRequestMatcher("/event/**")
+                        ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
+                        .requestMatchers(new AntPathRequestMatcher("/posts/comment", HttpMethod.POST.name())).permitAll()
+                        .anyRequest().authenticated()
                 )
 
                 /* ===========================
@@ -87,7 +88,7 @@ public class SecurityConfig {
                  * =========================== */
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .successHandler(authenticationSuccessHandler()) // Weiterleitung nach Login
+                        .successHandler(authenticationSuccessHandler())
                         .permitAll()
                 )
 
@@ -96,8 +97,8 @@ public class SecurityConfig {
                  * =========================== */
                 .rememberMe(rememberMe -> rememberMe
                         .key(REMEMBER_ME_KEY)
-                        .tokenValiditySeconds(7 * 24 * 60 * 60) // 7 Tage gültig
-                        .rememberMeParameter("remember-me") // HTML-Checkbox "remember-me"
+                        .tokenValiditySeconds(7 * 24 * 60 * 60)
+                        .rememberMeParameter("remember-me")
                 )
 
                 /* ===========================
@@ -115,7 +116,7 @@ public class SecurityConfig {
                  *  Fehlerhandling
                  * =========================== */
                 .exceptionHandling(exceptionHandling -> exceptionHandling
-                        .accessDeniedPage("/access-denied") // Eigene Fehlerseite für 403
+                        .accessDeniedPage("/access-denied")
                 );
 
         return http.build();
