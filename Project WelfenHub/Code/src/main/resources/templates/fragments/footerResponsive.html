@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Footer</title>
@@ -8,12 +8,57 @@
 </head>
 <body>
 <footer>
-    <p id="contact">Kontakt:</p>
+    <p id="contact-text">Kontakt:</p>
     <p id="adresse">Salzdahlumer Straße 160, 38126 Braunschweig</p>
     <a href="mailto:info@welfenakademie.de" id="mail">info@welfenakademie.de</a> <br>
     <img th:src="@{/images/logo_white.png}" alt="WelfenHub Logo" id="logoWa">
     <a th:href="@{/impressum}" id="imprint">Impressum</a>
     <a th:href="@{/datenschutz}" id="privacy">Datenschutz</a>
+
+    <!-- Video Hintergrund -->
+    <video id="video-background" muted>
+        <source th:src="@{/images/secret_message.mp4}" type="video/mp4">
+        Dein Browser unterstützt das Video-Tag nicht.
+    </video>
+
+    <script>
+        // Sicherstellen, dass das DOM geladen ist, bevor das Skript ausgeführt wird
+        document.addEventListener("DOMContentLoaded", function() {
+            // Video-Element und Kontakt-Text abrufen
+            const video = document.getElementById('video-background');
+            const contactText = document.getElementById('contact-text');
+
+            // Fehlerbehandlung: Wenn das Video nicht gefunden wird
+            if (!video) {
+                console.error('Das Video-Element konnte nicht gefunden werden.');
+                return;
+            }
+
+            // Event-Listener für den Klick auf den Kontakt-Text
+            contactText.addEventListener('click', function() {
+                // Kontakt-Text ausblenden
+                contactText.style.display = 'none';
+
+                // Video sichtbar machen und abspielen
+                video.style.display = 'block'; // Video sichtbar machen
+                video.play().then(() => {
+                    console.log("Das Video wurde abgespielt.");
+                }).catch((error) => {
+                    console.error("Fehler beim Abspielen des Videos:", error);
+                });
+            });
+
+            // Event-Listener für das Ende des Videos
+            video.addEventListener('ended', function() {
+                // Video ausblenden, wenn es zu Ende ist
+                video.style.display = 'none'; // Video verschwindet
+
+                // Kontakt-Text wieder einblenden
+                contactText.style.display = 'block';
+            });
+        });
+    </script>
 </footer>
+
 </body>
 </html>

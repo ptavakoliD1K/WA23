@@ -47,6 +47,17 @@ footer #privacy {
     text-decoration-line: underline;
 }
 
+#video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;  /* Sorgt dafür, dass das Video den gesamten Container ausfüllt */
+    display: none; /* Anfangs unsichtbar */
+    overflow: visible;
+}
+
 @media (max-width: 500px) {
     footer {
         height: 180px;
