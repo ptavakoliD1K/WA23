@@ -13,10 +13,10 @@ function postComment(event, postId) {
     const formData = new FormData(form);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', "http://welfenhub.de:8080/posts/comment");
+    xhr.open('POST', "/posts/comment");
 
     const csrfToken = getCsrfToken();
-    xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
+    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 
     xhr.onload = () => {
         console.log("XHR Response:", xhr.responseText);
