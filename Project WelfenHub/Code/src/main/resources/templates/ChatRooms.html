@@ -357,6 +357,7 @@ function openAddUsersModal() {
         .then(users => {
             const container = document.getElementById('addUsersCheckboxList');
             container.innerHTML = '';
+
             users.forEach(user => {
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
@@ -369,8 +370,7 @@ function openAddUsersModal() {
 
                 const div = document.createElement('div');
                 div.appendChild(checkbox);
-                div.appendChild(label = document.createElement('label'));
-                label.textContent = `${user.username} (${user.fullName})`;
+                div.appendChild(label); // Korrektur: Kein erneutes Zuweisen von label!
 
                 container.appendChild(div);
             });
@@ -379,6 +379,7 @@ function openAddUsersModal() {
         })
         .catch(error => console.error("Fehler beim Laden der Nutzer:", error));
 }
+
 
     function closeAddUsersModal() {
         document.getElementById('addUsersModal').style.display = 'none';
@@ -514,6 +515,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+    function addNewGroupToList(newGroup) {
+    const container = document.querySelector('.groupList');
+
+    // Überprüfe, ob die Gruppe bereits existiert, bevor sie hinzugefügt wird
+    if (document.getElementById(`chatRoom_${newGroup.id}`)) {
+        console.log("⚠️ Gruppe existiert bereits:", newGroup.name);
+        return;
+    }
+
+    const div = document.createElement('div');
+    div.className = "groupItem";
+    div.setAttribute("id", "chatRoom_" + newGroup.id);
+    div.setAttribute("data-id", newGroup.id);
+    div.setAttribute("data-name", newGroup.name);
+    div.setAttribute("onclick", "onRoomClicked(this)");
+
+    const groupNameSpan = document.createElement('span');
+    groupNameSpan.textContent = newGroup.name;
+
+    div.appendChild(groupNameSpan);
+    container.appendChild(div);
+
+    console.log("🚀 Neue Gruppe hinzugefügt:", newGroup.name);
+}
+
 
 
 

@@ -62,15 +62,14 @@ public class ChatController {
         List<User> users = userService.findByUsernames(usernames);
         users.add(creator);
 
-        // Korrektur: Ergebnis der Erstellung speichern
+        // 🚀 Gruppe erstellen und speichern
         ChatRoom createdRoom = chatService.createGroupChat(name, users);
 
-        // Benachrichtigung aller Nutzer der neuen Gruppe
-        users.forEach(user -> messagingTemplate.convertAndSendToUser(
-                user.getUsername(),
-                "/queue/new-group",
+        // 🔥 WebSocket-Nachricht an alle verbundenen Nutzer senden
+        messagingTemplate.convertAndSend(
+                "/topic/new-group",
                 new ChatRoomDTO(createdRoom.getId(), createdRoom.getName())
-        ));
+        );
 
         logger.info("Group created successfully with name: {}", name);
         return "redirect:/chat";
