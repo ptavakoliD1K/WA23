@@ -43,6 +43,24 @@ button:hover, button:focus {
     border-radius: 10px;
 }
 
+#createPopUp input, #createPopUp textarea {
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+#createPopUp button {
+    display: block;
+    float: none;
+    margin: 10px auto 10px auto;
+}
+
+#createPopUp p {
+    text-align: center;
+}
+
 .close-button {
     margin-top: 1%;
     margin-left: 1%;
@@ -101,4 +119,49 @@ input:hover, input:focus {
 
 h4 {
     text-align: center;
+}
+
+#jobArea {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    place-items: center;
+    margin-top: 50px;
+}
+
+.jobContainer {
+    margin-top: 20px;
+    width: 90%;
+    height: 450px;
+    border-radius: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+h5 {
+    font-size: 1.5rem;
+}
+
+.divContent {
+    word-wrap: break-word;
+}
+
+#toRemoveList {
+    padding: 0;
+}
+
+.removeJobTitle {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: fit-content;
+    justify-self: center;
+}
+
+.removeJobTitle:hover, .removeJobTitle:focus {
+    color: red;
+    cursor: pointer;
 }

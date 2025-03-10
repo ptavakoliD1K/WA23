@@ -68,7 +68,8 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/posts/**"),
                                 new AntPathRequestMatcher("/event/get-event"),
                                 new AntPathRequestMatcher("/event/get-event-count"),
-                                new AntPathRequestMatcher("/event/show**")
+                                new AntPathRequestMatcher("/event/show**"),
+                                new AntPathRequestMatcher("/job/get")
                         ).permitAll() // Diese Endpunkte sind für alle zugänglich
 
                         .requestMatchers(
@@ -76,7 +77,12 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/job/**"))
                         .hasAuthority("ROLE_MODERATOR")
 
-                        .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(
+                                new AntPathRequestMatcher("/admin/**"),
+                                new AntPathRequestMatcher("/event/**"),
+                                new AntPathRequestMatcher("/job/**")
+                        ).hasAuthority("ROLE_ADMIN")
+
                         .requestMatchers(new AntPathRequestMatcher("/moderator/**"), new AntPathRequestMatcher("/event/**"))
                         .hasAnyAuthority("ROLE_ADMIN", "ROLE_MODERATOR")
 

@@ -19,7 +19,7 @@
 </header>
 <main>
     <h1>Job-Börse</h1>
-    <span>Hier findest Du Stellenangebote von Unternehmen, die Deine Fähigkeiten gebrauchen könnten.</span>
+    <span>Hier findest Du Stellenangebote von Unternehmen, die Deine Fähigkeiten gut gebrauchen könnten.</span>
     <button sec:authorize="hasRole('MODERATOR')" id="createStelle" onclick="showCreate()">Stellenausschreibung erstellen</button>
     <button sec:authorize="hasRole('MODERATOR')" id="removeStelle" onclick="showRemove()">Stellenausschreibung löschen</button>
     <div id="createPopUp">
@@ -29,12 +29,14 @@
         <textarea id="content" placeholder="Inhalt"></textarea>
         <input type="url" id="url" placeholder="URL">
         <button onclick="submitNewJob()">Stellenausschreibung veröffentlichen</button>
+        <p id="status"></p>
     </div>
     <div id="removePopUp">
         <span class="close-button" onclick="showRemove()">&times;</span>
         <h4>Stellenausschreibung löschen</h4>
-        <ul></ul>
+        <ul id="toRemoveList"></ul>
     </div>
+    <div id="jobArea"></div>
 </main>
 
 <div th:insert="fragments/footerResponsive.html"></div>

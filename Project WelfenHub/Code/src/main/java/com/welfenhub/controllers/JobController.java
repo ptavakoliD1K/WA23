@@ -1,12 +1,11 @@
 package com.welfenhub.controllers;
-/*
+
 import com.welfenhub.dto.JobDTO;
 import com.welfenhub.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/job")
@@ -20,5 +19,9 @@ public class JobController {
         jobService.saveJob(jobDTO.getTitle(), jobDTO.getContent(), jobDTO.getUrl());
     }
 
+    @GetMapping("/get")
+    public List<JobDTO> getJobs() {
+        return jobService.getAllJobs();
+    }
+
 }
-*/
