@@ -258,7 +258,29 @@ public class ChatService {
         return count;
     }
 
+    @Transactional
+    public void renameChatRoom(Long chatRoomId, String newName) {
+        // ChatRoom laden (oder Exception, wenn nicht vorhanden)
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("ChatRoom mit ID " + chatRoomId + " nicht gefunden."));
 
+        // Neuen Namen setzen und speichern
+        chatRoom.setName(newName);
+        chatRoomRepository.save(chatRoom);
+        logger.info("Chatraum {} wurde umbenannt in '{}'", chatRoomId, newName);
+    }
+
+    @Transactional
+    public void leaveGroup(Long chatRoomId, Long userId) {
+        ChatRoomUser cru = chatRoomUserRepository.findByChatRoomIdAndUserId(chatRoomId, userId)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "User mit ID " + userId + " ist nicht im ChatRoom " + chatRoomId));
+
+        // Den Join-Eintrag aus der Tabelle chat_room_user löschen
+        chatRoomUserRepository.delete(cru);
+
+        logger.info("User {} hat den ChatRoom {} verlassen.", userId, chatRoomId);
+    }
 
 
 }

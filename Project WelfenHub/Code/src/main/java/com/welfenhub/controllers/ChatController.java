@@ -7,6 +7,7 @@ import com.welfenhub.services.UserService;
 import com.welfenhub.dto.MessageDTO;
 import com.welfenhub.dto.UserDTO;
 import com.welfenhub.dto.ChatRoomDTO;
+import com.welfenhub.dto.RenameRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -179,6 +180,52 @@ public class ChatController {
                 .map(user -> new UserDTO(user.getUsername(), user.getFullName()))
                 .collect(Collectors.toList());
     }
+
+    @PostMapping("/{chatRoomId}/rename")
+    public String renameChatRoom(
+            @PathVariable Long chatRoomId,
+            @RequestBody Map<String, Object> renameData) {
+
+        String newName = (String) renameData.get("newName");
+        if (newName == null || newName.trim().isEmpty()) {
+            return "redirect:/chat"; // o.ä.
+        }
+
+        try {
+            chatService.renameChatRoom(chatRoomId, newName);
+            return "redirect:/chat";
+        } catch (IllegalArgumentException e) {
+            // Chat nicht gefunden -> redirect z.B. zu /chat mit Fehler
+            return "redirect:/chat";
+        }
+    }
+
+    @PostMapping("/{chatRoomId}/leave")
+    public String leaveGroup(
+            @PathVariable Long chatRoomId,
+            Principal principal
+    ) {
+        try {
+            // Gerade eingeloggter User
+            User user = userService.findByUsername(principal.getName());
+            // Service aufrufen
+            chatService.leaveGroup(chatRoomId, user.getId());
+
+            // Erfolg: Zurück zur Übersichtsseite
+            return "redirect:/chat";
+        } catch (IllegalArgumentException e) {
+            // Chat nicht gefunden, oder User ist nicht im Chat
+            return "redirect:/chat";
+        } catch (Exception e) {
+            // Sonstige Probleme
+            return "redirect:/chat";
+        }
+    }
+
+
+
+
+
 
 
 
