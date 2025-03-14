@@ -206,6 +206,24 @@
         currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
             const msgDTO = JSON.parse(message.body);
             addMessageToChat(msgDTO);
+            // Wenn der user **immer noch** in diesem Chat ist:
+if (currentChatRoomId == chatRoomId) {
+    // Die neuen Nachrichten sofort als gelesen markieren
+    fetch(`/chat/${chatRoomId}/markAsRead`, { method: 'POST' })
+        .then(() => {
+            // Optional: wenn du noch was im UI ändern willst
+            // z.B. remove rotes Badge
+            const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+            if (chatRoomElement) {
+                const badge = chatRoomElement.querySelector('.unreadBadge');
+                if (badge) {
+                    badge.style.display = 'none';
+                }
+            }
+        })
+        .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+}
+
         });
     }
 
