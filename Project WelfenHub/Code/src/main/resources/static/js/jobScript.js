@@ -12,6 +12,10 @@ const toRemoveList = document.getElementById('toRemoveList');
 
 let csrfToken = getCsrfToken();
 
+/**
+ * shows pop up to create job
+ */
+
 function showCreate() {
     if (createPopUp.style.display === "none") {
         createPopUp.style.display = "block";
@@ -19,6 +23,10 @@ function showCreate() {
         createPopUp.style.display = "none";
     }
 }
+
+/**
+ * shows pop up to remove job
+ */
 
 function showRemove() {
     if (removePopUp.style.display === "none") {
@@ -29,6 +37,11 @@ function showRemove() {
         removePopUp.style.display = "none";
     }
 }
+
+/**
+ * submits new job to backend
+ * @returns {Promise<void>}
+ */
 
 async function submitNewJob() {
     titleValue = title.value;
@@ -68,6 +81,11 @@ async function submitNewJob() {
     await getEvents();
 }
 
+/**
+ * gets events from backend
+ * @returns {Promise<void>}
+ */
+
 async function getEvents() {
     const response = await fetch("http://localhost:8080/job/get", {
         method: "GET",
@@ -103,6 +121,11 @@ async function getEvents() {
     }
 }
 
+/**
+ * gets job list for remove popup
+ * @returns {Promise<void>}
+ */
+
 async function getToRemoveJobs() {
     const response = await fetch("http://localhost:8080/job/get", {
         method: "GET",
@@ -134,7 +157,9 @@ async function getToRemoveJobs() {
                 }),
             })
 
-            showRemove();
+            toRemoveList.innerHTML = "";
+
+            await getToRemoveJobs();
 
             jobArea.innerHTML = "";
 
@@ -148,15 +173,30 @@ async function getToRemoveJobs() {
 
 document.addEventListener('DOMContentLoaded', getEvents);
 
+/**
+ * gets csrf token
+ * @returns {string}
+ */
+
 function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
     const token = match ? match[1] : null;
     return token;
 }
 
+/**
+ * pauses function
+ * @param ms
+ * @returns {Promise<unknown>}
+ */
+
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+/**
+ * event listener
+ */
 
 document.addEventListener("DOMContentLoaded", function () {
     createPopUp.style.display = "none";
