@@ -184,19 +184,44 @@
     /* ==============================================
        WEBSOCKET / STOMP KONFIG
        ============================================== */
-    function connectWebSocket() {
-        const socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            console.log("✅ WebSocket verbunden: " + frame);
+function connectWebSocket() {
+    const socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function(frame) {
+        console.log("✅ WebSocket verbunden: " + frame);
 
-            // Abo für neu erstellte Gruppen
-            stompClient.subscribe('/user/queue/new-group', (message) => {
-                const newGroup = JSON.parse(message.body);
-                addNewGroupToList(newGroup);
-            });
+        // Abo für neu erstellte Gruppen
+        stompClient.subscribe('/user/queue/new-group', (message) => {
+            const newGroup = JSON.parse(message.body);
+            addNewGroupToList(newGroup);
         });
+
+        // NEU: Abo für Ungelesen-Benachrichtigungen
+        stompClient.subscribe('/user/queue/unread', (message) => {
+            const unreadInfo = JSON.parse(message.body);
+            onUnreadNotification(unreadInfo);
+        });
+    });
+}
+function onUnreadNotification(unreadInfo) {
+    // unreadInfo z.B. { "chatRoomId": 5, "unreadCount": 3 }
+    const chatRoomId = unreadInfo.chatRoomId;
+    const unreadCount = unreadInfo.unreadCount;
+
+    // Wenn wir NICHT gerade in diesem Chat sind:
+    if (currentChatRoomId != chatRoomId) {
+        // Baue oder aktualisiere das Badge
+        const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+        if (chatRoomElement) {
+            const badge = chatRoomElement.querySelector('.unreadBadge');
+            if (badge) {
+                badge.style.display = '';
+                badge.textContent = unreadCount; // oder unreadCount++
+            }
+        }
     }
+    // Falls du LOG willst: console.log("Neue Nachricht in Chat", chatRoomId, "->", unreadCount);
+}
 
     function subscribeToChatRoom(chatRoomId) {
         if (currentSubscription) {

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import com.welfenhub.models.ChatRoomUser;
 import java.util.stream.Collectors;
+import com.welfenhub.dto.UnreadNotificationDTO;
+
 
 
 import java.security.Principal;
@@ -94,12 +96,37 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/{chatRoomId}")
-    public void sendMessage(@DestinationVariable Long chatRoomId, MessageDTO messageDTO, Principal principal) {
+    public void sendMessage(@DestinationVariable Long chatRoomId,
+                            MessageDTO messageDTO,
+                            Principal principal) {
         User sender = userService.findByUsername(principal.getName());
         ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
+
+        // Nachricht speichern wie gehabt
         MessageDTO savedMessage = chatService.saveMessage(messageDTO, sender, chatRoom);
+
+        // Sendet die Nachricht an '/topic/messages/{chatRoomId}'
         messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
+
+        // Jetzt: Alle Mitglieder holen (außer Sender)
+        List<User> chatMembers = chatRoom.getUsers(); // oder via chatRoom.getChatRoomUsers() -> getUser()
+        for (User member : chatMembers) {
+            if (!member.getUsername().equals(sender.getUsername())) {
+                // z.B. Anzahl ungelesener Nachrichten ermitteln
+                // oder direkt "1" als Notification schicken
+                int unreadCount = chatService.countUnreadMessagesForChat(chatRoomId, member.getId());
+
+                // Dann an das User-Queue senden:
+                UnreadNotificationDTO unreadDTO = new UnreadNotificationDTO(chatRoomId, unreadCount);
+                messagingTemplate.convertAndSendToUser(
+                        member.getUsername(),             // Empfänger
+                        "/queue/unread",                 // Topic-Prefix
+                        unreadDTO                        // Payload
+                );
+            }
+        }
     }
+
 
     @GetMapping("")
     public String viewUserChats(Model model, Principal principal) {
