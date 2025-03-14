@@ -120,6 +120,28 @@ async function getToRemoveJobs() {
         divTitle.textContent = data[i].title;
         divTitle.title = "Entfernen";
 
+        divTitle.onclick = async function() {
+            const response = await fetch("http://localhost:8080/job/delete", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": csrfToken,
+                },
+                body: JSON.stringify({
+                    "title": data[i].title,
+                    "content": data[i].content,
+                    "url": data[i].url
+                }),
+            })
+
+            showRemove();
+
+            jobArea.innerHTML = "";
+
+            await getEvents();
+
+        }
+
         toRemoveList.appendChild(divTitle);
     }
 }

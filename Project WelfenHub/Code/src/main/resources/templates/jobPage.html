@@ -10,6 +10,7 @@
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
 </head>
 <body>
 <header id="responsive-header">
@@ -19,14 +20,16 @@
 </header>
 <main>
     <h1>Job-Börse</h1>
-    <span>Hier findest Du Stellenangebote von Unternehmen, die Deine Fähigkeiten gut gebrauchen könnten.</span>
-    <button sec:authorize="hasRole('MODERATOR')" id="createStelle" onclick="showCreate()">Stellenausschreibung erstellen</button>
-    <button sec:authorize="hasRole('MODERATOR')" id="removeStelle" onclick="showRemove()">Stellenausschreibung löschen</button>
+    <p id="startDesc">Hier findest Du Stellenangebote von Unternehmen, die Deine Fähigkeiten gut gebrauchen könnten.</p>
+    <p>
+        <button sec:authorize="hasRole('MODERATOR')" id="createStelle" onclick="showCreate()">Stellenausschreibung erstellen</button>
+        <button sec:authorize="hasRole('MODERATOR')" id="removeStelle" onclick="showRemove()">Stellenausschreibung löschen</button>
+    </p>
     <div id="createPopUp">
         <span class="close-button" onclick="showCreate()">&times;</span>
         <h4>Stellenausschreibung erstellen</h4>
         <input type="text" id="title" placeholder="Titel">
-        <textarea id="content" placeholder="Inhalt"></textarea>
+        <textarea id="content" placeholder="Inhalt" maxlength="600"></textarea>
         <input type="url" id="url" placeholder="URL">
         <button onclick="submitNewJob()">Stellenausschreibung veröffentlichen</button>
         <p id="status"></p>

@@ -23,4 +23,8 @@ public class JobService {
     public List<JobDTO> getAllJobs () {
         return jobRepository.getJobs();
     }
+
+    public  void removeJobs(String title, String content) {
+        jobRepository.removeJob(title, content);
+    }
 }

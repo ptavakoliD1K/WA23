@@ -19,4 +19,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     @Query("SELECT new com.welfenhub.dto.JobDTO(j.title, j.content, j.url) FROM Job j ORDER BY j.id DESC")
     List<JobDTO> getJobs();
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Job j WHERE j.title = :title AND j.content = :content")
+    void removeJob(@Param("title") String title, @Param("content") String content);
 }

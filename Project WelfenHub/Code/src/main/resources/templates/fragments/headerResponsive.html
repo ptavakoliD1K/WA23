@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Startseite</title>
     <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body>
@@ -48,7 +49,7 @@
             <li><a th:href="@{/forum}">Forum</a></li>
             <li><a th:href="@{/ereignisse}">Ereignisse</a></li>
             <li><a th:href="@{/feedback}">Feedback</a></li>
-            <li><a th:href="@{/jobs}">Jobs-Börse</a></li>
+            <li><a th:href="@{/jobs}">Job-Börse</a></li>
             <li sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
             </li>

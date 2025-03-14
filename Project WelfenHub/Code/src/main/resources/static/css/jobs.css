@@ -131,7 +131,7 @@ h4 {
 
 .jobContainer {
     margin-top: 20px;
-    width: 90%;
+    width: 400px;
     height: 450px;
     border-radius: 0.8rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -146,6 +146,8 @@ h5 {
 
 .divContent {
     word-wrap: break-word;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 #toRemoveList {
@@ -164,4 +166,61 @@ h5 {
 .removeJobTitle:hover, .removeJobTitle:focus {
     color: red;
     cursor: pointer;
+}
+
+@Media (max-width: 1250px) {
+    .jobContainer {
+        width: 350px;
+    }
+}
+
+@Media (max-width: 1100px) {
+    #jobArea {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    #createStelle, #removeStelle {
+        margin-top: 30px;
+        float: none;
+    }
+}
+
+@Media (max-width: 750px) {
+    h1 {
+        text-align: center;
+    }
+
+    #startDesc {
+        text-align: center;
+    }
+
+    #jobArea {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .jobContainer {
+        width: 400px;
+    }
+}
+
+@Media (max-width: 425px) {
+    h1 {
+        text-align: center;
+    }
+
+    #startDesc {
+        text-align: center;
+    }
+
+    .jobContainer {
+        width: 350px;
+    }
+}
+
+@Media (max-width: 370px) {
+    .jobContainer {
+        width: 320px;
+    }
 }
