@@ -191,7 +191,7 @@ function connectWebSocket() {
         console.log("✅ WebSocket verbunden: " + frame);
 
         // Abo für neu erstellte Gruppen
-        stompClient.subscribe('/user/queue/new-group', (message) => {
+        stompClient.subscribe('/topic/new-group', (message) => {
             const newGroup = JSON.parse(message.body);
             addNewGroupToList(newGroup);
         });
