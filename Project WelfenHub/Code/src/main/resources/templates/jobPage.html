@@ -21,7 +21,7 @@
 <main>
     <h1>Job-Börse</h1>
     <p id="startDesc">Hier findest Du Stellenangebote von Unternehmen, die Deine Fähigkeiten gut gebrauchen könnten.</p>
-    <p>
+    <p id="buttonP">
         <button sec:authorize="hasRole('MODERATOR')" id="createStelle" onclick="showCreate()">Stellenausschreibung erstellen</button>
         <button sec:authorize="hasRole('MODERATOR')" id="removeStelle" onclick="showRemove()">Stellenausschreibung löschen</button>
     </p>
