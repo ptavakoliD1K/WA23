@@ -24,4 +24,10 @@ public class JobController {
         return jobService.getAllJobs();
     }
 
+    @DeleteMapping("/delete")
+    public void deleteJob(@RequestBody JobDTO jobDTO) {
+        jobService.removeJobs(jobDTO.getTitle(), jobDTO.getContent());
+
+    }
+
 }
