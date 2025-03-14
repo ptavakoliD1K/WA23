@@ -46,11 +46,6 @@ public class HomeController {
         return "impressum";
     }
 
-    @GetMapping("/datenschutz")
-    public String datenschutz() {
-        return "datenschutz";
-    }
-
     @GetMapping("/jobs")
     public String jobs() {
         return "jobPage";
