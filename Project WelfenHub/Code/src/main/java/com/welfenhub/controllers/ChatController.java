@@ -120,7 +120,7 @@ public class ChatController {
                 UnreadNotificationDTO unreadDTO = new UnreadNotificationDTO(chatRoomId, unreadCount);
                 messagingTemplate.convertAndSendToUser(
                         member.getUsername(),             // Empfänger
-                        "/queue/unread",                 // Topic-Prefix
+                        "/user/queue/unread",                 // Topic-Prefix
                         unreadDTO                        // Payload
                 );
             }
