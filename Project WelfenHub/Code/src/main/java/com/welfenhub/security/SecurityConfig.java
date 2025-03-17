@@ -41,12 +41,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .ignoringRequestMatchers(
-                                new AntPathRequestMatcher("/chat/group"), // ✅ Fix für CSRF
-                                new AntPathRequestMatcher("/chat/{chatRoomId}/addUsers"), // ✅ Fix für CSRF
-                                new AntPathRequestMatcher("/chat/{chatRoomId}/markAsRead"),
-                                new AntPathRequestMatcher("/posts/comment"),
-                                new AntPathRequestMatcher("/chat/{chatRoomId}/rename"),
-                                new AntPathRequestMatcher("/chat/{chatRoomId}/leave")
+                                new AntPathRequestMatcher("/posts/comment")
                         )
                 )
 
