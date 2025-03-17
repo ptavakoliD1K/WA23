@@ -99,33 +99,11 @@ public class ChatController {
     public void sendMessage(@DestinationVariable Long chatRoomId,
                             MessageDTO messageDTO,
                             Principal principal) {
-        User sender = userService.findByUsername(principal.getName());
-        ChatRoom chatRoom = chatService.findChatRoomById(chatRoomId);
-
-        // Nachricht speichern wie gehabt
-        MessageDTO savedMessage = chatService.saveMessage(messageDTO, sender, chatRoom);
-
-        // Sendet die Nachricht an '/topic/messages/{chatRoomId}'
-        messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
-
-        // Jetzt: Alle Mitglieder holen (außer Sender)
-        List<User> chatMembers = chatRoom.getUsers(); // oder via chatRoom.getChatRoomUsers() -> getUser()
-        for (User member : chatMembers) {
-            if (!member.getUsername().equals(sender.getUsername())) {
-                // z.B. Anzahl ungelesener Nachrichten ermitteln
-                // oder direkt "1" als Notification schicken
-                int unreadCount = chatService.countUnreadMessagesForChat(chatRoomId, member.getId());
-
-                // Dann an das User-Queue senden:
-                UnreadNotificationDTO unreadDTO = new UnreadNotificationDTO(chatRoomId, unreadCount);
-                messagingTemplate.convertAndSendToUser(
-                        member.getUsername(),             // Empfänger
-                        "/user/queue/unread",                 // Topic-Prefix
-                        unreadDTO                        // Payload
-                );
-            }
-        }
+        // Hier keine Logik mehr, nur an die Service-Methode delegieren
+        String senderUsername = principal.getName();
+        chatService.handleIncomingMessage(chatRoomId, messageDTO, senderUsername);
     }
+
 
 
     @GetMapping("")
