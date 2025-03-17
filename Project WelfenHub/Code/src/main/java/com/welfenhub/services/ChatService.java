@@ -1,6 +1,7 @@
 package com.welfenhub.services;
 
 import com.welfenhub.dto.MessageDTO;
+import com.welfenhub.dto.UnreadNotificationDTO;
 import com.welfenhub.models.ChatRoom;
 import com.welfenhub.models.ChatRoomUser;
 import com.welfenhub.models.Message;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,12 @@ public class ChatService {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     /**
      * Gruppenchats anlegen – jetzt mit ChatRoomUser.
