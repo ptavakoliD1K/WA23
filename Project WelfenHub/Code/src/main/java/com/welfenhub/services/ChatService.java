@@ -282,5 +282,36 @@ public class ChatService {
         logger.info("User {} hat den ChatRoom {} verlassen.", userId, chatRoomId);
     }
 
+    @Transactional
+    public void handleIncomingMessage(Long chatRoomId, MessageDTO messageDTO, String senderUsername) {
+        // 1) Chatroom + Sender laden
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                .orElseThrow(() -> new IllegalArgumentException("ChatRoom not found: " + chatRoomId));
+        User sender = userService.findByUsername(senderUsername);
+
+        // 2) Nachricht speichern
+        MessageDTO savedMessage = saveMessage(messageDTO, sender, chatRoom);
+
+        // 3) An /topic/messages/{chatRoomId} broadcasten
+        messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
+
+        // 4) Alle Mitglieder (außer Sender) über /user/queue/unread informieren
+        //    => Hier kein LazyLoading mehr, weil @Transactional Session offen ist
+        List<User> chatMembers = chatRoom.getUsers(); // oder chatRoom.getChatRoomUsers().stream().map(...).toList()
+        for (User member : chatMembers) {
+            if (!member.getUsername().equals(senderUsername)) {
+                int unreadCount = countUnreadMessagesForChat(chatRoomId, member.getId());
+                UnreadNotificationDTO unreadDTO = new UnreadNotificationDTO(chatRoomId, unreadCount);
+
+                messagingTemplate.convertAndSendToUser(
+                        member.getUsername(),
+                        "/queue/unread",
+                        unreadDTO
+                );
+            }
+        }
+    }
+
+
 
 }
