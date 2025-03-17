@@ -163,18 +163,22 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
+<!-- Wichtig: th:inline="javascript", damit Thymeleaf den Wert korrekt einfügt -->
 <script th:inline="javascript">
     /* ==============================================
        GLOBALE VARIABLEN
        ============================================== */
+
+    // Hier kommt der echte Username vom Server
+    let loggedInUsername = /*[[${#authentication.principal.username}]]*/;
+
+    console.log("Aktueller User:", loggedInUsername);
+
     let stompClient = null;
     let currentChatRoomId = null;
     let currentChatRoomName = null;
     let currentSubscription = null;
 
-    /* ==============================================
-       SEITENLADUNG
-       ============================================== */
     document.addEventListener("DOMContentLoaded", function() {
         connectWebSocket();
         initSearchFilter();
@@ -184,44 +188,43 @@
     /* ==============================================
        WEBSOCKET / STOMP KONFIG
        ============================================== */
-function connectWebSocket() {
-    const socket = new SockJS('/ws');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function(frame) {
-        console.log("✅ WebSocket verbunden: " + frame);
+    function connectWebSocket() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log("✅ WebSocket verbunden: " + frame);
 
-        // Abo für neu erstellte Gruppen
-        stompClient.subscribe('/topic/new-group', (message) => {
-            const newGroup = JSON.parse(message.body);
-            addNewGroupToList(newGroup);
+            // Abo für neu erstellte Gruppen
+            stompClient.subscribe('/topic/new-group', (message) => {
+                const newGroup = JSON.parse(message.body);
+                addNewGroupToList(newGroup);
+            });
+
+            // Abo für Ungelesen-Benachrichtigungen
+            stompClient.subscribe('/user/queue/unread', (message) => {
+                const unreadInfo = JSON.parse(message.body);
+                onUnreadNotification(unreadInfo);
+            });
         });
+    }
 
-        // NEU: Abo für Ungelesen-Benachrichtigungen
-        stompClient.subscribe('/user/queue/unread', (message) => {
-            const unreadInfo = JSON.parse(message.body);
-            onUnreadNotification(unreadInfo);
-        });
-    });
-}
-function onUnreadNotification(unreadInfo) {
-    // unreadInfo z.B. { "chatRoomId": 5, "unreadCount": 3 }
-    const chatRoomId = unreadInfo.chatRoomId;
-    const unreadCount = unreadInfo.unreadCount;
+    function onUnreadNotification(unreadInfo) {
+        // unreadInfo z.B. { "chatRoomId": 5, "unreadCount": 3 }
+        const chatRoomId = unreadInfo.chatRoomId;
+        const unreadCount = unreadInfo.unreadCount;
 
-    // Wenn wir NICHT gerade in diesem Chat sind:
-    if (currentChatRoomId != chatRoomId) {
-        // Baue oder aktualisiere das Badge
-        const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
-        if (chatRoomElement) {
-            const badge = chatRoomElement.querySelector('.unreadBadge');
-            if (badge) {
-                badge.style.display = '';
-                badge.textContent = unreadCount; // oder unreadCount++
+        // Badge nur anzeigen, wenn wir nicht gerade in diesem Chat sind
+        if (currentChatRoomId != chatRoomId) {
+            const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+            if (chatRoomElement) {
+                const badge = chatRoomElement.querySelector('.unreadBadge');
+                if (badge) {
+                    badge.style.display = '';
+                    badge.textContent = unreadCount;
+                }
             }
         }
     }
-    // Falls du LOG willst: console.log("Neue Nachricht in Chat", chatRoomId, "->", unreadCount);
-}
 
     function subscribeToChatRoom(chatRoomId) {
         if (currentSubscription) {
@@ -231,24 +234,22 @@ function onUnreadNotification(unreadInfo) {
         currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
             const msgDTO = JSON.parse(message.body);
             addMessageToChat(msgDTO);
-            // Wenn der user **immer noch** in diesem Chat ist:
-if (currentChatRoomId == chatRoomId) {
-    // Die neuen Nachrichten sofort als gelesen markieren
-    fetch(`/chat/${chatRoomId}/markAsRead`, { method: 'POST' })
-        .then(() => {
-            // Optional: wenn du noch was im UI ändern willst
-            // z.B. remove rotes Badge
-            const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
-            if (chatRoomElement) {
-                const badge = chatRoomElement.querySelector('.unreadBadge');
-                if (badge) {
-                    badge.style.display = 'none';
-                }
-            }
-        })
-        .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
-}
 
+            // Neue Nachricht sofort als gelesen markieren,
+            // wenn wir in diesem Chat sind
+            if (currentChatRoomId == chatRoomId) {
+                fetch(`/chat/${chatRoomId}/markAsRead`, { method: 'POST' })
+                    .then(() => {
+                        const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+                        if (chatRoomElement) {
+                            const badge = chatRoomElement.querySelector('.unreadBadge');
+                            if (badge) {
+                                badge.style.display = 'none';
+                            }
+                        }
+                    })
+                    .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+            }
         });
     }
 
@@ -268,7 +269,7 @@ if (currentChatRoomId == chatRoomId) {
         document.getElementById('messageInput').disabled = false;
         document.getElementById('sendMessageBtn').disabled = false;
 
-        // Vorherige Nachrichten löschen
+        // Alte Nachrichten löschen
         const messagesContainer = document.getElementById('chatMessagesContainer');
         messagesContainer.innerHTML = '';
 
@@ -276,7 +277,7 @@ if (currentChatRoomId == chatRoomId) {
         fetchMessages(chatRoomId);
 
         // Nachrichten als gelesen markieren
-        fetch('/chat/' + chatRoomId + '/markAsRead', { method: 'POST' })
+        fetch(`/chat/${chatRoomId}/markAsRead`, { method: 'POST' })
             .then(() => {
                 const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
                 if (chatRoomElement) {
@@ -286,13 +287,10 @@ if (currentChatRoomId == chatRoomId) {
             })
             .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
 
-        // Per WebSocket subscriben
+        // WebSocket-Subscription
         subscribeToChatRoom(chatRoomId);
     }
 
-    /* ==============================================
-       REST: NACHRICHTEN LADEN
-       ============================================== */
     function fetchMessages(chatRoomId) {
         fetch('/chat/' + chatRoomId + '/messages')
             .then(response => response.json())
@@ -314,7 +312,7 @@ if (currentChatRoomId == chatRoomId) {
         const content = messageInput.value.trim();
         if (content !== '') {
             const msg = { content: content };
-            stompClient.send("/app/chat/" + currentChatRoomId, {}, JSON.stringify(msg));
+            stompClient.send(`/app/chat/${currentChatRoomId}`, {}, JSON.stringify(msg));
             messageInput.value = '';
         }
     }
@@ -324,9 +322,8 @@ if (currentChatRoomId == chatRoomId) {
        ============================================== */
     function addMessageToChat(messageDTO) {
         const container = document.getElementById('chatMessagesContainer');
-        // Platzhalter: eingelogger Nutzer heißt "Du"
-        const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du';
 
+        // Hier nutzen wir loggedInUsername anstelle von "Du"
         let msgClass = (messageDTO.username === loggedInUsername)
             ? 'message outgoing'
             : 'message incoming';
@@ -360,37 +357,34 @@ if (currentChatRoomId == chatRoomId) {
     }
 
     /* ==============================================
-       MODAL: EINSTELLUNGSMENÜ
+       MODALS & EINSTELLUNGEN
        ============================================== */
     function onSettingsClicked() {
         if (!currentChatRoomId) {
             alert("Bitte wähle zuerst einen Chat aus.");
             return;
         }
-        // Einstellungen-Modal öffnen
         document.getElementById('settingsModal').style.display = 'block';
     }
+
     function closeSettingsModal() {
         document.getElementById('settingsModal').style.display = 'none';
     }
 
-    /* ==============================================
-       MODAL: MITGLIEDER ANZEIGEN
-       ============================================== */
     function openGroupMembersModal(chatRoomId) {
-        closeSettingsModal(); // das Einstellungs-Modal schließen
+        closeSettingsModal();
         if (!chatRoomId) {
             alert("Bitte wähle zuerst eine Gruppe aus.");
             return;
         }
-        fetch('/chat/' + chatRoomId + '/members/json')
+        fetch(`/chat/${chatRoomId}/members/json`)
             .then(response => response.json())
             .then(members => {
                 const listContainer = document.getElementById('groupMembersList');
                 listContainer.innerHTML = '';
                 members.forEach(member => {
                     const li = document.createElement('li');
-                    li.textContent = member.username + " (" + member.fullName + ")";
+                    li.textContent = `${member.username} (${member.fullName})`;
                     listContainer.appendChild(li);
                 });
                 document.getElementById('groupMembersModal').style.display = 'block';
@@ -403,15 +397,14 @@ if (currentChatRoomId == chatRoomId) {
     }
 
     /* ==============================================
-       MODAL: GRUPPENNAMEN ÄNDERN
+       GRUPPENNAMEN ÄNDERN
        ============================================== */
     function openRenameGroupModal() {
-        closeSettingsModal(); // Einstellungsmodal schließen
+        closeSettingsModal();
         if (!currentChatRoomId) {
             alert("Keine Gruppe ausgewählt.");
             return;
         }
-        // Aktuellen Namen vorfüllen
         const input = document.getElementById('newGroupNameInput');
         input.value = currentChatRoomName || "";
         document.getElementById('renameGroupModal').style.display = 'block';
@@ -427,9 +420,6 @@ if (currentChatRoomId == chatRoomId) {
             alert("Bitte einen neuen Gruppennamen eingeben.");
             return;
         }
-
-        // Genau wie bei addUsersToGroup:
-        // Wir erwarten, dass der Controller uns ggf. "redirect:/chat" zurückschickt
         fetch(`/chat/${currentChatRoomId}/rename`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -437,13 +427,11 @@ if (currentChatRoomId == chatRoomId) {
         })
         .then(response => {
             if (response.redirected) {
-                // Der Controller hat ein "redirect:/chat" geschickt.
-                // Dann gehen wir jetzt auf die neue URL:
+                // Falls der Controller "redirect:/chat" liefert
                 window.location.href = response.url;
             } else if (response.ok) {
-                // Optional: Falls du einen 200 OK zurückgibst, ohne Redirect
+                // Falls er z.B. 200 OK gibt, ohne Redirect
                 alert("Gruppenname geändert (ohne Redirect)!");
-                // Seite manuell neuladen:
                 window.location.reload();
             } else {
                 alert("Fehler beim Umbenennen der Gruppe (Status: " + response.status + ").");
@@ -461,8 +449,7 @@ if (currentChatRoomId == chatRoomId) {
         if (!confirm("Möchtest du diese Gruppe wirklich verlassen?")) {
             return;
         }
-        // Beispiel-Endpunkt: POST /chat/{chatRoomId}/leave
-        fetch(`/chat/${currentChatRoomId}/leave`, { method: 'POST' })
+        fetch(`/chat/${chatRoomId}/leave`, { method: 'POST' })
             .then(response => {
                 if (response.ok) {
                     alert("Du hast die Gruppe verlassen.");
@@ -475,7 +462,7 @@ if (currentChatRoomId == chatRoomId) {
     }
 
     /* ==============================================
-       MODAL: NUTZER HINZUFÜGEN
+       NUTZER HINZUFÜGEN
        ============================================== */
     function openAddUsersModal() {
         if (!currentChatRoomId) {
@@ -519,7 +506,6 @@ if (currentChatRoomId == chatRoomId) {
             alert("Bitte mindestens einen Nutzer auswählen.");
             return;
         }
-
         fetch(`/chat/${currentChatRoomId}/addUsers`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -538,7 +524,7 @@ if (currentChatRoomId == chatRoomId) {
     }
 
     /* ==============================================
-       MODAL: GRUPPE ERSTELLEN
+       GRUPPE ERSTELLEN
        ============================================== */
     function openCreateGroupModal() {
         document.getElementById('groupNameInput').value = '';
@@ -555,8 +541,7 @@ if (currentChatRoomId == chatRoomId) {
         fetch('/chat/users')
             .then(response => response.json())
             .then(users => {
-                // Eingeloggter User als "Du" - filtern?
-                const loggedInUsername = /*[[${#authentication.principal.username}]]*/ 'Du';
+                // Eingeloggter User als "Du"? -> NEIN, wir haben loggedInUsername
                 const filteredUsers = users.filter(u => u.username !== loggedInUsername);
 
                 const container = document.getElementById('groupUsersCheckboxList');
