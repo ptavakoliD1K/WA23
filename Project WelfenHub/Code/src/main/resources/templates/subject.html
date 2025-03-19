@@ -57,25 +57,25 @@
 
         <!-- Posts -->
         <div class="posts-list">
-            <ul>
-                <li th:each="post : ${posts}" class="post-item">
+            <ul id="post-list">
+                <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
                     <h2 th:text="${post.title}">Post Title</h2>
                     <p th:text="${post.content}">Post Content</p>
                     <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Date</span></p>
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
                     <div class="comments-section" style="display: none;">
                         <h3>Kommentare:</h3>
-                        <ul>
-                            <li th:each="comment : ${post.comments}" id="liComment">
+                        <ul th:id="'comments-' + ${post.id}">
+                            <li th:each="comment : ${post.comments}" th:id="'comment-' + ${comment.id}">
                                 <p th:text="${comment.user.username}">Comment User</p>
                                 <p th:text="${comment.content}">Comment Content</p>
                                 <p th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Comment Date</p>
                             </li>
                         </ul>
                         <div class="comment-form">
-                            <form id="commentForm_${post.id}" onsubmit="postComment(event, ${post.id});" th:id="'commentForm_' + ${post.id}" th:onsubmit="'postComment(event, ' + ${post.id} + ');'">
+                            <form th:onsubmit="'postComment(event, ' + ${post.id} + ');'">
                                 <input type="hidden" name="postId" th:value="${post.id}" />
-                                <label th:for="'comment-content-' + ${post.id}">Dein Kommentar:</label>
+                                <label>Dein Kommentar:</label>
                                 <textarea th:id="'comment-content-' + ${post.id}" name="content" rows="3" required></textarea>
                                 <button type="submit">Kommentieren</button>
                             </form>
@@ -92,17 +92,14 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <h2>Neuen Post erstellen</h2>
-        <form th:action="@{/posts/create}" method="post">
+        <form onsubmit="postNewPost(event)">
             <input type="hidden" name="subject" th:value="${subject}"/>
             <input type="hidden" name="semester" th:value="${semester}"/>
             <input type="hidden" name="course" th:value="${course}"/>
-
             <label>Titel:</label>
-            <input type="text" name="title" required/><br/>
-
+            <input type="text" id="newPostTitle" required/><br/>
             <label>Inhalt:</label>
-            <textarea name="content" required></textarea><br/>
-
+            <textarea id="newPostContent" required></textarea><br/>
             <button type="submit">Post erstellen</button>
         </form>
     </div>
@@ -110,8 +107,11 @@
 
 <div th:insert="fragments/footerResponsive.html"></div>
 
+<!-- WebSocket Client -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/js/forum.js"></script>
 <script src="/js/scriptAddComment.js"></script>
+
 </body>
 </html>
-
-
