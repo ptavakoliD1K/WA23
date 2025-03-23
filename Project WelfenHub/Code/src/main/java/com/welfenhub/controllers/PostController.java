@@ -11,6 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.ResponseEntity;
+import java.util.Optional;
+import com.welfenhub.repositories.PostRepository;
+
 
 import java.security.Principal;
 import java.util.List;
@@ -26,6 +30,9 @@ public class PostController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PostRepository postRepository;
 
     // Posts anzeigen, mit oder ohne Kursfilter
     @GetMapping
@@ -178,6 +185,21 @@ public class PostController {
         // Display the search results in the same posts view
         return "subject";  // Assuming this is your posts view template
     }
+
+    @PostMapping("/{postId}/react")
+    @ResponseBody
+    public ResponseEntity<?> reactToPost(@PathVariable Long postId) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if(optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            post.addReaction();
+            postRepository.save(post);
+            return ResponseEntity.ok(post.getReactions());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 

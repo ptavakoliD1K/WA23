@@ -27,6 +27,7 @@ public class AdminController {
     @Autowired
     private SessionRegistry sessionRegistry;
 
+    //Zeigt das AdminDashboard an
     @GetMapping("/AdminDashboard")
     public String dashboard(Model model) {
         long userCount = userService.getUserCount();
@@ -43,18 +44,19 @@ public class AdminController {
         return "admin/AdminDashboard";
     }
 
+    //Funktion zum Ändern einer Rolle eines Users
     @PostMapping("/updateRole")
     public String updateUserRole(@RequestParam Long userId, @RequestParam UserRole role) {
         userService.updateUserRole(userId, role);
         return "redirect:/admin/AdminDashboard";
     }
-
+    //Funktion zum löschen eines Users
     @PostMapping("/deleteUser")
     public String deleteUser(@RequestParam Long userId) {
         userService.deleteUserById(userId);
         return "redirect:/admin/AdminDashboard";
     }
-
+    //Funktion um 100 Fake Posts zu generieren, um Statistiken zu testen
     @GetMapping("/admin/generateFakePosts")
     @ResponseBody
     public String generateFakePosts() {
@@ -76,11 +78,12 @@ public class AdminController {
         return "100 Testposts erfolgreich generiert!";
     }
 
-
+    //Funktion zum ermitteln der aktuell aktiven User
     private int getOnlineUsersCount() {
         return sessionRegistry.getAllPrincipals().size();
     }
 
+    //Funktion zum anzeigen von Statistiken
     @GetMapping("/posts/stats")
     @ResponseBody
     public List<Object[]> getPostStats(@RequestParam String period) {

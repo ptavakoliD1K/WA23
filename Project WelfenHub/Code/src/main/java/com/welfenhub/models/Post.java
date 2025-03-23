@@ -30,6 +30,8 @@ public class Post {
     @Column(nullable = false)
     private String subject;
 
+    private int reactions = 0;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -111,4 +113,18 @@ public class Post {
     public void setSemester(int semester) {
         this.semester = semester;
     }
+
+    public int getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(int reactions) {
+        this.reactions = reactions;
+    }
+
+    public void addReaction() {
+        this.reactions++;
+    }
+
 }
+

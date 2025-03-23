@@ -62,6 +62,11 @@
                     <h2 th:text="${post.title}">Post Title</h2>
                     <p th:text="${post.content}">Post Content</p>
                     <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Date</span></p>
+
+                    <button class="reaction-btn" th:data-post-id="${post.id}">
+                        👍 <span th:text="${post.reactions}">0</span>
+                    </button>
+
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
                     <div class="comments-section" style="display: none;">
                         <h3>Kommentare:</h3>
@@ -112,6 +117,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/js/forum.js"></script>
 <script src="/js/scriptAddComment.js"></script>
+<script src="/js/scriptAddReaction.js"></script>
+
 
 </body>
 </html>
