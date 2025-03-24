@@ -41,7 +41,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .ignoringRequestMatchers(
-                                new AntPathRequestMatcher("/posts/comment")
+                                new AntPathRequestMatcher("/posts/comment"),
+                                new AntPathRequestMatcher("/posts/**/react")
+
                         )
                 )
 

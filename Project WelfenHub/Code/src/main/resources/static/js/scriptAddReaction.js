@@ -1,27 +1,37 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
-
+document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.reaction-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const postId = this.getAttribute('data-post-id');
+        button.addEventListener('click', () => {
+            const postId = button.getAttribute('data-post-id');
 
-            fetch(`/forum/post/${postId}/react`, {
-                method: 'POST',
-                headers: {
-                    [csrfHeader]: csrfToken
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `/posts/${postId}/react`);
+
+            const csrfToken = getCsrfToken();
+            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    const reactionCount = xhr.responseText;
+                    button.querySelector('span').innerText = reactionCount;
+
+                    // Button visuell ein- und ausschalten
+                    button.classList.toggle('reacted');
+                } else {
+                    alert("Fehler beim Reagieren. Status: " + xhr.status);
                 }
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                }
-                throw new Error('Fehler beim Senden der Reaktion.');
-            })
-            .then(newReactions => {
-                button.querySelector('span').innerText = newReactions;
-            })
-            .catch(error => console.error('Error:', error));
+            };
+
+            xhr.onerror = () => {
+                alert("Netzwerkfehler. Reaktion konnte nicht gesendet werden.");
+            };
+
+            xhr.send();
         });
     });
 });
+
+// CSRF-Token aus Cookie holen (unverändert)
+function getCsrfToken() {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    return match ? match[1] : null;
+}

@@ -6,6 +6,9 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.HashSet;
+
 
 
 @Entity
@@ -41,6 +44,26 @@ public class Post {
     private List<Comment> comments;
 
     private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(name = "post_reactions",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<User> reactedUsers = new HashSet<>();
+
+    public boolean toggleReaction(User user) {
+        if (reactedUsers.contains(user)) {
+            reactedUsers.remove(user);
+            return false; // Reaktion entfernt
+        } else {
+            reactedUsers.add(user);
+            return true;  // Reaktion hinzugefügt
+        }
+    }
+
+    public int getReactionCount() {
+        return reactedUsers.size();
+    }
 
     // Getter und Setter
     public String getSubject() {
