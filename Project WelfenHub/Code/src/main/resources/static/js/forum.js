@@ -1,24 +1,34 @@
-const socket = new SockJS('/ws');
-const stompClient = Stomp.over(socket);
+let stompClient = null;
 
-stompClient.connect({}, function (frame) {
-    console.log("Connected: " + frame);
-
-    stompClient.subscribe('/topic/posts', function (message) {
-        let post = JSON.parse(message.body);
-        addPostToPage(post);
-    });
-
-    stompClient.subscribe('/topic/comments', function (message) {
-        let comment = JSON.parse(message.body);
-        addCommentToPage(comment);
-    });
-
-    stompClient.subscribe('/topic/reactions', function (message) {
-        let reactionUpdate = JSON.parse(message.body);
-        updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
-    });
+document.addEventListener("DOMContentLoaded", () => {
+    connectWebSocket();
+    bindReactionButtons(); // wichtig, da Post-Liste schon im DOM sein könnte
 });
+
+function connectWebSocket() {
+    const socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame) {
+        console.log("Connected: " + frame);
+
+        stompClient.subscribe('/topic/posts', function (message) {
+            let post = JSON.parse(message.body);
+            addPostToPage(post);
+        });
+
+        stompClient.subscribe('/topic/comments', function (message) {
+            let comment = JSON.parse(message.body);
+            addCommentToPage(comment);
+        });
+
+        stompClient.subscribe('/topic/reactions', function (message) {
+            let reactionUpdate = JSON.parse(message.body);
+            updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
+        });
+    });
+}
+
 
 
 // Neuer Post inklusive aller benötigten Felder
