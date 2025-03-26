@@ -149,5 +149,9 @@ public class Post {
         this.reactions++;
     }
 
+    public Set<User> getReactedUsers() {
+        return reactedUsers;
+    }
+
 }
 

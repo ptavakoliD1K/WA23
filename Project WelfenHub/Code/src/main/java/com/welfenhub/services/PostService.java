@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.HashMap;
 import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
+
 
 
 import java.sql.Timestamp;
@@ -134,15 +136,25 @@ public class PostService {
         return postRepository.countPostsByMonth(startDate, endDate);
     }
 
+    @Transactional
     public int reactToPost(Long postId, String username) {
-        Post post = findById(postId);
-        User user = userRepository.findByUsername(username);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post nicht gefunden"));
 
-        boolean added = post.toggleReaction(user);  // toggle (fügt hinzu oder entfernt)
-        postRepository.save(post);  // wichtig: muss gespeichert werden
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("User nicht gefunden");
+        }
+
+        // Sicherstellen, dass reactedUsers initialisiert ist
+        post.getReactedUsers().size(); // Lazy init erzwingen
+
+        boolean added = post.toggleReaction(user);
+        postRepository.save(post);  // Hier wird auch die Join-Tabelle aktualisiert
 
         return post.getReactionCount();
     }
+
 
 
 
