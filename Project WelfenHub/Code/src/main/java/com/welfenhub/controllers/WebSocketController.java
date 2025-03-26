@@ -26,6 +26,7 @@ public class WebSocketController {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+
     // Existierende Methode für Chats
     @MessageMapping("/ws/chat/{chatRoomId}")
     public void handleChatMessage(@DestinationVariable Long chatRoomId, @Payload MessageDTO messageDTO, Principal principal) {
@@ -61,4 +62,7 @@ public class WebSocketController {
 
         messagingTemplate.convertAndSend("/topic/comments", createdComment);
     }
+
+
+
 }

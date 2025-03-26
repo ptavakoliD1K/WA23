@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 import com.welfenhub.repositories.PostRepository;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+
 
 
 import java.security.Principal;
@@ -33,6 +35,9 @@ public class PostController {
 
     @Autowired
     private PostRepository postRepository;
+
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
     // Posts anzeigen, mit oder ohne Kursfilter
     @GetMapping
@@ -190,18 +195,25 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<?> reactToPost(@PathVariable Long postId, Principal principal) {
         Optional<Post> optionalPost = postRepository.findById(postId);
-        if (optionalPost.isPresent()) {
+        if(optionalPost.isPresent()) {
             Post post = optionalPost.get();
             User currentUser = userService.findByUsername(principal.getName());
 
             post.toggleReaction(currentUser);
             postRepository.save(post);
 
+            // WebSocket Nachricht senden
+            messagingTemplate.convertAndSend("/topic/reactions", Map.of(
+                    "postId", postId,
+                    "reactionCount", post.getReactionCount()
+            ));
+
             return ResponseEntity.ok(post.getReactionCount());
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
 
 
 
