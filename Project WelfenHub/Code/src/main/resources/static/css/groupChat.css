@@ -519,7 +519,6 @@ input{
         margin: 10% auto; /* Zentriert das Modal */
         padding: 20px;
         border: 1px solid #888;
-        width: 80%;
         max-width: 500px;
     }
     .close {
