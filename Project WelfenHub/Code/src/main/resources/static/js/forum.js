@@ -20,6 +20,7 @@ stompClient.connect({}, function (frame) {
     });
 });
 
+
 // Neuer Post inklusive aller benötigten Felder
 function postNewPost(event) {
     event.preventDefault();
@@ -75,6 +76,8 @@ function addPostToPage(post) {
     `;
 
     postList.prepend(newPostItem);
+    bindReactionButtons();
+
 }
 
 // Dynamisch Kommentar hinzufügen
@@ -115,3 +118,42 @@ function updateReactionCountOnPage(postId, newCount) {
     }
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    bindReactionButtons();
+});
+
+function bindReactionButtons() {
+    document.querySelectorAll('.reaction-btn').forEach(button => {
+        button.removeEventListener('click', handleReaction); // doppelte Bindung vermeiden
+        button.addEventListener('click', handleReaction);
+    });
+}
+
+function handleReaction(event) {
+    const button = event.currentTarget;
+    const postId = button.getAttribute('data-post-id');
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `/posts/${postId}/react`);
+    xhr.setRequestHeader('X-CSRF-TOKEN', getCsrfToken());
+
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            const newReactionCount = xhr.responseText;
+            button.querySelector('span').innerText = newReactionCount;
+        } else {
+            alert("Fehler beim Reagieren. Status: " + xhr.status);
+        }
+    };
+
+    xhr.onerror = () => {
+        alert("Netzwerkfehler. Reaktion konnte nicht gesendet werden.");
+    };
+
+    xhr.send();
+}
+
+function getCsrfToken() {
+    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+    return match ? match[1] : null;
+}
