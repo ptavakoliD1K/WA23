@@ -52,14 +52,25 @@ public class Post {
     private Set<User> reactedUsers = new HashSet<>();
 
     public boolean toggleReaction(User user) {
+        if (reactedUsers == null) {
+            reactedUsers = new HashSet<>();
+        }
+
         if (reactedUsers.contains(user)) {
             reactedUsers.remove(user);
             return false; // Reaktion entfernt
         } else {
+            // Sicherstellen, dass es nicht schon eine identische User-ID gibt (equals/hashCode!)
+            for (User u : reactedUsers) {
+                if (u.getId().equals(user.getId())) {
+                    return false; // Schon vorhanden
+                }
+            }
             reactedUsers.add(user);
             return true;  // Reaktion hinzugefügt
         }
     }
+
 
     public int getReactionCount() {
         return reactedUsers.size();

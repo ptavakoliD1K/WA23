@@ -142,22 +142,11 @@ public class PostService {
                 .orElseThrow(() -> new IllegalArgumentException("Post nicht gefunden"));
 
         User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new IllegalArgumentException("User nicht gefunden");
-        }
 
-        // Sicherstellen, dass reactedUsers initialisiert ist
-        post.getReactedUsers().size(); // Lazy init erzwingen
-
-        boolean added = post.toggleReaction(user);
-        postRepository.save(post);  // Hier wird auch die Join-Tabelle aktualisiert
+        post.toggleReaction(user); // verändert das Set
 
         return post.getReactionCount();
     }
-
-
-
-
 
 
 }
