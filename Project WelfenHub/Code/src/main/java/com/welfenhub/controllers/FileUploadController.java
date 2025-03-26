@@ -1,5 +1,6 @@
 package com.welfenhub.controllers;
 
+import com.welfenhub.repositories.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import java.sql.SQLException;
 public class FileUploadController {
 
     @Autowired
-    private DataSource dataSource;
+    private FileRepository fileRepository;
 
     /**
      * takes the information of the uploaded files and sends it to saveFileToDatabase()
@@ -78,20 +79,10 @@ public class FileUploadController {
      * @param fachrichtung
      * @param tag
      * @throws SQLException
+     * calls repository to upload file to database
      */
 
     private void saveFileToDatabase(String fileName, byte[] fileBytes, String semester, String module, String fachrichtung, String tag) throws SQLException {
-        try (Connection conn = dataSource.getConnection()) {
-            String insertSQL = "INSERT INTO files (name, content, semester, module, fachrichtung, tag) VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
-                pstmt.setString(1, fileName);
-                pstmt.setBytes(2, fileBytes);
-                pstmt.setString(3, semester);
-                pstmt.setString(4, module);
-                pstmt.setString(5, fachrichtung);
-                pstmt.setString(6, tag);
-                pstmt.executeUpdate();
-            }
-        }
+        fileRepository.uploadFile(fileName, fileBytes, semester, module, fachrichtung, tag);
     }
 }

@@ -100,7 +100,7 @@ public class FileController {
     private List<String> getFileNamesFromDatabase(String semester, String module, String fachrichtung, String tag) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         List<String> fileNames = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(dbUrl)) {
+        try (Connection conn = DriverManager.getConnection(dbUrl, "welfenadmin", "Welfenhub")) {
             String selectSQL = "SELECT name FROM files WHERE semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, semester);
@@ -129,7 +129,7 @@ public class FileController {
 
     private byte[] getFileFromDatabase(String fileName) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
-        try (Connection conn = DriverManager.getConnection(dbUrl)) {
+        try (Connection conn = DriverManager.getConnection(dbUrl, "welfenadmin", "Welfenhub")) {
             String selectSQL = "SELECT content FROM files WHERE name = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, fileName);

@@ -14,7 +14,7 @@ public class EvaluationFiles {
     @Column(name = "mime_type")
     private String mime_type;
 
-    @Column(name = "content", columnDefinition = "BLOB")
+    @Column(name = "content", columnDefinition = "BYTEA")
     private byte[] content;
 
     @Column(name = "creation_date")

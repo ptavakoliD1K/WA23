@@ -47,13 +47,13 @@ public class RegistrationController {
 
         if (!user.getPassword().equals(confirmPassword)) {
             logger.error("Passwords do not match for user: {}", user.getUsername());
-            model.addAttribute("error", "Passwords do not match. Please try again.");
+            model.addAttribute("error", "Die Passwörter sind nicht identisch. Bitte versuche es erneut");
             return "register";
         }
 
         if (!user.getEmail().contains("welfenakademie")) {
             logger.error("Invalid Email for User: {}", user.getUsername());
-            model.addAttribute("error", "Please use a valid Welfenakademie email.");
+            model.addAttribute("error", "Bitte nutze eine Welfenakademie E-Mail");
             return "register";
         }
 
@@ -64,7 +64,7 @@ public class RegistrationController {
             return "redirect:/login";
         } catch (Exception e) {
             logger.error("Error registering user: {}", user.getUsername(), e);
-            model.addAttribute("error", "Username or email already exists. Please choose another one.");
+            model.addAttribute("error", "Username oder E-Mail existiert bereits.");
             return "register";
         }
     }

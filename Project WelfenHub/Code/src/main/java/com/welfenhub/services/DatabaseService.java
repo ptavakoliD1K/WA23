@@ -27,7 +27,7 @@ public class DatabaseService {
     public boolean deleteFile(String name, String semester, String module, String fachrichtung, String tag) {
         String sql = "DELETE FROM files WHERE name = ? AND semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
 
-        try (Connection conn = DriverManager.getConnection(databaseUrl);
+        try (Connection conn = DriverManager.getConnection(databaseUrl, "welfenadmin", "Welfenhub");
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, name);

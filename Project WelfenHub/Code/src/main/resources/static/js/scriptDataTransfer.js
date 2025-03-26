@@ -187,6 +187,10 @@ uploadForm.addEventListener('submit', (e) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `http://localhost:8080/upload`, true);
 
+    const username = "welfenadmin";
+    const password = "Welfenhub";
+    xhr.setRequestHeader("Authorization", "Basic " + btoa(`${username}:${password}`));
+
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);
 
@@ -238,15 +242,26 @@ async function fetchFileList() {
     const selectedTag = tag.value;
 
     try {
-        const response = await fetch(`/files/list?semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}&tag=${encodeURIComponent(selectedTag)}`);
+        const username = "welfenadmin";
+        const password = "Welfenhub";
+
+        const response = await fetch(`/files/list?semester=${encodeURIComponent(selectedSemester)}&module=${encodeURIComponent(selectedModule)}&fachrichtung=${encodeURIComponent(selectedFachrichtung)}&tag=${encodeURIComponent(selectedTag)}`, {
+            method: 'GET',
+            headers: {
+                "Authorization": "Basic " + btoa(`${username}:${password}`)
+            }
+        });
+
         if (!response.ok) {
             throw new Error('Netzwerkantwort war nicht ok.');
         }
+
         const files = await response.json();
         displayFileList(files);
     } catch (error) {
         console.error('Fehler beim Abrufen der Dateiliste:', error);
     }
+
 }
 
 /**
