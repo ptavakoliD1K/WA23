@@ -13,6 +13,11 @@ stompClient.connect({}, function (frame) {
         let comment = JSON.parse(message.body);
         addCommentToPage(comment);
     });
+
+    stompClient.subscribe('/topic/reactions', function (message) {
+        let reactionUpdate = JSON.parse(message.body);
+        updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
+    });
 });
 
 // Neuer Post inklusive aller benötigten Felder
@@ -102,10 +107,6 @@ function closeModal() {
     document.getElementById('newPostModal').style.display = 'none';
 }
 
-stompClient.subscribe('/topic/reactions', function (message) {
-    let reactionUpdate = JSON.parse(message.body);
-    updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
-});
 
 function updateReactionCountOnPage(postId, newCount) {
     const button = document.querySelector(`button[data-post-id="${postId}"]`);
