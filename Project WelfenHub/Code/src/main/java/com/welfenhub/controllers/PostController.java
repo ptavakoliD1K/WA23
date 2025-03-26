@@ -194,25 +194,22 @@ public class PostController {
     @PostMapping("/{postId}/react")
     @ResponseBody
     public ResponseEntity<?> reactToPost(@PathVariable Long postId, Principal principal) {
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if(optionalPost.isPresent()) {
-            Post post = optionalPost.get();
-            User currentUser = userService.findByUsername(principal.getName());
+        String username = principal.getName();
+        try {
+            int count = postService.reactToPost(postId, username); // neue Service-Methode verwenden
 
-            post.toggleReaction(currentUser);
-            postRepository.save(post);
-
-            // WebSocket Nachricht senden
+            // WebSocket Nachricht für alle senden
             messagingTemplate.convertAndSend("/topic/reactions", Map.of(
                     "postId", postId,
-                    "reactionCount", post.getReactionCount()
+                    "reactionCount", count
             ));
 
-            return ResponseEntity.ok(post.getReactionCount());
-        } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(count);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Fehler: " + e.getMessage());
         }
     }
+
 
 
 

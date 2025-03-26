@@ -134,6 +134,17 @@ public class PostService {
         return postRepository.countPostsByMonth(startDate, endDate);
     }
 
+    public int reactToPost(Long postId, String username) {
+        Post post = findById(postId);
+        User user = userRepository.findByUsername(username);
+
+        boolean added = post.toggleReaction(user);  // toggle (fügt hinzu oder entfernt)
+        postRepository.save(post);  // wichtig: muss gespeichert werden
+
+        return post.getReactionCount();
+    }
+
+
 
 
 
