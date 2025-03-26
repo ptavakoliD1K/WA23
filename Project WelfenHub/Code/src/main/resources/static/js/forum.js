@@ -101,3 +101,16 @@ function openModal() {
 function closeModal() {
     document.getElementById('newPostModal').style.display = 'none';
 }
+
+stompClient.subscribe('/topic/reactions', function (message) {
+    let reactionUpdate = JSON.parse(message.body);
+    updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
+});
+
+function updateReactionCountOnPage(postId, newCount) {
+    const button = document.querySelector(`button[data-post-id="${postId}"]`);
+    if(button) {
+        button.querySelector('span').innerText = newCount;
+    }
+}
+

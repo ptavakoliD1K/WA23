@@ -26,6 +26,7 @@ public class WebSocketController {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+
     // Existierende Methode für Chats
     @MessageMapping("/ws/chat/{chatRoomId}")
     public void handleChatMessage(@DestinationVariable Long chatRoomId, @Payload MessageDTO messageDTO, Principal principal) {
@@ -61,4 +62,29 @@ public class WebSocketController {
 
         messagingTemplate.convertAndSend("/topic/comments", createdComment);
     }
+
+    // Methode reactToPost in PostController ergänzen:
+    @PostMapping("/{postId}/react")
+    @ResponseBody
+    public ResponseEntity<?> reactToPost(@PathVariable Long postId, Principal principal) {
+        Optional<Post> optionalPost = postRepository.findById(postId);
+        if(optionalPost.isPresent()) {
+            Post post = optionalPost.get();
+            User currentUser = userService.findByUsername(principal.getName());
+
+            post.toggleReaction(currentUser);
+            postRepository.save(post);
+
+            // WebSocket-Nachricht an alle Clients senden:
+            messagingTemplate.convertAndSend("/topic/reactions", Map.of(
+                    "postId", postId,
+                    "reactionCount", post.getReactionCount()
+            ));
+
+            return ResponseEntity.ok(post.getReactionCount());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
