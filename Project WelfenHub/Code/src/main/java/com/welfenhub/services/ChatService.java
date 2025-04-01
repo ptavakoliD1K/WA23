@@ -292,6 +292,8 @@ public class ChatService {
 
     @Transactional
     public void handleIncomingMessage(Long chatRoomId, MessageDTO messageDTO, String senderUsername) {
+        logger.info("🚀 Eingehende Nachricht von '{}' für ChatRoom '{}': {}", senderUsername, chatRoomId, messageDTO.getContent());
+
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("ChatRoom not found: " + chatRoomId));
         User sender = userService.findByUsername(senderUsername);
@@ -310,8 +312,7 @@ public class ChatService {
             if (!member.getUsername().equals(senderUsername)) {
                 int unreadCount = countUnreadMessagesForChat(chatRoomId, member.getId());
 
-                // 🔥 Hier die Log-Ausgabe hinzufügen:
-                logger.info("🔔 Sende WebSocket an User '{}': ChatRoomID {}, unreadCount {}",
+                logger.info("🔔 Sende WebSocket-Unread-Update an User '{}', ChatRoom '{}', UnreadCount: {}",
                         member.getUsername(), chatRoomId, unreadCount);
 
                 messagingTemplate.convertAndSendToUser(
@@ -322,6 +323,7 @@ public class ChatService {
             }
         }
     }
+
 
 
 
