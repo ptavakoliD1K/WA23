@@ -295,21 +295,25 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new IllegalArgumentException("ChatRoom not found: " + chatRoomId));
         User sender = userService.findByUsername(senderUsername);
-
-        // Nachricht speichern
         MessageDTO savedMessage = saveMessage(messageDTO, sender, chatRoom);
 
-        // lastReadAt für den Sender aktualisieren
         updateLastRead(chatRoomId, sender.getId());
 
-        // Nachricht an Chat senden
         messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
 
-        // Benachrichtigungen versenden
-        List<User> chatMembers = chatRoom.getUsers();
+        List<User> chatMembers = chatRoom.getChatRoomUsers().stream()
+                .map(ChatRoomUser::getUser)
+                .distinct()
+                .collect(Collectors.toList());
+
         for (User member : chatMembers) {
             if (!member.getUsername().equals(senderUsername)) {
                 int unreadCount = countUnreadMessagesForChat(chatRoomId, member.getId());
+
+                // 🔥 Hier die Log-Ausgabe hinzufügen:
+                logger.info("🔔 Sende WebSocket an User '{}': ChatRoomID {}, unreadCount {}",
+                        member.getUsername(), chatRoomId, unreadCount);
+
                 messagingTemplate.convertAndSendToUser(
                         member.getUsername(),
                         "/queue/unread",
@@ -318,6 +322,7 @@ public class ChatService {
             }
         }
     }
+
 
 
 
