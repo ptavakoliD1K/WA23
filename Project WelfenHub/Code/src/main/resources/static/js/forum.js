@@ -2,7 +2,6 @@ let stompClient = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     connectWebSocket();
-    bindReactionButtons(); // wichtig, da Post-Liste schon im DOM sein könnte
 });
 
 function connectWebSocket() {
@@ -22,14 +21,10 @@ function connectWebSocket() {
             addCommentToPage(comment);
         });
 
-        stompClient.subscribe('/topic/reactions', function (message) {
-            let reactionUpdate = JSON.parse(message.body);
-            updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
-        });
+        // ❌ WebSocket für Reactions ist überflüssig – REST übernimmt das
+        // --> alles zu Reactions läuft jetzt via fetch() in scriptAddReaction.js
     });
 }
-
-
 
 // Neuer Post inklusive aller benötigten Felder
 function postNewPost(event) {
@@ -44,11 +39,10 @@ function postNewPost(event) {
     };
 
     stompClient.send("/app/newPost", {}, JSON.stringify(post));
-
-    closeModal();  // Optional: schließt das Modal nach Erstellung
+    closeModal();
 }
 
-// Kommentar senden (passt bereits!)
+// Kommentar senden (via WebSocket)
 function postComment(event, postId) {
     event.preventDefault();
     let comment = {
@@ -58,7 +52,7 @@ function postComment(event, postId) {
     stompClient.send("/app/newComment", {}, JSON.stringify(comment));
 }
 
-// Dynamisch neuen Post hinzufügen (wichtig!)
+// Dynamisch neuen Post hinzufügen
 function addPostToPage(post) {
     let postList = document.getElementById("post-list");
     let newPostItem = document.createElement("li");
@@ -69,8 +63,8 @@ function addPostToPage(post) {
         <h2>${post.title}</h2>
         <p>${post.content}</p>
         <p>Gepostet von ${post.user.username} am ${post.createdAt.split("T")[0]}</p>
-        <button class="reaction-btn" data-post-id="${post.id}">
-            👍 <span>${post.reactions || 0}</span>
+        <button onclick="toggleReaction(${post.id})">
+            ❤️ <span id="reaction-count-${post.id}">${post.reactions || 0}</span>
         </button>
         <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
         <div class="comments-section" style="display: none;">
@@ -86,8 +80,6 @@ function addPostToPage(post) {
     `;
 
     postList.prepend(newPostItem);
-    bindReactionButtons();
-
 }
 
 // Dynamisch Kommentar hinzufügen
@@ -105,65 +97,17 @@ function addCommentToPage(comment) {
     commentList.appendChild(newCommentItem);
 }
 
-// Kommentare ein- und ausblenden
+// Kommentare ein-/ausblenden
 function toggleComments(button) {
     const commentsSection = button.nextElementSibling;
     commentsSection.style.display = commentsSection.style.display === "none" ? "block" : "none";
 }
 
-// Hilfsfunktionen Modal
+// Modal-Funktionen
 function openModal() {
     document.getElementById('newPostModal').style.display = 'block';
 }
 
 function closeModal() {
     document.getElementById('newPostModal').style.display = 'none';
-}
-
-
-function updateReactionCountOnPage(postId, newCount) {
-    const button = document.querySelector(`button[data-post-id="${postId}"]`);
-    if(button) {
-        button.querySelector('span').innerText = newCount;
-    }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    bindReactionButtons();
-});
-
-function bindReactionButtons() {
-    document.querySelectorAll('.reaction-btn').forEach(button => {
-        button.removeEventListener('click', handleReaction); // doppelte Bindung vermeiden
-        button.addEventListener('click', handleReaction);
-    });
-}
-
-function handleReaction(event) {
-    const button = event.currentTarget;
-    const postId = button.getAttribute('data-post-id');
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', `/posts/${postId}/react`);
-    xhr.setRequestHeader('X-CSRF-TOKEN', getCsrfToken());
-
-    xhr.onload = () => {
-        if (xhr.status === 200) {
-            const newReactionCount = xhr.responseText;
-            button.querySelector('span').innerText = newReactionCount;
-        } else {
-            alert("Fehler beim Reagieren. Status: " + xhr.status);
-        }
-    };
-
-    xhr.onerror = () => {
-        alert("Netzwerkfehler. Reaktion konnte nicht gesendet werden.");
-    };
-
-    xhr.send();
-}
-
-function getCsrfToken() {
-    const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
-    return match ? match[1] : null;
 }

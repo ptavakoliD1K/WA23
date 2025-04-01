@@ -1,15 +1,10 @@
 package com.welfenhub.models;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.HashSet;
-
-
+import java.util.List;
+import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Post {
@@ -22,98 +17,36 @@ public class Post {
     @Column(length = 5000)
     private String content;
 
-    // Neues Feld für den Kurs
     @Column(nullable = false)
     private String course;
 
-    // Neues Feld für das Semester
     @Column(nullable = false)
     private int semester;
 
     @Column(nullable = false)
     private String subject;
 
-    private int reactions = 0;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reaction> reactions = new ArrayList<>();
 
     private LocalDateTime createdAt;
 
-    @ManyToMany
-    @JoinTable(name = "post_reactions",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> reactedUsers = new HashSet<>();
+    // --- Getter & Setter ---
 
-    public boolean toggleReaction(User user) {
-        if (reactedUsers == null) {
-            reactedUsers = new HashSet<>();
-        }
-
-        if (reactedUsers.contains(user)) {
-            reactedUsers.remove(user);
-            return false; // Reaktion entfernt
-        } else {
-            // Sicherstellen, dass es nicht schon eine identische User-ID gibt (equals/hashCode!)
-            for (User u : reactedUsers) {
-                if (u.getId().equals(user.getId())) {
-                    return false; // Schon vorhanden
-                }
-            }
-            reactedUsers.add(user);
-            return true;  // Reaktion hinzugefügt
-        }
-    }
-
-
-    public int getReactionCount() {
-        return reactedUsers.size();
-    }
-
-    // Getter und Setter
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
     public Long getId() {
         return id;
     }
 
-    public String getContent() {
-        return content;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public String getTitle() {
@@ -124,12 +57,12 @@ public class Post {
         this.title = title;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public String getContent() {
+        return content;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getCourse() {
@@ -148,21 +81,47 @@ public class Post {
         this.semester = semester;
     }
 
-    public int getReactions() {
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public List<Reaction> getReactions() {
         return reactions;
     }
 
-    public void setReactions(int reactions) {
+    public void setReactions(List<Reaction> reactions) {
         this.reactions = reactions;
     }
 
-    public void addReaction() {
-        this.reactions++;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public Set<User> getReactedUsers() {
-        return reactedUsers;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
+    public int getReactionCount() {
+        return reactions != null ? reactions.size() : 0;
+    }
 }
-

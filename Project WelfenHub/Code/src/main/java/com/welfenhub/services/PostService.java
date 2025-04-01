@@ -6,16 +6,12 @@ import com.welfenhub.models.Comment;
 import com.welfenhub.repositories.UserRepository;
 import com.welfenhub.repositories.PostRepository;
 import com.welfenhub.repositories.CommentRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.Map;
-import java.util.HashMap;
-import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,8 +31,21 @@ public class PostService {
         return postRepository.findByCourse(course);
     }
 
+    public List<Post> getPostsBySubjectDescending(String subject) {
+        return postRepository.findBySubjectOrderByCreatedAtDesc(subject);
+    }
+
+    public List<Post> getAllPosts() {
+        return postRepository.findAllByOrderByCreatedAtDesc();
+    }
+
     public long getTotalPostCount() {
         return postRepository.count();
+    }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post nicht gefunden"));
     }
 
     public Post createPost(String title, String content, String course, int semester, String subject, User user) {
@@ -45,108 +54,67 @@ public class PostService {
         post.setContent(content);
         post.setCourse(course);
         post.setSemester(semester);
-        post.setSubject(subject); // subject hinzufügen
+        post.setSubject(subject);
         post.setUser(user);
         post.setCreatedAt(LocalDateTime.now());
         return postRepository.save(post);
-    }
-
-
-    public Comment addComment(Long postId, String content, String username) {
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if (optionalPost.isPresent()) {
-            Post post = optionalPost.get();
-
-            // Benutzer anhand des Benutzernamens abrufen
-            User user = userRepository.findByUsername(username);
-            if (user == null) {
-                throw new IllegalArgumentException("User not found");
-            }
-
-            // Kommentar erstellen und speichern
-            Comment comment = new Comment();
-            comment.setContent(content);
-            comment.setPost(post);
-            comment.setUser(user);
-            comment.setCreatedDate(LocalDateTime.now());
-            Comment savedComment = commentRepository.save(comment);
-            System.out.println("Saved Comment: " + savedComment);
-
-            return savedComment;
-        } else {
-            throw new IllegalArgumentException("Invalid post ID");
-        }
-    }
-
-    public Post findById(Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid post ID"));
     }
 
     public void save(Post post) {
         postRepository.save(post);
     }
 
-    public Comment findCommentById(Long commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
-    }
-
-    public void saveComment(Comment comment) {
-        commentRepository.save(comment);
-    }
-
     public void deletePost(Long postId) {
         postRepository.deleteById(postId);
-    }
-
-    public void deleteComment(Long commentId) {
-        commentRepository.deleteById(commentId);
-    }
-
-    public Post getLatestPostForSubject(String subject) {
-        return postRepository.findTopByCourseOrderByCreatedAtDesc(subject);
-    }
-
-    public List<Post> getAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public List<Post> searchPostsByTitle(String query) {
         return postRepository.findByTitleContainingIgnoreCase(query);
     }
 
-    public List<Post> getPostsBySubjectDescending(String subject) {
-        return postRepository.findBySubjectOrderByCreatedAtDesc(subject);
+    public Post getLatestPostForSubject(String subject) {
+        return postRepository.findTopByCourseOrderByCreatedAtDesc(subject);
     }
 
-    public List<Post> getAllPostsDescending() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
+    public List<Object[]> getPostCountByHour(LocalDateTime start, LocalDateTime end) {
+        return postRepository.countPostsPerHour(start, end);
     }
 
-    public List<Object[]> getPostCountByHour(LocalDateTime startDate, LocalDateTime endDate) {
-        return postRepository.countPostsPerHour(startDate, endDate);
+    public List<Object[]> getPostCountByDay(LocalDateTime start, LocalDateTime end) {
+        return postRepository.countPostsByDay(start, end);
     }
 
-    public List<Object[]> getPostCountByDay(LocalDateTime startDate, LocalDateTime endDate) {
-        return postRepository.countPostsByDay(startDate, endDate);
+    public List<Object[]> getPostCountByMonth(LocalDateTime start, LocalDateTime end) {
+        return postRepository.countPostsByMonth(start, end);
     }
 
-    public List<Object[]> getPostCountByMonth(LocalDateTime startDate, LocalDateTime endDate) {
-        return postRepository.countPostsByMonth(startDate, endDate);
-    }
-
-    @Transactional
-    public int reactToPost(Long postId, String username) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("Post nicht gefunden"));
-
+    // Kommentare
+    public Comment addComment(Long postId, String content, String username) {
+        Post post = findById(postId);
         User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("User nicht gefunden");
+        }
 
-        post.toggleReaction(user); // verändert das Set
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setPost(post);
+        comment.setUser(user);
+        comment.setCreatedDate(LocalDateTime.now());
 
-        return post.getReactionCount();
+        return commentRepository.save(comment);
     }
 
+    public Comment findCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Kommentar nicht gefunden"));
+    }
 
+    public void saveComment(Comment comment) {
+        commentRepository.save(comment);
+    }
+
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
+    }
 }

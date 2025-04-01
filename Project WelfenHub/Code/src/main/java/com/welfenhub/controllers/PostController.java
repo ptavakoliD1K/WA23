@@ -191,24 +191,6 @@ public class PostController {
         return "subject";  // Assuming this is your posts view template
     }
 
-    @PostMapping("/{postId}/react")
-    @ResponseBody
-    public ResponseEntity<?> reactToPost(@PathVariable Long postId, Principal principal) {
-        String username = principal.getName();
-        try {
-            int count = postService.reactToPost(postId, username); // neue Service-Methode verwenden
-
-            // WebSocket Nachricht für alle senden
-            messagingTemplate.convertAndSend("/topic/reactions", Map.of(
-                    "postId", postId,
-                    "reactionCount", count
-            ));
-
-            return ResponseEntity.ok(count);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Fehler: " + e.getMessage());
-        }
-    }
 
 
 

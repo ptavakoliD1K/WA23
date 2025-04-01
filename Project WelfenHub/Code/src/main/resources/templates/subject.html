@@ -63,9 +63,8 @@
                     <p th:text="${post.content}">Post Content</p>
                     <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Date</span></p>
 
-                    <button class="reaction-btn" th:data-post-id="${post.id}">
-                        👍 <span th:text="${post.reactionCount}">0</span>
-                    </button>
+                    <button onclick="toggleReaction(1)">❤️ <span id="reaction-count-1">0</span></button>
+
 
 
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
