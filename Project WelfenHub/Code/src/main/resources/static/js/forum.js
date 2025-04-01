@@ -29,6 +29,16 @@ function connectWebSocket() {
     });
 }
 
+function updateReactionCountOnPage(postId, newCount) {
+    const span = document.getElementById(`reaction-count-${postId}`);
+    if (span) {
+        span.textContent = newCount;
+    } else {
+        console.warn(`⚠️ Reaktions-Element für Post ${postId} nicht gefunden.`);
+    }
+}
+
+
 // Neuer Post inklusive aller benötigten Felder
 function postNewPost(event) {
     event.preventDefault();
