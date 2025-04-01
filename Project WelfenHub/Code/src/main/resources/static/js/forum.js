@@ -21,8 +21,11 @@ function connectWebSocket() {
             addCommentToPage(comment);
         });
 
-        // ❌ WebSocket für Reactions ist überflüssig – REST übernimmt das
-        // --> alles zu Reactions läuft jetzt via fetch() in scriptAddReaction.js
+        stompClient.subscribe('/topic/reactions', function (message) {
+            let reactionUpdate = JSON.parse(message.body);
+            updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
+        });
+
     });
 }
 
