@@ -9,6 +9,8 @@ import com.welfenhub.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,10 @@ public class ReactionService {
     @Autowired
     private UserRepository userRepo;
 
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
+
+
     @Transactional
     public int toggleReaction(Long postId, String username) {
         Post post = postRepo.findById(postId)
@@ -42,6 +48,16 @@ public class ReactionService {
             reactionRepo.save(reaction);
         }
 
-        return reactionRepo.findByPost(post).size();
+        int newCount = reactionRepo.findByPost(post).size();
+
+        // 🔴 WebSocket-Broadcast an alle
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("postId", postId);
+        payload.put("reactionCount", newCount);
+
+        messagingTemplate.convertAndSend("/topic/reactions", payload);
+
+        return newCount;
     }
+
 }
