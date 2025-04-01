@@ -208,6 +208,7 @@
             // Abo für Ungelesen-Benachrichtigungen
             stompClient.subscribe('/user/queue/unread', (message) => {
                 const unreadInfo = JSON.parse(message.body);
+                console.log("✅ WebSocket Nachricht erhalten (Unread Info): ", unreadInfo);
                 onUnreadNotification(unreadInfo);
             });
         });
@@ -217,17 +218,17 @@
     const chatRoomId = unreadInfo.chatRoomId;
     const unreadCount = unreadInfo.unreadCount;
 
-    const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
-    if (chatRoomElement) {
-        const badge = chatRoomElement.querySelector('.unreadBadge');
-        if (currentChatRoomId != chatRoomId) {
-            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
-            badge.textContent = unreadCount;
-        } else {
-            badge.style.display = 'none';
-        }
+    const badgeElement = document.querySelector(`#chatRoom_${chatRoomId} .unreadBadge`);
+
+    if (badgeElement) {
+        badgeElement.textContent = unreadCount;
+        badgeElement.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    } else {
+        console.warn(`⚠️ Kein Badge-Element gefunden für ChatRoom ID: ${chatRoomId}`);
     }
 }
+
+
 
 function updateUnreadBadge(chatRoomId, unreadCount) {
     const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
