@@ -305,7 +305,10 @@ public class ChatService {
 
         // 4) Alle Mitglieder (außer Sender) über /user/queue/unread informieren
         //    => Hier kein LazyLoading mehr, weil @Transactional Session offen ist
-        List<User> chatMembers = chatRoom.getUsers(); // oder chatRoom.getChatRoomUsers().stream().map(...).toList()
+        List<User> chatMembers = chatRoom.getChatRoomUsers().stream()
+                .map(ChatRoomUser::getUser)
+                .distinct()
+                .collect(Collectors.toList());
         for (User member : chatMembers) {
             if (!member.getUsername().equals(senderUsername)) {
                 int unreadCount = countUnreadMessagesForChat(chatRoomId, member.getId());

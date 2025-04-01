@@ -214,55 +214,60 @@
     }
 
     function onUnreadNotification(unreadInfo) {
-        // unreadInfo z.B. { "chatRoomId": 5, "unreadCount": 3 }
-        const chatRoomId = unreadInfo.chatRoomId;
-        const unreadCount = unreadInfo.unreadCount;
+    const chatRoomId = unreadInfo.chatRoomId;
+    const unreadCount = unreadInfo.unreadCount;
 
-        // Badge nur anzeigen, wenn wir nicht gerade in diesem Chat sind
+    const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+    if (chatRoomElement) {
+        const badge = chatRoomElement.querySelector('.unreadBadge');
         if (currentChatRoomId != chatRoomId) {
-            const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
-            if (chatRoomElement) {
-                const badge = chatRoomElement.querySelector('.unreadBadge');
-                if (badge) {
-                    badge.style.display = '';
-                    badge.textContent = unreadCount;
-                }
-            }
+            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            badge.textContent = unreadCount;
+        } else {
+            badge.style.display = 'none';
         }
     }
+}
+
+function updateUnreadBadge(chatRoomId, unreadCount) {
+    const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+    if (chatRoomElement) {
+        const badge = chatRoomElement.querySelector('.unreadBadge');
+        if (badge) {
+            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            badge.textContent = unreadCount;
+        }
+    }
+}
+
+
 
     function subscribeToChatRoom(chatRoomId) {
-        if (currentSubscription) {
-            currentSubscription.unsubscribe();
-            currentSubscription = null;
-        }
-        currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
-            const msgDTO = JSON.parse(message.body);
-            addMessageToChat(msgDTO);
-
-            // Neue Nachricht sofort als gelesen markieren,
-            // wenn wir in diesem Chat sind
-            if (currentChatRoomId === chatRoomId) {
-                fetch(`/chat/${chatRoomId}/markAsRead`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-XSRF-TOKEN': csrfToken
-                    },
-                })
-                    .then(() => {
-                        const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
-                        if (chatRoomElement) {
-                            const badge = chatRoomElement.querySelector('.unreadBadge');
-                            if (badge) {
-                                badge.style.display = 'none';
-                            }
-                        }
-                    })
-                    .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
-            }
-        });
+    if (currentSubscription) {
+        currentSubscription.unsubscribe();
+        currentSubscription = null;
     }
+
+    currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
+        const msgDTO = JSON.parse(message.body);
+        addMessageToChat(msgDTO);
+
+        if (currentChatRoomId === chatRoomId) {
+            fetch(`/chat/${chatRoomId}/markAsRead`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': csrfToken
+                },
+            })
+            .then(() => {
+                updateUnreadBadge(chatRoomId, 0);
+            })
+            .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+        }
+    });
+}
+
 
     /* ==============================================
        GRUPPENLISTE – RAUM AUSWÄHLEN
