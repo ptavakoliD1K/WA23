@@ -77,7 +77,7 @@ function addPostToPage(post) {
         <p>${post.content}</p>
         <p>Gepostet von ${post.user.username} am ${post.createdAt.split("T")[0]}</p>
         <button onclick="toggleReaction(${post.id})">
-            ❤️ <span id="reaction-count-${post.id}">${post.reactions || 0}</span>
+            ❤️ <span id="reaction-count-${post.id}">${post.reactionCount || 0}</span>
         </button>
         <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
         <div class="comments-section" style="display: none;">
@@ -94,6 +94,7 @@ function addPostToPage(post) {
 
     postList.prepend(newPostItem);
 }
+
 
 // Dynamisch Kommentar hinzufügen
 function addCommentToPage(comment) {

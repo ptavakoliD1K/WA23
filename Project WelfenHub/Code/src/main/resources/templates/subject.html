@@ -55,7 +55,6 @@
             </div>
         </div>
 
-        <!-- Posts -->
         <div class="posts-list">
             <ul id="post-list">
                 <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
@@ -63,9 +62,9 @@
                     <p th:text="${post.content}">Post Content</p>
                     <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Date</span></p>
 
-                    <button onclick="toggleReaction(1)">❤️ <span id="reaction-count-1">0</span></button>
-
-
+                    <button th:onclick="'toggleReaction(' + ${post.id} + ')'">
+                        ❤️ <span th:id="'reaction-count-' + ${post.id}" th:text="${post.reactionCount}">0</span>
+                    </button>
 
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
                     <div class="comments-section" style="display: none;">
@@ -89,6 +88,7 @@
                 </li>
             </ul>
         </div>
+
     </main>
 </div>
 

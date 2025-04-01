@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
+import java.util.List;
+
 
 import java.security.Principal;
 import java.util.Map;
@@ -36,7 +38,6 @@ public class WebSocketController {
         messagingTemplate.convertAndSend("/topic/messages/" + chatRoomId, savedMessage);
     }
 
-    // NEUE Methode für Posts
     @MessageMapping("/newPost")
     public void handleNewPost(@Payload Map<String, String> payload, Principal principal) {
         String title = payload.get("title");
@@ -48,8 +49,11 @@ public class WebSocketController {
         User user = userService.findByUsername(principal.getName());
         Post createdPost = postService.createPost(title, content, course, semester, subject, user);
 
+        createdPost.setReactions(List.of());
+
         messagingTemplate.convertAndSend("/topic/posts", createdPost);
     }
+
 
     // NEUE Methode für Kommentare
     @MessageMapping("/newComment")
