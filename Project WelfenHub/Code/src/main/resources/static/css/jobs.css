@@ -168,6 +168,10 @@ h5 {
     cursor: pointer;
 }
 
+footer {
+    margin-top: 550px !important;
+}
+
 @Media (max-width: 1250px) {
     .jobContainer {
         width: 350px;

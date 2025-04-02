@@ -95,6 +95,7 @@ button:hover, button:focus {
     height: fit-content;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    top: 160px;
 }
 
 #editSelectedEventPopUp .close-button {
