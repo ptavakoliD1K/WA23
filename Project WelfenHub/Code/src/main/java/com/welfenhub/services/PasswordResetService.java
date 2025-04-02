@@ -50,11 +50,13 @@ public class PasswordResetService {
         int result = 0;
 
         try(Connection conn = dataSource.getConnection()) {
-            String insertSQL = "SELECT COUNT(*) FROM user WHERE email = ?";
+            String insertSQL = "SELECT COUNT(*) FROM users WHERE email = ?";
             try(PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
                 pstmt.setString(1, receiver);
                 try(ResultSet rs = pstmt.executeQuery()) {
-                    result = rs.getInt(1);
+                    if (rs.next()) {
+                        result = rs.getInt(1);
+                    }
                 }
             }
         }
