@@ -185,7 +185,7 @@ uploadForm.addEventListener('submit', (e) => {
     formData.append('tag', tag.value);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `http://localhost:8080/upload`, true);
+    xhr.open('POST', `/upload`, true);
 
     const username = "welfenadmin";
     const password = "Welfenhub";
