@@ -12,7 +12,17 @@ public interface FileRepository extends JpaRepository<Files, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO files VALUES (null, :fileName, :fileBytes, :semester, :module, :fachrichtung, :tag)", nativeQuery = true)
-    void uploadFile(@Param("fileName") String fileName, @Param("fileBytes") byte[] fileBytes, @Param("semester") String semester, @Param("module") String module, @Param("fachrichtung") String fachrichtung, @Param("tag") String tag);
+    @Query(value = "INSERT INTO files (name, content, semester, module, fachrichtung, tag) "
+            + "VALUES (:fileName, :fileBytes, :semester, :module, :fachrichtung, :tag)",
+            nativeQuery = true)
+    void uploadFile(
+            @Param("fileName") String fileName,
+            @Param("fileBytes") byte[] fileBytes,
+            @Param("semester")  String semester,
+            @Param("module")    String module,
+            @Param("fachrichtung") String fachrichtung,
+            @Param("tag")       String tag
+    );
+
 
 }
