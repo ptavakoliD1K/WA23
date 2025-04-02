@@ -33,6 +33,8 @@ public class UserService implements UserDetailsService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+
+
     @Transactional
     public void save(User user) throws Exception {
         logger.info("Saving user: {}", user.getUsername());
