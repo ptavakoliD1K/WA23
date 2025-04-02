@@ -13,7 +13,7 @@ public interface EvaluationFilesRepository extends JpaRepository<EvaluationFiles
 
     @Transactional
     @Modifying
-    @Query(value = "INSERT INTO evaluation_files VALUES (null, :content, '.pdf', :date)", nativeQuery = true)
+    @Query(value = "INSERT INTO dozent_evaluation_files (content, mime_type, creation_date) VALUES (:content, '.pdf', :date)", nativeQuery = true)
     void saveFileToDatabase(@Param("content") byte[] content, @Param("date") String date);
 
     @Query("SELECT e.content FROM EvaluationFiles e WHERE e.date = :date")
