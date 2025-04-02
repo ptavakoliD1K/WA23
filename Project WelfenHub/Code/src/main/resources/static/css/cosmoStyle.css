@@ -111,7 +111,7 @@ body.show-chatbot .chatbot-popup {
 }
 
 #close-chatbot {
-    display: none;
+    display: none !important;
 }
 
 .chat-header #close-chatbot:hover {
