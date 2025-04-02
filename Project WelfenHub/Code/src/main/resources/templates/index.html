@@ -32,7 +32,9 @@
 
 <div class="card-container">
     <div class="card">
+        <a th:href="@{/chat}">
         <img th:src="@{/images/Gruppenchat.jpg}" alt="Gruppenchat">
+        </a>
         <div class="card-content">
             <h3>Gruppenchat</h3>
             <p>Der Gruppenchat ist perfekt dafür geeinget, um Lerngruppen zu bilden und gemeinsam effektiv zu lernen. Hier kannst du dich mit Gleichgesinnten vernetzen, Wissen austauschen und deine Lernziele schneller erreichen.</p>
@@ -41,7 +43,9 @@
     </div>
 
     <div class="card">
+        <a th:href="@{/forum}">
         <img th:src="@{/images/Forum.jpg}" alt="Forum">
+        </a>
         <div class="card-content">
             <h3>Forum</h3>
             <p>Dies ist der perfekte Ort für alle, die sich über Vorlesungen austauschen möchten. Hier könnt ihr eure Gedanken, Ideen und Erfahrungen teilen, Fragen stellen und euch gegenseitig unterstützen.</p>
@@ -50,7 +54,9 @@
     </div>
 
     <div class="card">
+        <a th:href="@{/fileshare}">
         <img th:src="@{/images/Fileshare.jpg}" alt="Fileshare">
+        </a>
         <div class="card-content">
             <h3>Fileshare</h3>
             <p>Mit unserer Filesharing-Funktion kannst du schnell und unkompliziert Dateien mit anderen teilen und sicher speichern. Egal, ob Skripte oder Mitschriften unser System macht es dir leicht.</p>
@@ -59,7 +65,9 @@
     </div>
 
     <div class="card">
+        <a th:href="@{/ereignisse}">
         <img th:src="@{/images/Ereignisse.jpg}" alt="Ereignisse">
+        </a>
         <div class="card-content">
             <h3>Ereignisse</h3>
             <p>Die Ereignisseite ist deine erste Anlaufstelle für aktuelle Informationen über kommende Ereignisse innerhalb der WelfenAkademie, als auch außerhalb.</p>
@@ -107,8 +115,6 @@
         <form action="#" class="chat-form">
             <textarea placeholder="Message..." class="message-input" required></textarea>
             <div class="chat-controls">
-                <button type="button" class="material-symbols-rounded">sentiment_satisfied</button>
-                <button type="button" class="material-symbols-rounded">attach_file</button>
                 <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
             </div>
         </form>
