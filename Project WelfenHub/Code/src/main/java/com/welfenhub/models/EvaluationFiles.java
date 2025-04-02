@@ -3,9 +3,8 @@ package com.welfenhub.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "evaluation_files")
+@Table(name = "dozent_evaluation_files")
 public class EvaluationFiles {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

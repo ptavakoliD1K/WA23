@@ -3,7 +3,7 @@ package com.welfenhub.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Job")
+@Table(name = "job_inserate")
 public class Job {
 
     @Id
