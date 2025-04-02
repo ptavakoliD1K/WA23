@@ -3,7 +3,7 @@ package com.welfenhub.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "files")
+@Table(name = "filesharefiles")
 public class Files {
 
     @Id
