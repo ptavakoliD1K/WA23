@@ -1,5 +1,6 @@
 package com.welfenhub.controllers;
 
+import com.welfenhub.models.Files;
 import com.welfenhub.repositories.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,16 @@ public class FileUploadController {
      */
 
     private void saveFileToDatabase(String fileName, byte[] fileBytes, String semester, String module, String fachrichtung, String tag) throws SQLException {
-        fileRepository.uploadFile(fileName, fileBytes, semester, module, fachrichtung, tag);
+
+        Files file = new Files();
+
+        file.setName(fileName);
+        file.setContent(fileBytes);
+        file.setSemester(semester);
+        file.setModule(module);
+        file.setFachrichtung(fachrichtung);
+        file.setTag(tag);
+
+        fileRepository.save(file);
     }
 }

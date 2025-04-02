@@ -39,7 +39,7 @@ public class FileSearchController {
         ) {
         List<FileDTO> results = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dataSource)) {
-            String sql = "SELECT id, name FROM files WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ? AND tag = ?";
+            String sql = "SELECT id, name FROM fileshareFiles WHERE name LIKE ? AND semester LIKE ? AND module LIKE ? AND fachrichtung LIKE ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
                 pstmt.setString(1, "%" + query + "%");
                 pstmt.setString(2, semester);

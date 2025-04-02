@@ -101,7 +101,7 @@ public class FileController {
         Class.forName("org.sqlite.JDBC");
         List<String> fileNames = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection(dbUrl, "welfenadmin", "Welfenhub")) {
-            String selectSQL = "SELECT name FROM files WHERE semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
+            String selectSQL = "SELECT name FROM fileshareFiles WHERE semester = ? AND module = ? AND fachrichtung = ? AND tag = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, semester);
                 pstmt.setString(2, module);
@@ -130,7 +130,7 @@ public class FileController {
     private byte[] getFileFromDatabase(String fileName) throws SQLException, ClassNotFoundException {
         Class.forName("org.sqlite.JDBC");
         try (Connection conn = DriverManager.getConnection(dbUrl, "welfenadmin", "Welfenhub")) {
-            String selectSQL = "SELECT content FROM files WHERE name = ?";
+            String selectSQL = "SELECT content FROM fileshareFiles WHERE name = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
                 pstmt.setString(1, fileName);
                 try (ResultSet rs = pstmt.executeQuery()) {
@@ -156,7 +156,7 @@ public class FileController {
     @GetMapping("/preview")
     public ResponseEntity<InputStreamResource> previewFile(@RequestParam String name) {
         try (Connection connection = dataSource.getConnection()) {
-            String sql = "SELECT content FROM files WHERE name = ?";
+            String sql = "SELECT content FROM fileshareFiles WHERE name = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, name);
             ResultSet resultSet = statement.executeQuery();
