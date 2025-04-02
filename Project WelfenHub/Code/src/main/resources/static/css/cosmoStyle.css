@@ -110,6 +110,10 @@ body.show-chatbot .chatbot-popup {
     position: relative; /* Falls er noch verrutscht ist, probiere alternativ `absolute` */
 }
 
+#close-chatbot {
+    display: none;
+}
+
 .chat-header #close-chatbot:hover {
     background:  #10427a;
 }
