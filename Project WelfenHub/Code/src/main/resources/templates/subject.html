@@ -73,7 +73,7 @@
                             <li th:each="comment : ${post.comments}" th:id="'comment-' + ${comment.id}">
                                 <p th:text="${comment.user.username}">Comment User</p>
                                 <p th:text="${comment.content}">Comment Content</p>
-                                <p th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Comment Date</p>
+                                <p th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">Comment Date</p>
                             </li>
                         </ul>
                         <div class="comment-form">
