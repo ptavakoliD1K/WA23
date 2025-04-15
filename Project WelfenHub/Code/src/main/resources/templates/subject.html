@@ -1,47 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Posts</title>
-    <link rel="stylesheet" th:href="@{/css/subject.css}" />
+    <title>Diskussionsforum</title>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/subject.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <meta name="_csrf" content="${_csrf.token}"/>
     <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
-    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
-    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+
 <header id="responsive-header">
     <nav>
         <div th:insert="fragments/headerResponsive.html"></div>
     </nav>
 </header>
 
-<!-- Hauptcontainer für Sidebar und Content -->
-<div class="content-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <div th:each="entry : ${coursesBySemester}">
-            <h3 th:text="'Semester ' + ${entry.key}"></h3>
+<main id="forumMainContainer">
+
+    <section class="forumSidebar">
+        <div class="sidebarHeader">
+            <h2 th:text="${subject}">Fachbereich</h2>
+        </div>
+        <div th:each="entry : ${coursesBySemester}" class="semester-section">
+            <h3 th:text="'Semester ' + ${entry.key}">Semester X</h3>
             <ul>
                 <li th:each="course : ${entry.value}">
                     <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${entry.key}, course=${course})}"
-                       th:text="${course}">Course Name</a>
+                       th:text="${course}">Kursname</a>
                 </li>
             </ul>
         </div>
-    </aside>
+    </section>
 
-    <!-- Hauptinhalt -->
-    <main class="main-content">
-        <h1>Posts</h1>
 
-        <!-- Suchleiste und Neuer Post Button -->
-        <div class="action-buttons-container">
-            <div class="search-container">
-                <span class="search-icon" onclick="toggleSearch()">🔍</span>
-                <a class="new-post-button" onclick="openModal()">+</a>
+    <section class="ForumBeitrag">
+        <div class="forumHeader">
+            <h2 class="forumTitle" id="currentforumTitle" th:text="${course}">Kursname</h2>
+            <div class="forumHeaderIcons">
+                <i class="fa-solid fa-magnifying-glass" title="Beitrag suchen" onclick="toggleSearch()"></i>
+                <i class="fa-solid fa-plus" title="Beitrag erstellen" onclick="openModal()"></i>
                 <div id="searchBar" class="search-bar" style="display: none;">
                     <form th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
                         <input type="text" name="query" placeholder="Nach Titel suchen..." required/>
@@ -58,54 +58,79 @@
         <div class="posts-list">
             <ul id="post-list">
                 <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
+
+                    <div class="post-menu">
+                        <button class="options-button" onclick="toggleDropdown(this)">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            <button class="actionButton editButton" th:onclick="'editPost(' + ${post.id} + ')'">
+                                <i class="fas fa-edit"></i> Bearbeiten
+                            </button>
+                            <button class="actionButton deleteButton" th:onclick="'deletePost(' + ${post.id} + ')'">
+                                <i class="fas fa-trash-alt"></i> Löschen
+                            </button>
+                        </div>
+                    </div>
+
                     <h2 th:text="${post.title}">Post Title</h2>
                     <p th:text="${post.content}">Post Content</p>
-                    <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Date</span></p>
+                    <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Datum</span></p>
 
-                    <button th:onclick="'toggleReaction(' + ${post.id} + ')'">
-                        ❤️ <span th:id="'reaction-count-' + ${post.id}" th:text="${post.reactionCount}">0</span>
+                    <button class="actionButton likeButton" th:onclick="'toggleReaction(' + ${post.id} + ')'">
+                        <i class="fa-solid fa-heart"></i> <span th:id="'reaction-count-' + ${post.id}" th:text="${post.reactionCount}">0</span>
                     </button>
 
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
                     <div class="comments-section" style="display: none;">
                         <h3>Kommentare:</h3>
                         <ul th:id="'comments-' + ${post.id}">
-                            <li th:each="comment : ${post.comments}" th:id="'comment-' + ${comment.id}">
-                                <p th:text="${comment.user.username}">Comment User</p>
-                                <p th:text="${comment.content}">Comment Content</p>
-                                <p th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">Comment Date</p>
+                            <li class="comment-item"
+                                th:each="comment, iterStat : ${post.comments}"
+                                th:id="'comment-' + ${comment.id}"
+                                th:classappend="${iterStat.index >= 3} ? 'hidden-comment'">
+                                <div class="comment-header">
+                                    <span class="comment-author" th:text="${comment.user.username}">User</span>
+                                    <span class="comment-date" th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Datum</span>
+                                </div>
+                                <div class="comment-body" th:text="${comment.content}">Kommentar-Inhalt</div>
                             </li>
                         </ul>
+
+
+                        <div th:if="${#lists.size(post.comments) > 3}">
+                            <button class="load-more-comments-button" onclick="showAllComments(this)">Ältere Kommentare anzeigen</button>
+                        </div>
+
                         <div class="comment-form">
                             <form th:id="'commentForm_' + ${post.id}" th:onsubmit="'postComment(event, ' + ${post.id} + ');'">
                                 <input type="hidden" name="postId" th:value="${post.id}" />
                                 <label>Dein Kommentar:</label>
-                                <textarea th:id="'comment-content-' + ${post.id}" name="content" rows="3" required></textarea>
-                                <button type="submit">Kommentieren</button>
+                                <textarea th:id="'comment-content-' + ${post.id}" name="content" rows="3" placeholder="Schreib deinen Kommentar..." required></textarea>
+                                <button id="kommentierenButton" type="submit">Kommentieren</button>
                             </form>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
+    </section>
 
-    </main>
-</div>
+</main>
 
 <!-- Modal für neuen Post -->
 <div id="newPostModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <h2>Neuen Post erstellen</h2>
+        <h2 id="modalTitel">Neuen Post erstellen</h2>
         <form onsubmit="postNewPost(event)">
             <input type="hidden" name="subject" th:value="${subject}"/>
             <input type="hidden" name="semester" th:value="${semester}"/>
             <input type="hidden" name="course" th:value="${course}"/>
-            <label>Titel:</label>
-            <input type="text" id="newPostTitle" required/><br/>
-            <label>Inhalt:</label>
-            <textarea id="newPostContent" required></textarea><br/>
-            <button type="submit">Post erstellen</button>
+            <input type="text" id="newPostTitle" placeholder="Titel" required/><br/>
+            <textarea id="newPostContent" placeholder="Inhalt" required></textarea><br/>
+            <button type="submit" id="speichernButton">Post erstellen</button>
+            <button type="button" id="abbrechenButton" onclick="closeModal()">Abbrechen</button>
         </form>
     </div>
 </div>
@@ -116,9 +141,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/js/forum.js"></script>
-<script src="/js/scriptAddComment.js"></script>
-<script src="/js/scriptAddReaction.js"></script>
-
 
 </body>
 </html>

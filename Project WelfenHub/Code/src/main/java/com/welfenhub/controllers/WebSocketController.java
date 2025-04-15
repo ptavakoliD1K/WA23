@@ -67,6 +67,22 @@ public class WebSocketController {
         messagingTemplate.convertAndSend("/topic/comments", createdComment);
     }
 
+    @MessageMapping("/reactToPost")
+    public void handleReaction(@Payload Map<String, String> payload, Principal principal) {
+        Long postId = Long.parseLong(payload.get("postId"));
+        User user = userService.findByUsername(principal.getName());
+
+        int updatedCount = postService.toggleReaction(postId, user);
+
+        Map<String, Object> updatePayload = Map.of(
+                "postId", postId,
+                "reactionCount", updatedCount
+        );
+
+        messagingTemplate.convertAndSend("/topic/reactions", updatePayload);
+    }
+
+
 
 
 }

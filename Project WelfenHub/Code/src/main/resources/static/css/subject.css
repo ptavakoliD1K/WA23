@@ -1,129 +1,259 @@
-/* Global Styles */
+/************************************************
+ *  Grundlegendes Layout
+ ************************************************/
+
+:root {
+    --primary-color: #00274d;
+    --secondary-color: #37445d;
+    --hover-color: #abadb0;
+    --text-color: white;
+    --font-family: Arial, sans-serif;
+    --box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    --hover-box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+    --active-box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 * {
+    margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-family);
     text-decoration: none;
     box-sizing: border-box;
 }
 
-/* Body und HTML */
 html, body {
-    height: 100%; /* Stellt sicher, dass die gesamte Seite die volle Höhe hat */
     margin: 0;
-    display: flex;
-    flex-direction: column; /* Header, Content und Footer in einer Spalte */
+    padding: 0;
+    height: 100%;
+    /* overflow: hidden; */ /* Scrollen innerhalb des Chatbereichs ermöglichen */
 }
 
-/* Body und Layout-Anpassungen */
-body {
+#forumMainContainer {
     margin: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Stellt sicher, dass die Seite die gesamte Höhe des Viewports einnimmt */
-    background: #f4f4f9;
-    margin: 0;
-}
-
-
-.navbar {
-    background: #00274d;
-    padding: 15px 20px;
+    padding: 0;
+    height: calc(100vh - 100px);
+    display: grid;
+    grid-template-columns: 280px 1fr; /* Vereinfacht */
+    grid-template-areas: "sidebar main";
     overflow: hidden;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    position: relative;
+    top: 0px;
 }
 
-.navbar a:hover {
-    color: rgb(57, 117, 173);
+h2{
+    text-align:center;
 }
 
-.navbar a:active {
-    color: gray;
-}
-
-.navdiv {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.name {
-    font-size: 35px;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 10px;
-    margin-left: 50px;
-    animation: slide-in 1s ease-out;
-}
-
-li {
+ul, ol {
     list-style: none;
-    display: inline-block;
-    margin-bottom: 10px;
+    padding: 0;
+    margin: 0;
 }
 
-li a {
-    color: white;
-    font-size: 20px;
-    margin-right: 20px;
-    transition: color 0.3s;
+.modal {
+    position: fixed; /* unbedingt fixed, damit es nichts verschiebt */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+    background-color: rgba(0, 0, 0, 0.7);
 }
-
-button {
-    margin-left: 10px;
-    border-radius: 5px;
-    padding: 10px 20px;
-    width: auto;
-    border: none;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.1s, box-shadow 0.1s;
+.modal-content {
+    background: #ffffff;
+    border: 3px solid #ccc;
+    width: 450px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 16px 12px rgba(0,0,0,0.25);
+    animation: scaleIn 0.3s ease-out;
+    font-family: Arial, sans-serif;
     position: relative;
 }
 
-button:hover {
+.button{
+    margin-top: 10px;
+    padding: 10px 20px;
+    width: 450px;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+    background: #00274d;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    color:white;
+}
+
+.button:hover {
     background-color: #abadb0;
     transform: scale(1.05);
     box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Main Content Styles */
-h1 {
-    text-align: center;
+.modal-content .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
     font-size: 24px;
-    color: #00274d;
-    margin: 20px 0;
+    cursor: pointer;
+    color: #333;
 }
 
-/* Hauptinhalt */
-.main-content {
-    flex: 1; /* Füllt den verfügbaren Platz neben der Sidebar */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes scaleIn {
+    0%   { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+}
+
+/************************************************
+ *  Seitenleiste (Vorlesungen)
+ ************************************************/
+
+.forumSidebar {
+    width: 280px;
+    background-color: #f4f4f9;
     padding: 20px;
-    background-color: #ffffff;
-    overflow: auto; /* Scrollbar für den Hauptinhalt */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 1;
 }
 
-.posts-list {
+.sidebarHeader {
+    margin-bottom: 20px;
+}
+
+.sidebarHeader h2 {
+    font-size: 16px;
+    color: #00274d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.semester-section h3 {
+    font-size: 16px;
+    color: #00274d;
+    margin-bottom: 10px;
+}
+
+.semester-section ul {
+    list-style-type: none;
     padding: 0;
+}
+
+.semester-section ul li {
+    margin-bottom: 8px;
+}
+
+.semester-section ul li a {
+    color: #37445d;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.semester-section ul li a:hover {
+    background-color: #d0e4f7;
+    color: #00274d;
+}
+
+
+/************************************************
+ *  Forum-Bereich
+ ************************************************/
+ .ForumBeitrag {
+    grid-area: main;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header, Messages, Input */
+    /*height: 100%; */
+    background-color: #f2f2f2;
+    min-height: 0; /* Wichtig für korrektes Scrolling */
+    height: 100%;
+}
+
+.forumHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #37445d;
+    color: white;
+    padding: 15px 20px;
+    grid-row: 1;
+    box-shadow: 0px 15px 10px -15px #111;
+}
+
+.forumTitle {
     margin: 0;
-    width: 100%;
+    font-size: 22px;
+    font-weight: 500;
 }
 
-.posts-list ul {
+.forumHeaderIcons i {
+    font-size: 24px;
+    margin-left: 15px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.forumHeaderIcons i:hover {
+    color: #FFAE00;
+}
+
+#searchBar input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.reset-search-button {
+    display: inline-block;
+    margin-left: 10px;
+    color: white;
+    background-color: var(--secondary-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.reset-search-button:hover {
+    background-color: var(--hover-color);
+}
+
+/************************************************
+ *  Post-liste
+ ************************************************/
+ .posts-list {
+    display: block;
+    grid-row: 2;
+    overflow-y: auto;
+    padding: 20px;
+    margin-bottom: 0; /* Entfernt */
+    min-height: 0; /* Wichtig für korrektes Scrolling */
+    scrollbar-color: linear-gradient(to bottom, #001a44, #3c6dae, #7ea6f2);
+    scrollbar-width: thin;
     list-style: none;
-    padding: 0;
-    margin: 0 20px;
 }
 
 .post-item {
     background-color: white;
-    margin: 8px 0;
-    padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Volle Breite */
+    box-shadow: var(--box-shadow);
+    padding: 15px;
+    margin-bottom: 15px;
 }
 
 .post-item h2 {
@@ -140,332 +270,275 @@ h1 {
     font-weight: bold;
 }
 
-.comments-section {
+/* Du hattest das ja letztens neu gemacht und das sah schon am besten aus musst du nur umtauschen */
+.likeButton, .comment-toggle {
+    border: none;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.likeButton:hover, .comment-toggle:hover {
+    background-color: var(--hover-color);
+}
+
+.post-menu {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+.post-item {
+    position: relative;
+}
+
+.options-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: var(--primary-color);
+    cursor: pointer;
+
+    padding: 10px;
+    border-radius: 50%; /* Optional: rund */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.dropdown-menu {
+    display: none; /* bleibt für JS */
+    position: absolute;
+    top: 25px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: var(--box-shadow);
+    border-radius: 5px;
+    z-index: 1000;
+    min-width: 120px;
+
+    /* Animation */
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.dropdown-menu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-menu button {
+    width: 100%;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Abstand zwischen Icon und Text */
+    font-size: 14px;
+    color: #333;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f2f2f2;
+}
+
+.editButton {
+    color: #ffc107;
+    align-items: center;
+    margin: 5px;
+}
+.editButton:hover {
+    color: #e0a800;
+}
+.deleteButton {
+    color: #dc3545;
+    align-items: center;
+    margin: 5px;
+}
+.deleteButton:hover {
+    color: #c82333;
+}
+
+/************************************************
+ *  Comment-Section
+ ************************************************/
+
+ .comments-section {
     margin-top: 20px;
+    border-top: 2px solid #ddd;
 }
 
 .comment-form {
     margin-top: 20px;
-    font-size: 14px;
+    background-color: #f5f7fa;
+    border: 1px solid #cbd2da;
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.comment-toggle {
-    font-size: 18px;
-    background: #00274d;
-    border: none;
-    cursor: pointer;
-    color: #ffffff;
-    padding: 0;
-    margin-top: 8px;
-}
 
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
+.comment-item {
+    background-color: #ffffff;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
+    border-radius: 6px;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-button {
-    background-color: #37445d;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #556b8e;
-}
-
-/* Styling for the Modal (Popup) */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    background-color: white;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Styling for the Plus Button */
-.new-post-button {
-    top: 160px;
-    right: 20px;
-    background-color: #00274d;
-    color: white;
-    font-size: 24px;
-    padding: 4px 30px;
-    border-radius: 100px;
-    cursor: pointer;
-}
-
-#liComment {
-    display: block;
-    margin-top: 20px;
-}
-
-
-
-/* Media Queries */
-@media (max-width: 768px) {
-    .navbar ul {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .navbar ul li {
-        margin-bottom: 10px;
-    }
-
-    .name {
-        font-size: 24px;
-    }
-
-    button {
-        padding: 8px 16px;
-        font-size: 16px;
-    }
-
-    h1 {
-        font-size: 28px;
-    }
-
-    .posts-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    li {
-        display: block; /* Jeder Post wird als Block-Element angezeigt */
-        margin-bottom: 20px; /* Abstand zwischen den Posts */
-    }
-
-    .post-box {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 15px;
-        width: 100%; /* Boxen nutzen die volle Breite */
-        max-width: 1200px; /* Maximale Breite für große Bildschirme */
-        margin: 0 auto; /* Zentriert die Post-Box auf der Seite */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease;
-    }
-
-    .post-box:hover {
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .post-title {
-        font-size: 24px;
-        color: #333;
-        margin-bottom: 10px;
-        cursor: pointer;
-    }
-
-    .post-info {
-        font-size: 14px;
-        color: #777;
-        margin-top: 10px;
-    }
-
-    .post-content {
-        margin-top: 15px;
-    }
-
-    .modal-content {
-        width: 80%;
-    }
-}
-
-/* Action Buttons */
-.action-buttons-container {
+.comment-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: flex-end;
-    position: absolute;
-    right: 20px;
-    top: 120px; /* Fixed position below header */
-}
-
-.search-icon {
-    font-size: 24px;
-    cursor: pointer;
-    margin-right: 10px; /* Abstand zum Plus-Button */
-    }
-
-.search-container {
-position: relative;
-}
-
-
-.new-post-button {
-    margin-right: 10px;  /* Abstand zwischen Plus-Button und Suchknopf */
-    top: 120px;
-}
-
-
-
-.search-bar {
-    position: absolute;
-    top: 45px;
-    right: 0;
-    background-color: white;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    width: 310px;
-}
-
-.search-bar input {
-    padding: 5px;
-    width: 200px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-
-.search-bar button {
-    padding: 5px 10px;
-    background-color: #00274d;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.search-bar button:hover {
-    background-color: #3a3f50;
-}
-
-/* Content-Container */
-.content-container {
-    flex: 1; /* Füllt den Platz zwischen Header und Footer */
-    display: flex; /* Sidebar und Hauptinhalt nebeneinander */
-    margin-bottom: 20px; /* Platz für den Footer */
-    min-height: calc(100vh - 90px); /* Höhe des Inhalts ohne Header und Footer */
-
-}
-
-/* Sidebar */
-.sidebar {
-    width: 250px;
-    background-color: #f4f4f9;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    z-index: 1; /* Bringt die Sidebar in den Vordergrund */
-    overflow-y: auto; /* Ermöglicht Scrollen innerhalb der Sidebar */
-}
-
-/* Semester Styling */
-.sidebar h3 {
-    font-size: 16px;
-    color: #00274d;
-    margin-bottom: 10px;
-}
-
-/* Fächer Styling */
-.sidebar ul li a {
-    font-size: 14px;
-    color: #00274d;
-    text-decoration: none;
-    padding: 5px 10px;
-    display: inline-block;
-    border-radius: 5px;
-    background-color: #f4f4f9;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.sidebar ul li a:hover {
-    background-color: #d0e4f7;
-    color: #37445d;
-}
-
-/* List Styles */
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li {
-    margin-bottom: 10px;
-}
-
-/* Semester Section Styling */
-.semester-section {
-    margin-bottom: 20px;
-}
-
-.semester-section h3 {
-    font-size: 16px;
-    color: #00274d;
-    margin-bottom: 10px;
-}
-
-.semester-section ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.semester-section ul li,
-.course-list li {
     margin-bottom: 8px;
 }
 
-.semester-section ul li a,
-.course-list li a {
-    color: #37445d;
-    text-decoration: none;
+.comment-author {
+    font-weight: bold;
+    color: #00274d;
+}
+
+.comment-date {
+    font-size: 12px;
+    color: #888;
+}
+
+.comment-body {
     font-size: 14px;
-    transition: color 0.3s;
+    line-height: 1.4;
 }
 
-/* Hover Effects */
-.semester-section ul li a:hover,
-.course-list li a:hover {
-    color: #1a73e8; /* Adjusted to a unified blue tone */
+.comment-form textarea {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    resize: vertical;
+    margin-bottom: 10px;
 }
 
-/* Consistent Course List Styling */
-.course-list {
-    list-style-type: none;
-    padding: 0;
+.comment-form button {
+    background-color: #28a745;
+    color: white;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-@media (max-width: 1020px) {
-     .search-container {
-         margin-top: 35px;
-     }
+.comment-form button:hover {
+    background-color: #218838;
+}
+
+.hidden-comment {
+    display: none;
+}
+
+.load-more-comments-button {
+    background: none;
+    color: #555;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    margin-top: 5px;
+    text-decoration: underline;
+}
+
+.load-more-comments-button:hover {
+    color: #00274d;
+}
+
+
+
+
+#kommentierenButton {
+    background-color: #28a745;
+    color: white;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/************************************************
+ *  Post-Modal
+ ************************************************/
+
+ #newPostModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+#modal-content {
+    min-height: 250px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    text-align: center;
+}
+#modal-content input, #modal-content textarea, #modal-content select {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+#modal-content button {
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#speichernButton {
+    background-color: #007bff;
+    color: white;
+}
+#speichernButton:hover {
+    background-color: #0056b3;
+}
+#abbrechenButton {
+    background-color: #dc3545;
+    color: white;
+}
+#abbrechenButton:hover {
+    background-color: #c82333;
+}
+
+/************************************************
+ *  Media-Bereich
+ ************************************************/
+
+@media screen and (max-width: 768px) {
+    #forumMainContainer {
+        grid-template-columns: 1fr; /* Sidebar ausblenden */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .forumSidebar {
+        display: none; /* Sidebar ausblenden oder als Menü einbauen */
+    }
+
+    .forumHeader {
+        flex-direction: column;
+        text-align: center;
+    }
 }

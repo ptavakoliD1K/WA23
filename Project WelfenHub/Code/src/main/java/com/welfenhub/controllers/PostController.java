@@ -3,6 +3,7 @@ package com.welfenhub.controllers;
 import com.welfenhub.models.Post;
 import com.welfenhub.models.User;
 import com.welfenhub.models.Comment;
+import com.welfenhub.dto.CommentDTO;
 import com.welfenhub.services.PostService;
 import com.welfenhub.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,17 +73,34 @@ public class PostController {
     public Map<String, Object> addComment(@RequestParam Long postId, @RequestParam String content, Principal principal) {
         System.out.println("Request received: postId=" + postId + ", content=" + content);
         Map<String, Object> response = new HashMap<>();
+
         try {
             // Kommentar hinzufügen
             Comment newComment = postService.addComment(postId, content, principal.getName());
+
+            // Kommentar in DTO umwandeln
+            CommentDTO dto = new CommentDTO();
+            dto.setId(newComment.getId());
+            dto.setContent(newComment.getContent());
+            dto.setCreatedDate(newComment.getCreatedDate().toString());
+            dto.setUsername(newComment.getUser().getUsername());
+            dto.setPostId(newComment.getPost().getId());
+
+            // WebSocket senden
+            messagingTemplate.convertAndSend("/topic/comments", dto);
+
+            // REST-Antwort (falls du's brauchst)
             response.put("success", true);
-            response.put("comment", newComment);
+            response.put("comment", dto);
+
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", e.getMessage());
         }
+
         return response;
     }
+
 
     // Einzelnen Post und zugehörige Kommentare anzeigen
     @GetMapping("/{postId}")

@@ -6,6 +6,7 @@ import com.welfenhub.models.Comment;
 import com.welfenhub.repositories.UserRepository;
 import com.welfenhub.repositories.PostRepository;
 import com.welfenhub.repositories.CommentRepository;
+import com.welfenhub.models.Reaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,4 +118,29 @@ public class PostService {
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
+
+
+    @Transactional
+    public int toggleReaction(Long postId, User user) {
+        Post post = findById(postId);
+
+        // Prüfen, ob User schon geliked hat
+        Reaction existing = post.getReactions().stream()
+                .filter(r -> r.getUser().getId().equals(user.getId()))
+                .findFirst()
+                .orElse(null);
+
+        if (existing != null) {
+            post.getReactions().remove(existing);
+        } else {
+            Reaction newReaction = new Reaction();
+            newReaction.setPost(post);
+            newReaction.setUser(user);
+            post.getReactions().add(newReaction);
+        }
+
+        save(post); // persistieren
+        return post.getReactions().size();
+    }
+
 }

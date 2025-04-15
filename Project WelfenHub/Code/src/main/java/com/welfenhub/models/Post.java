@@ -124,4 +124,14 @@ public class Post {
     public int getReactionCount() {
         return reactions != null ? reactions.size() : 0;
     }
+
+    public void addReaction(Reaction reaction) {
+        reaction.setPost(this);
+        this.reactions.add(reaction);
+    }
+
+    public void removeReaction(Reaction reaction) {
+        this.reactions.remove(reaction);
+    }
+
 }
