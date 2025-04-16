@@ -213,11 +213,21 @@ ul, ol {
     color: #FFAE00;
 }
 
+.forumHeaderIcons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+
 #searchBar input {
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+
+
 
 .reset-search-button {
     display: inline-block;
@@ -657,3 +667,27 @@ ul, ol {
         text-align: center;
     }
 }
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    background-color: transparent;
+    color: white;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.sort-container select {
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: none;
+    background-color: white;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+

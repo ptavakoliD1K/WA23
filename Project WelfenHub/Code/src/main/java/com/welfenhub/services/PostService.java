@@ -155,4 +155,31 @@ public class PostService {
         return post.getReactions().size();
     }
 
+    public List<Post> getPostsByCourseSortedByLikes(String course) {
+        List<Post> posts = postRepository.findByCourse(course);
+
+        // Kommentare sortieren (neueste oben) UND Posts nach Like-Anzahl sortieren
+        for (Post post : posts) {
+            List<Comment> sorted = new ArrayList<>(post.getComments());
+            sorted.sort(Comparator.comparing(Comment::getCreatedDate).reversed());
+            post.setSortedComments(sorted);
+        }
+
+        posts.sort(Comparator.comparingInt((Post p) -> p.getReactions().size()).reversed());
+        return posts;
+    }
+
+    public List<Post> getPostsByCourseSortedByDate(String course) {
+        List<Post> posts = postRepository.findByCourse(course);
+        posts.sort(Comparator.comparing(Post::getCreatedAt).reversed()); // neueste zuerst
+
+        for (Post post : posts) {
+            List<Comment> sorted = new ArrayList<>(post.getComments());
+            sorted.sort(Comparator.comparing(Comment::getCreatedDate).reversed());
+            post.setSortedComments(sorted);
+        }
+
+        return posts;
+    }
+
 }

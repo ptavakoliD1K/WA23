@@ -261,5 +261,15 @@ function showAllComments(button) {
     button.style.display = "none";
 }
 
+function changeSortOrder() {
+    const sortValue = document.getElementById("sortSelect").value;
+    const url = new URL(window.location.href);
+    url.searchParams.set("sort", sortValue);
+    window.location.href = url.toString();
+}
+
+
+
+
 
 

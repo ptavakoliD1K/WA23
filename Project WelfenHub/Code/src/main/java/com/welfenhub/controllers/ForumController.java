@@ -36,21 +36,27 @@ public class ForumController {
     public String getPostsForCourse(@PathVariable String subject,
                                     @PathVariable int semester,
                                     @PathVariable String course,
+                                    @RequestParam(value = "sort", defaultValue = "created") String sort,
                                     Model model) {
-        // Lade die Posts zu dem Kurs und Semester
-        List<Post> posts = postService.getPostsByCourse(course);
+
+        List<Post> posts;
+        if ("likes".equals(sort)) {
+            posts = postService.getPostsByCourseSortedByLikes(course);
+        } else {
+            posts = postService.getPostsByCourseSortedByDate(course);
+        }
+
         model.addAttribute("posts", posts);
         model.addAttribute("course", course);
         model.addAttribute("semester", semester);
         model.addAttribute("subject", subject);
+        model.addAttribute("sort", sort); // für das Dropdown ausgewählt
+        model.addAttribute("coursesBySemester", getCoursesForSubject(subject));
 
-        // Lade die Fächer für das aktuelle Semester und alle Semester
-        Map<Integer, List<String>> coursesBySemester = getCoursesForSubject(subject);
-        model.addAttribute("sidepanelCourses", coursesBySemester.get(semester)); // Kurse des aktuellen Semesters
-        model.addAttribute("coursesBySemester", coursesBySemester); // Alle Semester
-
-        return "subject"; // Die Seite mit allen Posts zu einem bestimmten Kurs
+        return "subject";
     }
+
+
 
 
     private Map<Integer, List<String>> getCoursesForSubject(String subject) {
@@ -85,15 +91,21 @@ public class ForumController {
                                  @PathVariable String course,
                                  @RequestParam("query") String query,
                                  Model model) {
+
         List<Post> posts = postService.searchPostsByTitle(query);
         model.addAttribute("posts", posts);
         model.addAttribute("course", course);
         model.addAttribute("semester", semester);
         model.addAttribute("subject", subject);
 
-        // Return the correct template, for example, "subject" if it displays the posts
+        // ✅ Sidebar retten
+        Map<Integer, List<String>> coursesBySemester = getCoursesForSubject(subject);
+        model.addAttribute("sidepanelCourses", coursesBySemester.get(semester));
+        model.addAttribute("coursesBySemester", coursesBySemester);
+
         return "subject";
     }
+
 
     @GetMapping("/forum/{subject}/all")
     public String viewAllPostsBySubjectDescending(@PathVariable("subject") String subject, Model model) {

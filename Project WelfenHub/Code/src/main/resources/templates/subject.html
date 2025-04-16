@@ -35,11 +35,18 @@
         </div>
     </section>
 
-
     <section class="ForumBeitrag">
         <div class="forumHeader">
             <h2 class="forumTitle" id="currentforumTitle" th:text="${course}">Kursname</h2>
+
+
             <div class="forumHeaderIcons">
+                <div class="sort-container">
+                    <select id="sortSelect" onchange="changeSortOrder()">
+                        <option th:value="'created'" th:selected="${sort == 'created'}">Neueste zuerst</option>
+                        <option th:value="'likes'" th:selected="${sort == 'likes'}">Meiste Likes</option>
+                    </select>
+                </div>
                 <i class="fa-solid fa-magnifying-glass" title="Beitrag suchen" onclick="toggleSearch()"></i>
                 <i class="fa-solid fa-plus" title="Beitrag erstellen" onclick="openModal()"></i>
                 <div id="searchBar" class="styled-search-container" style="display: none;">
@@ -56,14 +63,13 @@
                         Suche zurücksetzen
                     </a>
                 </div>
-
             </div>
         </div>
+
 
         <div class="posts-list">
             <ul id="post-list">
                 <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
-
                     <div class="post-menu">
                         <div class="dropdown-menu">
                             <button class="actionButton editButton" th:onclick="'editPost(' + ${post.id} + ')'">
@@ -91,14 +97,13 @@
                                 th:each="comment, iterStat : ${post.sortedComments}"
                                 th:id="'comment-' + ${comment.id}"
                                 th:classappend="${iterStat.index >= 3} ? 'hidden-comment'">
-                            <div class="comment-header">
+                                <div class="comment-header">
                                     <span class="comment-author" th:text="${comment.user.username}">User</span>
                                     <span class="comment-date" th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Datum</span>
                                 </div>
                                 <div class="comment-body" th:text="${comment.content}">Kommentar-Inhalt</div>
                             </li>
                         </ul>
-
 
                         <div th:if="${#lists.size(post.comments) > 3}">
                             <button class="load-more-comments-button" onclick="showAllComments(this)">Ältere Kommentare anzeigen</button>
@@ -123,7 +128,7 @@
 <!-- Modal für neuen Post -->
 <div id="newPostModal" class="modal">
     <div id="postModalContent" class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal()">&times;</span>
         <h2 id="modalTitel">Neuen Post erstellen</h2>
         <form onsubmit="postNewPost(event)">
             <input type="hidden" name="subject" th:value="${subject}"/>
@@ -135,17 +140,18 @@
                 <button type="submit" class="modal-button save">Post erstellen</button>
                 <button type="button" class="modal-button cancel" onclick="closeModal()">Abbrechen</button>
             </div>
-
         </form>
     </div>
 </div>
 
 <div th:insert="fragments/footerResponsive.html"></div>
 
-<!-- WebSocket Client -->
+<!-- WebSocket + Haupt-JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/js/forum.js"></script>
+
+
 
 </body>
 </html>
