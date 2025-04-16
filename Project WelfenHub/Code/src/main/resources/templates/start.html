@@ -24,9 +24,8 @@
                 <img th:src="@{/images/StudiengangBWL.jpg}" alt="BWL" class="subject-image">
                 <span class="subject-text">BWL</span>
             </a>
-
-            <a th:href="@{/forum/bwl/all}" class="btn-show-all">
-                Alle BWL-Beiträge (neueste zuerst)
+            <a th:href="@{/forum/bwl/all}" class="see-all-icon" title="Alle Beiträge anzeigen">
+                <i class="fas fa-list-ul"></i>
             </a>
         </div>
 
@@ -35,9 +34,9 @@
                 <img th:src="@{/images/StudiengangWINF.jpg}" alt="Wirtschaftsinformatik" class="subject-image">
                 <span class="subject-text">Wirtschaftsinformatik</span>
             </a>
-
-            <a th:href="@{/forum/wirtschaftsinformatik/all}">Alle WiInf-Beiträge (neueste zuerst)</a>
-
+            <a th:href="@{/forum/wirtschaftsinformatik/all}" class="see-all-icon" title="Alle Beiträge anzeigen">
+                <i class="fas fa-list-ul"></i>
+            </a>
         </div>
 
         <div class="subject-box">
@@ -45,10 +44,11 @@
                 <img th:src="@{/images/Sonstiges2.png}" alt="Sonstiges" class="subject-image">
                 <span class="subject-text">Sonstiges</span>
             </a>
-
-            <a th:href="@{/forum/sonstiges/all}">Alle Sonstiges-Beiträge (neueste zuerst)</a>
-
+            <a th:href="@{/forum/sonstiges/all}" class="see-all-icon" title="Alle Beiträge anzeigen">
+                <i class="fas fa-list-ul"></i>
+            </a>
         </div>
+
     </div>
 </div>
 

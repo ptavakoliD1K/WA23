@@ -39,6 +39,9 @@ public class Post {
 
     private LocalDateTime createdAt;
 
+    @Transient
+    private List<Comment> sortedComments;
+
     // --- Getter & Setter ---
 
     public Long getId() {
@@ -132,6 +135,14 @@ public class Post {
 
     public void removeReaction(Reaction reaction) {
         this.reactions.remove(reaction);
+    }
+
+    public List<Comment> getSortedComments() {
+        return sortedComments;
+    }
+
+    public void setSortedComments(List<Comment> sortedComments) {
+        this.sortedComments = sortedComments;
     }
 
 }

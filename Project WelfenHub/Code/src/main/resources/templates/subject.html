@@ -65,9 +65,6 @@
                 <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
 
                     <div class="post-menu">
-                        <button class="options-button" onclick="toggleDropdown(this)">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
                         <div class="dropdown-menu">
                             <button class="actionButton editButton" th:onclick="'editPost(' + ${post.id} + ')'">
                                 <i class="fas fa-edit"></i> Bearbeiten
@@ -91,10 +88,10 @@
                         <h3>Kommentare:</h3>
                         <ul th:id="'comments-' + ${post.id}">
                             <li class="comment-item"
-                                th:each="comment, iterStat : ${post.comments}"
+                                th:each="comment, iterStat : ${post.sortedComments}"
                                 th:id="'comment-' + ${comment.id}"
                                 th:classappend="${iterStat.index >= 3} ? 'hidden-comment'">
-                                <div class="comment-header">
+                            <div class="comment-header">
                                     <span class="comment-author" th:text="${comment.user.username}">User</span>
                                     <span class="comment-date" th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Datum</span>
                                 </div>

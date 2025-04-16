@@ -11,6 +11,9 @@ import com.welfenhub.models.Reaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
+import java.util.Comparator;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,8 +32,17 @@ public class PostService {
     private UserRepository userRepository;
 
     public List<Post> getPostsByCourse(String course) {
-        return postRepository.findByCourse(course);
+        List<Post> posts = postRepository.findByCourse(course);
+
+        for (Post post : posts) {
+            List<Comment> sorted = new ArrayList<>(post.getComments());
+            sorted.sort(Comparator.comparing(Comment::getCreatedDate).reversed());
+            post.setSortedComments(sorted);
+        }
+
+        return posts;
     }
+
 
     public List<Post> getPostsBySubjectDescending(String subject) {
         return postRepository.findBySubjectOrderByCreatedAtDesc(subject);

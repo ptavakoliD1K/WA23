@@ -209,3 +209,16 @@ h2 {
 .subject-box:hover .subject-text {
     color: #556b8e;
 }
+
+.see-all-icon {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 18px;
+    color: #888;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.see-all-icon:hover {
+    color: var(--primary-color);
+    transform: scale(1.15);
+}
