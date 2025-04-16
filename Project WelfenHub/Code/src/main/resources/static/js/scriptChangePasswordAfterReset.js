@@ -38,7 +38,7 @@ newPasswordForm.addEventListener('submit', (e) => {
     formData.append('token', token);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', "http://localhost:8080/setNewPassword");
+    xhr.open('POST', "/setNewPassword");
 
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);

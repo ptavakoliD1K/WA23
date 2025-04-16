@@ -68,7 +68,7 @@ public class PasswordResetLinkService {
 
         passwordResetTokensRepository.insertToken(token, userId, dateTime.plusMinutes(15).format(formatter), 0);
 
-        return "http://localhost:8080/reset-password?token=" + token;
+        return "/reset-password?token=" + token;
     }
 
     /**

@@ -48,7 +48,7 @@ async function submitNewJob() {
     contentValue = content.value;
     urlValue = url.value;
 
-    const response = await fetch("http://localhost:8080/job/post", {
+    const response = await fetch("/job/post", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -87,7 +87,7 @@ async function submitNewJob() {
  */
 
 async function getEvents() {
-    const response = await fetch("http://localhost:8080/job/get", {
+    const response = await fetch("/job/get", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -127,7 +127,7 @@ async function getEvents() {
  */
 
 async function getToRemoveJobs() {
-    const response = await fetch("http://localhost:8080/job/get", {
+    const response = await fetch("/job/get", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -144,7 +144,7 @@ async function getToRemoveJobs() {
         divTitle.title = "Entfernen";
 
         divTitle.onclick = async function() {
-            const response = await fetch("http://localhost:8080/job/delete", {
+            const response = await fetch("/job/delete", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

@@ -48,7 +48,7 @@ formular.addEventListener('submit', (e) => {
     formData.append('text', textInput.value);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8080/evaluation');
+    xhr.open('POST', '/evaluation');
 
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);

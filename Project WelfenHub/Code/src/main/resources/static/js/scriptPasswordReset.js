@@ -14,7 +14,7 @@ resetForm.addEventListener('submit', (e) => {
     formData.append('email', emailInput.value);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost:8080/passwordResetProcess');
+    xhr.open('POST', '/passwordResetProcess');
 
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);

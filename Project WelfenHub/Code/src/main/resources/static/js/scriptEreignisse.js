@@ -91,7 +91,7 @@ function showEventToEdit() {
  */
 
 async function getToEditEvents() {
-    const response = await fetch("http://localhost:8080/event/get-event", {
+    const response = await fetch("/event/get-event", {
         method: "GET",
         headers: {
             "X-XSRF-TOKEN": csrfToken,
@@ -125,7 +125,7 @@ async function submitUpdate() {
     const textAreaValue = editTextarea.value;
     const editInputValue = editInput.value;
 
-    const response = await fetch("http://localhost:8080/event/update-event", {
+    const response = await fetch("/event/update-event", {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -151,7 +151,7 @@ async function submitUpdate() {
  */
 
 async function getToRemoveEvents() {
-    const response = await fetch("http://localhost:8080/event/get-event", {
+    const response = await fetch("/event/get-event", {
         method: "GET",
         headers: {
             "X-XSRF-TOKEN": csrfToken,
@@ -184,7 +184,7 @@ async function getToRemoveEvents() {
  */
 
 async function removeEventFunc(title, content, date) {
-    const response = await fetch("http://localhost:8080/event/remove", {
+    const response = await fetch("/event/remove", {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -227,7 +227,7 @@ async function publishEvent() {
         return;
     }
 
-    const response = await fetch("http://localhost:8080/event/post", {
+    const response = await fetch("/event/post", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -272,7 +272,7 @@ async function showPage() {
 
     pages.innerHTML = "";
 
-    const response = await fetch("http://localhost:8080/event/get-event-count", {
+    const response = await fetch("/event/get-event-count", {
         method: "GET",
         headers: {
             "X-XSRF-TOKEN": csrfToken,
@@ -295,7 +295,7 @@ async function showPage() {
 
             newsArea.innerHTML = "";
 
-            const response = await fetch(`http://localhost:8080/event/show?page=${encodeURIComponent(i)}`);
+            const response = await fetch(`/event/show?page=${encodeURIComponent(i)}`);
 
             const data = await response.json();
 
@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', showPage);
  */
 
 async function showFirstPage() {
-    const response = await fetch(`http://localhost:8080/event/show?page=1`);
+    const response = await fetch(`/event/show?page=1`);
 
     const data = await response.json();
 
