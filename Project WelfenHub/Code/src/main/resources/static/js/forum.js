@@ -21,31 +21,31 @@ function connectWebSocket() {
             addCommentToPage(comment);
         });
 
-        stompClient.subscribe('/topic/reactions', function (message) {
-            let reactionUpdate = JSON.parse(message.body);
-            updateReactionCountOnPage(reactionUpdate.postId, reactionUpdate.reactionCount);
-        });
     });
 }
 
-// ⬆️ Reaktion aktualisieren
-function toggleReaction(postId) {
-    stompClient.send("/app/reactToPost", {}, JSON.stringify({ postId: postId }));
-}
 
-function updateReactionCountOnPage(postId, newCount) {
+
+function updateReactionCountOnPage(postId, newCount, likedByUser) {
     const span = document.getElementById(`reaction-count-${postId}`);
     if (span) {
         span.textContent = newCount;
     }
+
+    const heartIcon = document.querySelector(`#post-${postId} .fa-heart`);
+    if (heartIcon) {
+        if (likedByUser) {
+            heartIcon.classList.add("liked-heart");
+        } else {
+            heartIcon.classList.remove("liked-heart");
+        }
+    }
 }
 
-// 📝 Kommentar senden
 function postComment(event, postId) {
     event.preventDefault();
     const content = document.getElementById(`comment-content-${postId}`).value;
 
-    // per REST senden, nicht WebSocket!
     fetch('/posts/comment', {
         method: 'POST',
         headers: {
@@ -57,8 +57,6 @@ function postComment(event, postId) {
     document.getElementById(`comment-content-${postId}`).value = "";
 }
 
-
-// ➕ Post erstellen
 function postNewPost(event) {
     event.preventDefault();
 
@@ -74,7 +72,6 @@ function postNewPost(event) {
     closeModal();
 }
 
-// 🔽 Kommentare ein-/ausblenden
 function toggleComments(button) {
     const commentsSection = button.nextElementSibling;
     const commentList = commentsSection.querySelector("ul");
@@ -84,11 +81,9 @@ function toggleComments(button) {
     const isVisible = commentsSection.style.display === "block";
 
     if (isVisible) {
-        // Zuklappen
         commentsSection.style.display = "none";
         button.textContent = "▼";
 
-        // Reset auf Standardzustand beim nächsten Öffnen
         allComments.forEach((comment, index) => {
             if (index >= 3) {
                 comment.classList.add("hidden-comment");
@@ -97,17 +92,14 @@ function toggleComments(button) {
             }
         });
 
-        // Button neu einblenden, wenn mehr als 3 Kommentare da sind
         if (loadMoreBtn) {
             loadMoreBtn.style.display = allComments.length > 3 ? "block" : "none";
         }
 
     } else {
-        // Aufklappen
         commentsSection.style.display = "block";
         button.textContent = "▲";
 
-        // Nur 3 Kommentare zeigen
         allComments.forEach((comment, index) => {
             if (index >= 3) {
                 comment.classList.add("hidden-comment");
@@ -116,17 +108,12 @@ function toggleComments(button) {
             }
         });
 
-        // Button sichtbar machen (wenn nötig)
         if (loadMoreBtn) {
             loadMoreBtn.style.display = allComments.length > 3 ? "block" : "none";
         }
     }
 }
 
-
-
-
-// ➕ Dynamischen Post hinzufügen
 function addPostToPage(post) {
     let postList = document.getElementById("post-list");
     let newPostItem = document.createElement("li");
@@ -153,7 +140,8 @@ function addPostToPage(post) {
         <p>Gepostet von ${post.user.username} am ${post.createdAt.split("T")[0]}</p>
 
         <button class="actionButton likeButton" onclick="toggleReaction(${post.id})">
-            <i class="fa-solid fa-heart"></i> <span id="reaction-count-${post.id}">${post.reactionCount || 0}</span>
+            <i class="fa-solid fa-heart ${post.likedByUser ? 'liked-heart' : ''}"></i>
+            <span id="reaction-count-${post.id}">${post.reactionCount || 0}</span>
         </button>
 
         <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
@@ -172,15 +160,10 @@ function addPostToPage(post) {
     postList.prepend(newPostItem);
 }
 
-// 💬 Dynamisch Kommentar hinzufügen
 function addCommentToPage(comment) {
-    console.log("Looking for comment list:", `comments-${comment.postId}`);
-    console.log("Found:", document.getElementById(`comments-${comment.postId}`));
-
     const commentList = document.getElementById(`comments-${comment.postId}`);
     if (!commentList) return;
 
-    // Neues Kommentar-Element erstellen
     const newCommentItem = document.createElement("li");
     newCommentItem.id = `comment-${comment.id}`;
     newCommentItem.className = "comment-item";
@@ -193,14 +176,11 @@ function addCommentToPage(comment) {
         <div class="comment-body">${comment.content}</div>
     `;
 
-    // Kommentar anhängen
     commentList.appendChild(newCommentItem);
 
-    // Alle Kommentare zählen
     const comments = commentList.querySelectorAll(".comment-item");
     const loadMoreButton = commentList.parentElement.querySelector(".load-more-comments-button");
 
-    // Alle ausblenden, außer die letzten 3
     comments.forEach((c, i) => {
         if (i < comments.length - 3) {
             c.classList.add("hidden-comment");
@@ -209,21 +189,16 @@ function addCommentToPage(comment) {
         }
     });
 
-    // Button aktualisieren
     if (comments.length > 3 && loadMoreButton) {
         loadMoreButton.style.display = "block";
     }
 }
 
-
-
-// 🔍 Suchleiste
 function toggleSearch() {
     const searchBar = document.getElementById("searchBar");
     searchBar.style.display = searchBar.style.display === "none" ? "block" : "none";
 }
 
-// 🔓 Modal öffnen/schließen
 function openModal() {
     document.getElementById("newPostModal").style.display = "flex";
 }
@@ -231,7 +206,6 @@ function closeModal() {
     document.getElementById("newPostModal").style.display = "none";
 }
 
-// ⬇️ Dropdown-Menü anzeigen
 function toggleDropdown(button) {
     const dropdown = button.nextElementSibling;
     dropdown.classList.toggle("show");
@@ -267,9 +241,3 @@ function changeSortOrder() {
     url.searchParams.set("sort", sortValue);
     window.location.href = url.toString();
 }
-
-
-
-
-
-

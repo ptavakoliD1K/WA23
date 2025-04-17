@@ -30,6 +30,9 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Transient
+    private boolean likedByUser;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
@@ -144,5 +147,14 @@ public class Post {
     public void setSortedComments(List<Comment> sortedComments) {
         this.sortedComments = sortedComments;
     }
+
+    public boolean isLikedByUser() {
+        return likedByUser;
+    }
+
+    public void setLikedByUser(boolean likedByUser) {
+        this.likedByUser = likedByUser;
+    }
+
 
 }

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,33 +30,41 @@ public class ReactionService {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
-
     @Transactional
-    public int toggleReaction(Long postId, String username) {
+    public Map<String, Object> toggleReaction(Long postId, String username) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post nicht gefunden"));
         User user = userRepo.findByUsername(username);
 
         Optional<Reaction> existing = reactionRepo.findByUserAndPost(user, post);
+        boolean likedByUser;
+
         if (existing.isPresent()) {
             reactionRepo.delete(existing.get());
+            likedByUser = false;
         } else {
             Reaction reaction = new Reaction();
             reaction.setUser(user);
             reaction.setPost(post);
             reactionRepo.save(reaction);
+
+            // Jetzt reload nach Save → garantiert aktuell
+            likedByUser = true;
         }
 
+        // Reaktionen neu laden, um korrekten Count zu erhalten
         int newCount = reactionRepo.findByPost(post).size();
 
-        // 🔴 WebSocket-Broadcast an alle
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("postId", postId);
-        payload.put("reactionCount", newCount);
+        // 🔴 WebSocket für Live-Updates senden
+        Map<String, Object> wsPayload = new HashMap<>();
+        wsPayload.put("postId", postId);
+        wsPayload.put("reactionCount", newCount);
+        messagingTemplate.convertAndSend("/topic/reactions", wsPayload);
 
-        messagingTemplate.convertAndSend("/topic/reactions", payload);
-
-        return newCount;
+        // ✅ REST-Antwort zurückgeben
+        Map<String, Object> result = new HashMap<>();
+        result.put("reactionCount", newCount);
+        result.put("likedByUser", likedByUser);
+        return result;
     }
-
 }

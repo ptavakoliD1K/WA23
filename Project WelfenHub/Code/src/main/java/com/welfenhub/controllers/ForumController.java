@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 import java.util.List;
 import java.util.TreeMap;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.welfenhub.models.Reaction;
 
 @Controller
 public class ForumController {
@@ -31,7 +34,6 @@ public class ForumController {
         return "semester-overview";
     }
 
-    // Zeige alle Posts für ein bestimmtes Fach und Semester
     @GetMapping("/forum/{subject}/{semester}/course/{course}")
     public String getPostsForCourse(@PathVariable String subject,
                                     @PathVariable int semester,
@@ -46,15 +48,27 @@ public class ForumController {
             posts = postService.getPostsByCourseSortedByDate(course);
         }
 
+        // 🔒 Aktuell eingeloggten Usernamen holen
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String currentUsername = auth.getName();
+
+        // 🔁 likedByUser setzen
+        for (Post post : posts) {
+            boolean liked = post.getReactions().stream()
+                    .anyMatch(r -> r.getUser().getUsername().equals(currentUsername));
+            post.setLikedByUser(liked);
+        }
+
         model.addAttribute("posts", posts);
         model.addAttribute("course", course);
         model.addAttribute("semester", semester);
         model.addAttribute("subject", subject);
-        model.addAttribute("sort", sort); // für das Dropdown ausgewählt
+        model.addAttribute("sort", sort);
         model.addAttribute("coursesBySemester", getCoursesForSubject(subject));
 
         return "subject";
     }
+
 
 
 

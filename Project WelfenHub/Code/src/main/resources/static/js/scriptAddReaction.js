@@ -1,12 +1,23 @@
-
 function toggleReaction(postId) {
     fetch(`/api/reactions/${postId}`, {
         method: 'POST'
     })
-    .then(res => res.json())
+    .then(response => response.json())
     .then(data => {
-        document.getElementById(`reaction-count-${postId}`).textContent = data.reactionCount;
-    })
-    .catch(err => console.error("Fehler bei der Reaktion:", err));
-}
+        const countSpan = document.getElementById(`reaction-count-${postId}`);
+        const heartIcon = document.getElementById(`heart-icon-${postId}`);
 
+        if (countSpan) countSpan.textContent = data.reactionCount;
+
+        if (heartIcon) {
+            if (data.likedByUser === true) {
+                heartIcon.classList.add("liked-heart");
+            } else {
+                heartIcon.classList.remove("liked-heart");
+            }
+        }
+    })
+    .catch(error => {
+        alert('Fehler beim Liken: ' + error);
+    });
+}

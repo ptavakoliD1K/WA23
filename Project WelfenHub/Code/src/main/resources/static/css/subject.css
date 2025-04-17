@@ -689,5 +689,17 @@ ul, ol {
     cursor: pointer;
 }
 
+.fa-heart {
+    color: #888;
+    transition: color 0.2s;
+}
+
+.liked-heart {
+    color: red !important;
+}
+
+
+
+
 
 

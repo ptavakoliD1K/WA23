@@ -20,11 +20,12 @@ public class ReactionController {
     public ResponseEntity<?> reactToPost(@PathVariable Long postId, Principal principal) {
         String username = principal.getName();
         try {
-            int count = reactionService.toggleReaction(postId, username);
+            Map<String, Object> result = reactionService.toggleReaction(postId, username);
 
             Map<String, Object> response = new HashMap<>();
             response.put("postId", postId);
-            response.put("reactionCount", count);
+            response.put("reactionCount", result.get("reactionCount"));
+            response.put("likedByUser", result.get("likedByUser"));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Fehler: " + e.getMessage());

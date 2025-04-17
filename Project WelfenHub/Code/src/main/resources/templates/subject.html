@@ -70,23 +70,17 @@
         <div class="posts-list">
             <ul id="post-list">
                 <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
-                    <div class="post-menu">
-                        <div class="dropdown-menu">
-                            <button class="actionButton editButton" th:onclick="'editPost(' + ${post.id} + ')'">
-                                <i class="fas fa-edit"></i> Bearbeiten
-                            </button>
-                            <button class="actionButton deleteButton" th:onclick="'deletePost(' + ${post.id} + ')'">
-                                <i class="fas fa-trash-alt"></i> Löschen
-                            </button>
-                        </div>
-                    </div>
+
 
                     <h2 th:text="${post.title}">Post Title</h2>
                     <p th:text="${post.content}">Post Content</p>
                     <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Datum</span></p>
 
                     <button class="actionButton likeButton" th:onclick="'toggleReaction(' + ${post.id} + ')'">
-                        <i class="fa-solid fa-heart"></i> <span th:id="'reaction-count-' + ${post.id}" th:text="${post.reactionCount}">0</span>
+                        <i class="fa-solid fa-heart"
+                           th:id="'heart-icon-' + ${post.id}"
+                           th:classappend="${post.likedByUser} ? ' liked-heart' : ''"></i>
+                        <span th:id="'reaction-count-' + ${post.id}" th:text="${post.reactionCount}">0</span>
                     </button>
 
                     <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
@@ -150,6 +144,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="/js/forum.js"></script>
+<script src="/js/scriptAddReaction.js"></script>
+
 
 
 

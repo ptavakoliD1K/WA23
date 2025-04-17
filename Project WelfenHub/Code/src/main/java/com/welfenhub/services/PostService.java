@@ -7,17 +7,15 @@ import com.welfenhub.repositories.UserRepository;
 import com.welfenhub.repositories.PostRepository;
 import com.welfenhub.repositories.CommentRepository;
 import com.welfenhub.models.Reaction;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.ArrayList;
 import java.util.Comparator;
-
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {
@@ -31,25 +29,44 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByUsername(authentication.getName());
+    }
+
     public List<Post> getPostsByCourse(String course) {
+        User currentUser = getCurrentUser();
         List<Post> posts = postRepository.findByCourse(course);
 
         for (Post post : posts) {
             List<Comment> sorted = new ArrayList<>(post.getComments());
             sorted.sort(Comparator.comparing(Comment::getCreatedDate).reversed());
             post.setSortedComments(sorted);
+            post.setLikedByUser(post.getReactions().stream()
+                    .anyMatch(reaction -> reaction.getUser().getId().equals(currentUser.getId())));
         }
 
         return posts;
     }
 
-
     public List<Post> getPostsBySubjectDescending(String subject) {
-        return postRepository.findBySubjectOrderByCreatedAtDesc(subject);
+        User currentUser = getCurrentUser();
+        List<Post> posts = postRepository.findBySubjectOrderByCreatedAtDesc(subject);
+        for (Post post : posts) {
+            post.setLikedByUser(post.getReactions().stream()
+                    .anyMatch(r -> r.getUser().getId().equals(currentUser.getId())));
+        }
+        return posts;
     }
 
     public List<Post> getAllPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc();
+        User currentUser = getCurrentUser();
+        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
+        for (Post post : posts) {
+            post.setLikedByUser(post.getReactions().stream()
+                    .anyMatch(r -> r.getUser().getId().equals(currentUser.getId())));
+        }
+        return posts;
     }
 
     public long getTotalPostCount() {
@@ -82,7 +99,13 @@ public class PostService {
     }
 
     public List<Post> searchPostsByTitle(String query) {
-        return postRepository.findByTitleContainingIgnoreCase(query);
+        User currentUser = getCurrentUser();
+        List<Post> posts = postRepository.findByTitleContainingIgnoreCase(query);
+        for (Post post : posts) {
+            post.setLikedByUser(post.getReactions().stream()
+                    .anyMatch(r -> r.getUser().getId().equals(currentUser.getId())));
+        }
+        return posts;
     }
 
     public Post getLatestPostForSubject(String subject) {
@@ -101,7 +124,6 @@ public class PostService {
         return postRepository.countPostsByMonth(start, end);
     }
 
-    // Kommentare
     public Comment addComment(Long postId, String content, String username) {
         Post post = findById(postId);
         User user = userRepository.findByUsername(username);
@@ -131,12 +153,10 @@ public class PostService {
         commentRepository.deleteById(commentId);
     }
 
-
     @Transactional
     public int toggleReaction(Long postId, User user) {
         Post post = findById(postId);
 
-        // Prüfen, ob User schon geliked hat
         Reaction existing = post.getReactions().stream()
                 .filter(r -> r.getUser().getId().equals(user.getId()))
                 .findFirst()
@@ -151,18 +171,20 @@ public class PostService {
             post.getReactions().add(newReaction);
         }
 
-        save(post); // persistieren
+        save(post);
         return post.getReactions().size();
     }
 
     public List<Post> getPostsByCourseSortedByLikes(String course) {
+        User currentUser = getCurrentUser();
         List<Post> posts = postRepository.findByCourse(course);
 
-        // Kommentare sortieren (neueste oben) UND Posts nach Like-Anzahl sortieren
         for (Post post : posts) {
             List<Comment> sorted = new ArrayList<>(post.getComments());
             sorted.sort(Comparator.comparing(Comment::getCreatedDate).reversed());
             post.setSortedComments(sorted);
+            post.setLikedByUser(post.getReactions().stream()
+                    .anyMatch(r -> r.getUser().getId().equals(currentUser.getId())));
         }
 
         posts.sort(Comparator.comparingInt((Post p) -> p.getReactions().size()).reversed());
@@ -170,16 +192,18 @@ public class PostService {
     }
 
     public List<Post> getPostsByCourseSortedByDate(String course) {
+        User currentUser = getCurrentUser();
         List<Post> posts = postRepository.findByCourse(course);
-        posts.sort(Comparator.comparing(Post::getCreatedAt).reversed()); // neueste zuerst
+        posts.sort(Comparator.comparing(Post::getCreatedAt).reversed());
 
         for (Post post : posts) {
             List<Comment> sorted = new ArrayList<>(post.getComments());
             sorted.sort(Comparator.comparing(Comment::getCreatedDate).reversed());
             post.setSortedComments(sorted);
+            post.setLikedByUser(post.getReactions().stream()
+                    .anyMatch(r -> r.getUser().getId().equals(currentUser.getId())));
         }
 
         return posts;
     }
-
 }
