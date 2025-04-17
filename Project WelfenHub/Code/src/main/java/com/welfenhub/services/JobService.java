@@ -25,11 +25,11 @@ public class JobService {
      * @param url
      */
 
-    public void saveJob(String title, String content, String url) {
+    public void saveJob(String title, String content, String url, String color) {
         LocalDateTime creationDate = LocalDateTime.now();
-
-        jobRepository.saveJob(title, content, url, creationDate.toString());
+        jobRepository.saveJob(title, content, url, creationDate.toString(), color);
     }
+
 
     /**
      * gets all jobs

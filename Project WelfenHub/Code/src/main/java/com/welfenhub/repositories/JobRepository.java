@@ -14,10 +14,14 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO job_inserate (title, content, url, date) VALUES (:title, :content, :url, :date)", nativeQuery = true)
-    void saveJob(@Param("title") String title, @Param("content") String content, @Param("url") String url, @Param("date") String date);
+    @Query(value = "INSERT INTO job_inserate (title, content, url, date, color) VALUES (:title, :content, :url, :date, :color)", nativeQuery = true)
+    void saveJob(@Param("title") String title,
+                 @Param("content") String content,
+                 @Param("url") String url,
+                 @Param("date") String date,
+                 @Param("color") String color);
 
-    @Query("SELECT new com.welfenhub.dto.JobDTO(j.title, j.content, j.url) FROM Job j ORDER BY j.id DESC")
+    @Query("SELECT new com.welfenhub.dto.JobDTO(j.title, j.content, j.url, j.color) FROM Job j ORDER BY j.id DESC")
     List<JobDTO> getJobs();
 
     @Modifying

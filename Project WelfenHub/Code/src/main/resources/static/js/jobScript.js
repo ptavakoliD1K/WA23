@@ -4,29 +4,17 @@ const removePopUp = document.getElementById('removePopUp');
 const title = document.getElementById('title');
 const content = document.getElementById('content');
 const url = document.getElementById('url');
+const color = document.getElementById('color'); // 🔄 NEU
 const status = document.getElementById('status');
 
 const jobArea = document.getElementById('jobArea');
-
 const toRemoveList = document.getElementById('toRemoveList');
 
 let csrfToken = getCsrfToken();
 
-/**
- * shows pop up to create job
- */
-
 function showCreate() {
-    if (createPopUp.style.display === "none") {
-        createPopUp.style.display = "block";
-    } else {
-        createPopUp.style.display = "none";
-    }
+    createPopUp.style.display = (createPopUp.style.display === "none") ? "block" : "none";
 }
-
-/**
- * shows pop up to remove job
- */
 
 function showRemove() {
     if (removePopUp.style.display === "none") {
@@ -38,15 +26,11 @@ function showRemove() {
     }
 }
 
-/**
- * submits new job to backend
- * @returns {Promise<void>}
- */
-
 async function submitNewJob() {
-    titleValue = title.value;
-    contentValue = content.value;
-    urlValue = url.value;
+    const titleValue = title.value;
+    const contentValue = content.value;
+    const urlValue = url.value;
+    const colorValue = color.value; // 🔄 NEU
 
     const response = await fetch("/job/post", {
         method: "POST",
@@ -57,12 +41,13 @@ async function submitNewJob() {
         body: JSON.stringify({
             "title": titleValue,
             "content": contentValue,
-            "url": urlValue
+            "url": urlValue,
+            "color": colorValue // 🔄 NEU
         }),
     });
 
     if (response.status === 200) {
-        status.textContent = "Das Inserat wurde erfolgreich erstellt"
+        status.textContent = "Das Inserat wurde erfolgreich erstellt";
         status.style.color = "green";
         await wait(2000);
         status.innerHTML = "";
@@ -81,11 +66,6 @@ async function submitNewJob() {
     await getEvents();
 }
 
-/**
- * gets events from backend
- * @returns {Promise<void>}
- */
-
 async function getEvents() {
     const response = await fetch("/job/get", {
         method: "GET",
@@ -93,13 +73,19 @@ async function getEvents() {
             "Content-Type": "application/json",
             "X-XSRF-TOKEN": csrfToken
         }
-    })
+    });
 
     const data = await response.json();
 
     for (let i = 0; i < data.length; i++) {
         const divJob = document.createElement('div');
         divJob.className = "jobContainer";
+
+        const color = data[i].color || "#cccccc"; // Fallback wenn leer
+
+        // Setze Farbe als Rand und leicht getönten Hintergrund
+        divJob.style.borderColor = color;
+        divJob.style.backgroundColor = hexToRGBA(color, 0.07); // 7% Deckkraft
 
         const divTitle = document.createElement("h5");
         divTitle.className = "jobTitle";
@@ -113,6 +99,7 @@ async function getEvents() {
         divJobUrl.href = data[i].url;
         divJobUrl.className = "divUrl";
         divJobUrl.textContent = data[i].url;
+        divJobUrl.target = "_blank";
 
         divJob.appendChild(divTitle);
         divJob.appendChild(divJobContent);
@@ -121,10 +108,12 @@ async function getEvents() {
     }
 }
 
-/**
- * gets job list for remove popup
- * @returns {Promise<void>}
- */
+function hexToRGBA(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 async function getToRemoveJobs() {
     const response = await fetch("/job/get", {
@@ -133,7 +122,7 @@ async function getToRemoveJobs() {
             "Content-Type": "application/json",
             "X-XSRF-TOKEN": csrfToken
         }
-    })
+    });
 
     const data = await response.json();
 
@@ -143,8 +132,8 @@ async function getToRemoveJobs() {
         divTitle.textContent = data[i].title;
         divTitle.title = "Entfernen";
 
-        divTitle.onclick = async function() {
-            const response = await fetch("/job/delete", {
+        divTitle.onclick = async function () {
+            await fetch("/job/delete", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -155,50 +144,29 @@ async function getToRemoveJobs() {
                     "content": data[i].content,
                     "url": data[i].url
                 }),
-            })
+            });
 
             toRemoveList.innerHTML = "";
-
             await getToRemoveJobs();
-
             jobArea.innerHTML = "";
-
             await getEvents();
-
-        }
+        };
 
         toRemoveList.appendChild(divTitle);
     }
 }
 
-document.addEventListener('DOMContentLoaded', getEvents);
-
-/**
- * gets csrf token
- * @returns {string}
- */
-
 function getCsrfToken() {
     const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
-    const token = match ? match[1] : null;
-    return token;
+    return match ? match[1] : null;
 }
-
-/**
- * pauses function
- * @param ms
- * @returns {Promise<unknown>}
- */
 
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * event listener
- */
-
 document.addEventListener("DOMContentLoaded", function () {
     createPopUp.style.display = "none";
     removePopUp.style.display = "none";
+    getEvents();
 });

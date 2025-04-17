@@ -25,8 +25,9 @@ public class JobController {
 
     @PostMapping("/post")
     public void postJob(@RequestBody JobDTO jobDTO) {
-        jobService.saveJob(jobDTO.getTitle(), jobDTO.getContent(), jobDTO.getUrl());
+        jobService.saveJob(jobDTO.getTitle(), jobDTO.getContent(), jobDTO.getUrl(), jobDTO.getColor());
     }
+
 
     /**
      * get job

@@ -22,6 +22,9 @@ public class Job {
     @Column(name = "date")
     private String date;
 
+    @Column(name = "color")
+    private String color;
+
     public Job() {}
 
     public Job(Long id, String title, String content, String url, String date) {
@@ -70,5 +73,13 @@ public class Job {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

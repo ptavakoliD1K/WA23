@@ -28,8 +28,10 @@
     <div id="createPopUp">
         <span class="close-button" onclick="showCreate()">&times;</span>
         <h4>Stellenausschreibung erstellen</h4>
+        <label for="color">Farbe wählen:</label>
+        <input type="color" id="color" value="#ffffff">
         <input type="text" id="title" placeholder="Titel">
-        <textarea id="content" placeholder="Inhalt" maxlength="600"></textarea>
+        <textarea id="content" placeholder="Inhalt" maxlength="6000"></textarea>
         <input type="url" id="url" placeholder="Vollständige URL">
         <button onclick="submitNewJob()">Stellenausschreibung veröffentlichen</button>
         <p id="status"></p>

@@ -130,15 +130,62 @@ h4 {
 }
 
 .jobContainer {
-    margin-top: 20px;
-    width: 400px;
+    margin: 20px 10px;
+    width: 380px;
     height: 450px;
-    border-radius: 0.8rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
     background-color: #fff;
-    text-align: center;
-    padding-bottom: 15px;
+    text-align: left;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-top: 10px solid #ccc; /* wird dynamisch überschrieben */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
+.jobContainer:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.jobTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.divContent {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    max-height: 250px; /* 👈 Beschränkt die Höhe des Texts */
+    overflow-y: auto;
+    padding-right: 8px;
+    padding-left: 8px;
+    scrollbar-width: thin; /* für Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.divUrl {
+    color: #0056b3;
+    text-decoration: underline;
+    word-break: break-word;
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+
+.divUrl:hover {
+    color: #003d80;
+}
+
 
 h5 {
     font-size: 1.5rem;
@@ -148,6 +195,15 @@ h5 {
     word-wrap: break-word;
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.divContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.divContent::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
 }
 
 #toRemoveList {
