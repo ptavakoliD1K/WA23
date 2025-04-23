@@ -4,7 +4,8 @@ const removePopUp = document.getElementById('removePopUp');
 const title = document.getElementById('title');
 const content = document.getElementById('content');
 const url = document.getElementById('url');
-const color = document.getElementById('color'); // 🔄 NEU
+const colorPicker = document.getElementById('colorPicker');
+const colorText = document.getElementById('colorText');
 const status = document.getElementById('status');
 
 const jobArea = document.getElementById('jobArea');
@@ -13,8 +14,21 @@ const toRemoveList = document.getElementById('toRemoveList');
 let csrfToken = getCsrfToken();
 
 function showCreate() {
-    createPopUp.style.display = (createPopUp.style.display === "none") ? "block" : "none";
+    if (createPopUp.style.display === "none" || createPopUp.style.display === "") {
+        // Popup öffnen und Felder leeren
+        createPopUp.style.display = "block";
+        title.value = "";
+        content.value = "";
+        url.value = "";
+        colorPicker.value = "#ffffff";
+        colorText.value = "#ffffff";
+        status.textContent = "";
+    } else {
+        // Popup schließen
+        createPopUp.style.display = "none";
+    }
 }
+
 
 function showRemove() {
     if (removePopUp.style.display === "none") {
@@ -26,11 +40,21 @@ function showRemove() {
     }
 }
 
+colorPicker.addEventListener('input', () => {
+    colorText.value = colorPicker.value;
+});
+
+colorText.addEventListener('input', () => {
+    if (/^#([A-Fa-f0-9]{6})$/.test(colorText.value)) {
+        colorPicker.value = colorText.value;
+    }
+});
+
 async function submitNewJob() {
     const titleValue = title.value;
     const contentValue = content.value;
     const urlValue = url.value;
-    const colorValue = color.value; // 🔄 NEU
+    const colorValue = colorText.value;
 
     const response = await fetch("/job/post", {
         method: "POST",
@@ -42,7 +66,7 @@ async function submitNewJob() {
             "title": titleValue,
             "content": contentValue,
             "url": urlValue,
-            "color": colorValue // 🔄 NEU
+            "color": colorValue
         }),
     });
 
@@ -81,11 +105,10 @@ async function getEvents() {
         const divJob = document.createElement('div');
         divJob.className = "jobContainer";
 
-        const color = data[i].color || "#cccccc"; // Fallback wenn leer
+        const color = data[i].color || "#cccccc";
 
-        // Setze Farbe als Rand und leicht getönten Hintergrund
         divJob.style.borderColor = color;
-        divJob.style.backgroundColor = hexToRGBA(color, 0.07); // 7% Deckkraft
+        divJob.style.backgroundColor = hexToRGBA(color, 0.07);
 
         const divTitle = document.createElement("h5");
         divTitle.className = "jobTitle";
