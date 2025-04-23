@@ -22,7 +22,7 @@
                 <li><a th:href="@{/feedback}">Feedback</a></li>
                 <li><a th:href="@{/jobs}">Jobs</a></li>
                 <li sec:authorize="hasRole('ADMIN')">
-                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <form th:action="@{/logout}" method="post" id="formLogout">
