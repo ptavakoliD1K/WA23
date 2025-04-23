@@ -15,15 +15,13 @@ body {
     flex-direction: column;
     justify-content: space-between;
     background: #f4f4f9;
-
 }
 
+/* NAVBAR */
 .navbar {
     background: #00274d;
-    padding: 15px 20px;
+    padding: 30px 20px;
     overflow: hidden;
-    padding-top: 30px;
-    padding-bottom: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -62,7 +60,6 @@ li a {
     font-size: 20px;
     transition: color 0.3s;
     cursor: pointer;
-
 }
 
 button {
@@ -79,12 +76,12 @@ button {
 }
 
 button:hover {
-    background-color: #abadb0; /* Background color on hover */
-    transform: scale(1.05); /* Slightly enlarge button on hover */
-    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Semester Overview Container */
+/* SEMESTER OVERVIEW */
 .semester-overview-container {
     display: flex;
     flex-direction: column;
@@ -92,13 +89,50 @@ button:hover {
     background-color: #f4f4f9;
 }
 
+/* HEADER ROW MIT BUTTON + TITEL */
+.semester-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* linksbündig für Button + Titel */
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 1rem;
+    position: relative;
+}
+
+.semester-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: #00274d;
+    margin: 0 auto; /* damit zentriert trotz flex-start */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.zurueck-button {
+    padding: 0.4rem 0.7rem;
+    font-size: 1.2rem;
+    background-color: #f0f0f0;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+    margin-left: 0; /* wichtig: ganz an den Rand */
+}
+
+.zurueck-button:hover {
+    background-color: #ddd;
+}
+
+/* SEMESTER + KURSE */
 .semester-section {
     display: flex;
     flex-direction: column;
     margin-bottom: 30px;
 }
 
-/* Course List Styles */
 .course-list {
     display: flex;
     justify-content: space-between;
@@ -137,7 +171,7 @@ button:hover {
     font-weight: bold;
 }
 
-/* Latest Post Section Styles */
+/* NEUSTER POST (OPTIONAL) */
 .latest-post {
     width: 35%;
     background-color: #fdfdfd;
@@ -157,7 +191,7 @@ button:hover {
     margin: 5px 0;
 }
 
-/* Animations */
+/* ANIMATION */
 @keyframes slide-in {
     from {
         transform: translateX(-100%);
@@ -165,15 +199,4 @@ button:hover {
     to {
         transform: translateX(0);
     }
-}
-
-.semester-overview-header {
-    text-align: center; /* Zentriert den Text */
-    margin-top: 20px; /* Abstand nach oben */
-}
-
-.semester-overview-header h1 {
-    font-size: 32px; /* Größe des Titels */
-    font-weight: bold; /* Fettschrift */
-    color: #00274d; /* Optional: eine passende Farbe */
 }

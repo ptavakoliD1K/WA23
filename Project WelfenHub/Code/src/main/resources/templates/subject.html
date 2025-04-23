@@ -37,6 +37,9 @@
 
     <section class="ForumBeitrag">
         <div class="forumHeader">
+            <a class="zurueck-button" th:href="@{/forum/{subject}(subject=${subject})}">
+                ⬅
+            </a>
             <h2 class="forumTitle" id="currentforumTitle" th:text="${course}">Kursname</h2>
 
 

@@ -17,15 +17,19 @@
 </header>
 
 <div class="semester-overview-container">
-    <!-- Zentrierter Titel -->
-    <div class="semester-overview-header">
-        <h1 th:text="${subject.equalsIgnoreCase('bwl') ? 'BWL' : (subject.equalsIgnoreCase('wirtschaftsinformatik') ? 'Wirtschaftsinformatik' : (subject.equalsIgnoreCase('sonstiges') ? 'Sonstiges' : #strings.capitalize(subject)))}"></h1>
-    </div>
 
+    <!-- Zurück-Button + Titel in einer Zeile -->
+    <div class="semester-header-row">
+        <a class="zurueck-button" href="/forum">⬅</a>
+        <h1 class="semester-title"
+            th:text="${subject.equalsIgnoreCase('bwl') ? 'BWL' :
+                      (subject.equalsIgnoreCase('wirtschaftsinformatik') ? 'Wirtschaftsinformatik' :
+                      (subject.equalsIgnoreCase('sonstiges') ? 'Sonstiges' : #strings.capitalize(subject)))}">
+        </h1>
+    </div>
 
     <!-- Dynamische Anzeige für jedes Semester -->
     <div th:each="entry : ${coursesBySemester}">
-        <!-- Zugriff auf Semester und Kurse -->
         <div class="semester-section">
             <h2 th:text="'Semester ' + ${entry.key}"></h2>
             <div class="course-list">
