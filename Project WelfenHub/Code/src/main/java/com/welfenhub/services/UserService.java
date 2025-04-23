@@ -4,6 +4,7 @@ import com.welfenhub.models.User;
 import com.welfenhub.models.UserRole;
 import com.welfenhub.repositories.UserRepository;
 import com.welfenhub.repositories.RoleRepository;
+import com.welfenhub.repositories.ChatRoomUserRepository;
 import com.welfenhub.models.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 
@@ -29,6 +32,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private ChatRoomUserRepository chatRoomUserRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -91,30 +97,35 @@ public class UserService implements UserDetailsService {
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
     }
-
+    //User wird gelöscht
+    @Transactional
     public void deleteUserById(Long userId) {
+        // Zuerst alle Einträge aus der Join-Tabelle löschen
+        chatRoomUserRepository.deleteByUserId(userId);
+
+        // Dann den User selbst löschen
         userRepository.deleteById(userId);
     }
 
 
 
-
+    //User anhand des Usernames finden
     public List<User> findByUsernames(List<String> usernames) {
         return userRepository.findByUsernameIn(usernames);
     }
 
-
+    //Findet alle User
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-
+    //Update der User Rolle
     public void updateUserRole(Long userId, UserRole role) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         user.setRole(role);
         userRepository.save(user);
     }
-
+    //Anzahl der User
     public long getUserCount() {
         return userRepository.count();
     }
