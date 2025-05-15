@@ -5,132 +5,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
- * Service, which edits to html to match the lecturer rating
+ * Service, which edits html to match the lecturer rating
  */
-
 @Service
 public class EvaluationService {
 
-    /**
-     * private constructor for clean code
-     */
-
-    EvaluationService() {
-    }
-
-     @Autowired
-     ConvertToPDFService convertToPDFService;
+    @Autowired
+    private ConvertToPDFService convertToPDFService;
 
     /**
-     * generates html which right values of the lecturer rating and start convertToPdf
-     * @param valueJson
-     * @param text
-     * @throws IOException
+     * generates html with values of the lecturer rating and calls convertToPdf
      */
-
     public void generateHtml(String valueJson, String text) throws IOException {
-
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> mapValues = objectMapper.readValue(valueJson, Map.class);
 
-        String htmlTemplate = new String(Files.readAllBytes(Path.of("/templates/fragments/dozentenEvaluationWADokument.html")));
+        // ✅ Lade Template über Classpath
+        String htmlTemplate;
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("templates/fragments/dozentenEvaluationWADokument.html")) {
+            if (is == null) {
+                throw new IOException("Template not found in resources: templates/fragments/dozentenEvaluationWADokument.html");
+            }
+            htmlTemplate = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        }
 
-        String valueLehrveranstaltung = mapValues.get("Lehrveranstaltung");
-        String valueDozent = mapValues.get("Dozent");
-        String valueSemester = mapValues.get("Semester");
-        String valueJahrgang = mapValues.get("Jahrgang");
-        String valueFachrichtung = mapValues.get("Fachrichtung");
-        int valueGesamtEindruck = Integer.parseInt(mapValues.get("gesamteindruckLabel"));
-        int valueVergleich = Integer.parseInt(mapValues.get("vergleichLabel"));
-        int valueKlima = Integer.parseInt(mapValues.get("klimaLabel"));
-        int valueStrukturierung = Integer.parseInt(mapValues.get("strukturierungLabel"));
-        int valueDetail = Integer.parseInt(mapValues.get("detailLabel"));
-        int valueDetailInformation = Integer.parseInt(mapValues.get("detailInfoLabel"));
-        int valueUmfang = Integer.parseInt(mapValues.get("umfangLabel"));
-        int valueSach = Integer.parseInt(mapValues.get("sachLabel"));
-        int valuePraxis = Integer.parseInt(mapValues.get("praxisbezugLabel"));
-        int valueInteresseWecken = Integer.parseInt(mapValues.get("interesseWecken"));
-        int valuePresentation = Integer.parseInt(mapValues.get("presentationLabel"));
-        int valueExplanation = Integer.parseInt(mapValues.get("explanationLabel"));
-        int valueQuestion = Integer.parseInt(mapValues.get("questionLabel"));
-        int valueActiveBeteiligung = Integer.parseInt(mapValues.get("aktiveBeteiligungLabel"));
-        int valueKompetent = Integer.parseInt(mapValues.get("kompetentLabel"));
-        int valueThema = Integer.parseInt(mapValues.get("themaLabel"));
-        int valueBeteiligung = Integer.parseInt(mapValues.get("beteiligungLabel"));
-        int valueLernerfolg = Integer.parseInt(mapValues.get("lernerfolgLabel"));
-
-        htmlTemplate = htmlTemplate.replace("{{lehrveranstaltung}}", valueLehrveranstaltung);
-        htmlTemplate = htmlTemplate.replace("{{dozent}}", valueDozent);
-        htmlTemplate = htmlTemplate.replace("{{semester}}", valueSemester);
-        htmlTemplate = htmlTemplate.replace("{{jahrgang}}", valueJahrgang);
-        htmlTemplate = htmlTemplate.replace("{{fachrichtung}}", valueFachrichtung);
+        htmlTemplate = htmlTemplate.replace("{{lehrveranstaltung}}", mapValues.get("Lehrveranstaltung"));
+        htmlTemplate = htmlTemplate.replace("{{dozent}}", mapValues.get("Dozent"));
+        htmlTemplate = htmlTemplate.replace("{{semester}}", mapValues.get("Semester"));
+        htmlTemplate = htmlTemplate.replace("{{jahrgang}}", mapValues.get("Jahrgang"));
+        htmlTemplate = htmlTemplate.replace("{{fachrichtung}}", mapValues.get("Fachrichtung"));
         htmlTemplate = htmlTemplate.replace("{{text}}", text);
 
         final String CHECKED_TRUE = "checked=\"true\"";
 
         for (int i = 1; i <= 5; i++) {
-            String checked1 = (i == valueGesamtEindruck) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked1" + i + "}}", checked1);
-
-            String checked2 = (i == valueVergleich) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked2" + i + "}}", checked2);
-
-            String checked3 = (i == valueKlima) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked3" + i + "}}", checked3);
-
-            String checked4 = (i == valueStrukturierung) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked4" + i + "}}", checked4);
-
-            String checked5 = (i == valueDetail) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked5" + i + "}}", checked5);
-
-            String checked6 = (i == valueDetailInformation) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked6" + i + "}}", checked6);
-
-            String checked7 = (i == valueUmfang) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked7" + i + "}}", checked7);
-
-            String checked8 = (i == valueSach) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked8" + i + "}}", checked8);
-
-            String checked9 = (i == valuePraxis) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked9" + i + "}}", checked9);
-
-            String checked10 = (i == valueInteresseWecken) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked10" + i + "}}", checked10);
-
-            String checked11 = (i == valuePresentation) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked11" + i + "}}", checked11);
-
-            String checked12 = (i == valueExplanation) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked12" + i + "}}", checked12);
-
-            String checked13 = (i == valueQuestion) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked13" + i + "}}", checked13);
-
-            String checked14 = (i == valueActiveBeteiligung) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked14" + i + "}}", checked14);
-
-            String checked15 = (i == valueKompetent) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked15" + i + "}}", checked15);
-
-            String checked16 = (i == valueThema) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked16" + i + "}}", checked16);
-
-            String checked17 = (i == valueBeteiligung) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked17" + i + "}}", checked17);
-
-            String checked18 = (i == valueLernerfolg) ? CHECKED_TRUE : "";
-            htmlTemplate = htmlTemplate.replace("{{checked18" + i + "}}", checked18);
-
+            htmlTemplate = htmlTemplate.replace("{{checked1" + i + "}}", i == parse(mapValues, "gesamteindruckLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked2" + i + "}}", i == parse(mapValues, "vergleichLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked3" + i + "}}", i == parse(mapValues, "klimaLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked4" + i + "}}", i == parse(mapValues, "strukturierungLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked5" + i + "}}", i == parse(mapValues, "detailLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked6" + i + "}}", i == parse(mapValues, "detailInfoLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked7" + i + "}}", i == parse(mapValues, "umfangLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked8" + i + "}}", i == parse(mapValues, "sachLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked9" + i + "}}", i == parse(mapValues, "praxisbezugLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked10" + i + "}}", i == parse(mapValues, "interesseWecken") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked11" + i + "}}", i == parse(mapValues, "presentationLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked12" + i + "}}", i == parse(mapValues, "explanationLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked13" + i + "}}", i == parse(mapValues, "questionLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked14" + i + "}}", i == parse(mapValues, "aktiveBeteiligungLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked15" + i + "}}", i == parse(mapValues, "kompetentLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked16" + i + "}}", i == parse(mapValues, "themaLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked17" + i + "}}", i == parse(mapValues, "beteiligungLabel") ? CHECKED_TRUE : "");
+            htmlTemplate = htmlTemplate.replace("{{checked18" + i + "}}", i == parse(mapValues, "lernerfolgLabel") ? CHECKED_TRUE : "");
         }
 
         convertToPDFService.convertToPdf(htmlTemplate);
+    }
 
+    private int parse(Map<String, String> map, String key) {
+        return Integer.parseInt(map.getOrDefault(key, "0"));
     }
 }
