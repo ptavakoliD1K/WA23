@@ -13,7 +13,7 @@ const userData = {
 
 let knowledgeBase = {};
 
-fetch('faq_brainstorm.json')
+fetch('/js/faq_brainstorm.json')
     .then(response => response.json())
     .then(data => {
         knowledgeBase = data;
