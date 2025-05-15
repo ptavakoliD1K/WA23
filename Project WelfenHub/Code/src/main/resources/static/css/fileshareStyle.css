@@ -1,0 +1,387 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+.header {
+    display: grid;
+    background-color: #00274d;
+    width: 100%;
+    height: 160px;
+    padding: 20px;
+    box-sizing: border-box;
+    grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+}
+
+.header h1 {
+    font-weight: 600;
+    color: white;
+    font-size: 35px;
+}
+
+.header a {
+    color: white;
+    text-decoration-line: none;
+    justify-self: center;
+    font-size: 20px;
+}
+
+.header a:hover {
+    color: rgb(57, 117, 173);
+    transition: color 0.3s;
+}
+
+.header button {
+    color: black;
+    justify-self: center;
+    cursor: pointer;
+    border: none;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.header button:hover {
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0 , 0.2);
+}
+
+.burgerMenuSum .burgerMenu {
+    display: none;
+}
+
+.burgerMenuSum {
+    display: none;
+}
+
+.container {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1.75fr;
+}
+
+.chooseProps {
+    grid-column: 1;
+    grid-row: 2;
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    margin-top: 100px;
+}
+
+.chooseProps select{
+    border: 2px solid transparent;
+    width: 80%;
+    height: 50px;
+    padding-left: 0.8em;
+    outline: none;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.5s;
+    margin-top: 1%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chooseProps select:hover, .chooseProps select:focus {
+    border: 2px solid #00274d;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
+}
+
+.drop_zone {
+    grid-column: 1;
+    grid-row: 2;
+    width: 80%;
+}
+
+.drop_zone p {
+    border-radius: 5px;
+    text-align: center;
+    box-sizing: border-box;
+    padding-top: 25px;
+    height: 75px;
+    border: 2px solid #c7c5c5;
+}
+
+.drop_zone p:hover {
+    cursor: pointer;
+    background-color: #dfdfdf;
+    transition: background-color 0.3s;
+}
+
+#upload-form {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+#progress-bar-container {
+    grid-column: 1;
+    grid-row: 4;
+    display: none;
+    width: 60%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+       margin-top: 10px;
+    padding: 2px;
+    overflow: hidden;
+}
+
+#message {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: 30px;
+}
+
+#progress-bar {
+    height: 20px;
+    width: 0%;
+    background-color: #007bff;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-weight: bold;
+    transition: width 0.2s ease-in-out;
+}
+
+h3 {
+    grid-column: 1;
+    grid-row: 5;
+}
+
+#file-list {
+    grid-column: 1;
+    grid-row: 6;
+}
+
+#file-list p {
+    margin-top: -15px;
+}
+
+.container h2 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#searchBar {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 16px;
+}
+
+#fileList {
+    grid-column: 2;
+    grid-row: 2;
+    margin-left: 0px;
+    padding-left: 0px;
+    margin-top: 70px;
+}
+
+.lineDiv {
+    background-color: #c7c5c5;
+    height: 1px;
+}
+
+#fileList div {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 70% 10% 10% 10%;
+    margin-top: 7.5px;
+}
+
+#fileList div button {
+    grid-column: auto;
+    width: 40px;
+    height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #333;
+    justify-self: end;
+    color: #fff;
+    transition: transform 0.1s;
+}
+
+#fileList div button:hover {
+    outline: none;
+    cursor: pointer;
+    transform: scale(1.02);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.25s;
+}
+
+#upButton {
+    background-color: #333;
+    padding: 8px 16px;
+    border-radius: 4px;
+    color: #fff;
+    transition: transform 0.1s;
+    outline: none;
+    margin-top: 10px
+}
+
+#upButton:hover {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#file-input {
+    display: none;
+}
+
+#searchQuery {
+    width: 60%;
+    height: 40px;
+    border: 2px solid transparent;
+    padding-left: 0.8em;
+    outline: none;
+    overflow: hidden;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.5s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#searchQuery:hover, #searchQuery:focus {
+    border: 2px solid #00274d;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 700px;
+    text-align: left;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+footer {
+    margin-top: 560px !important;
+}
+
+@media (max-width: 768px) {
+    .container {
+        display: grid;
+        grid-template-rows: auto;
+        grid-template-columns: 1fr;
+    }
+
+    #message {
+        grid-column: 1;
+        grid-row: 7;
+    }
+
+    .searchFunc {
+        grid-column: 1;
+        grid-row: 8;
+    }
+
+    #fileList {
+        grid-column: 1;
+        grid-row: 8;
+    }
+
+    #searchBar {
+        grid-column: 1;
+        grid-row: 8;
+    }
+
+    #searchQuery {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .chooseProps select{
+        width: 100%;
+    }
+
+    .drop_zone {
+        width: 100%
+    }
+
+    .fas.fa-eye {
+        display: none;
+    }
+
+    #fileList div button {
+        width: 30px;
+    }
+}
+
+@media (max-width: 820px) {
+    .header {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        justify-items: center;
+    }
+
+    .header h1 {
+        justify-self: center;
+        grid-row: 1;
+    }
+
+    .header a {
+        display: none;
+    }
+
+    .header button {
+        display: none;
+    }
+
+    .burgerMenuSum {
+        display: block;
+        grid-row: 1;
+    }
+
+    .burgerMenuSum .burgerMenu {
+        display: block;
+        height: 5px;
+        width: 35px;
+        background-color: white;
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 920px) {
+    footer {
+        margin-top: 560px !important;
+    }
+}

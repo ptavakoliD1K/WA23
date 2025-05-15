@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registrierung</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/register.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+</head>
+<body>
+
+<div class="center-image">
+    <a th:href="@{/}" class="active">
+        <img th:src="@{/images/WelfenHUB_Logo_3.png}" alt="WelfenHUB Logo" class="fade-in">
+    </a>
+</div>
+
+<div class="wrapper">
+    <form th:action="@{/register}" th:object="${user}" method="post" id="formularRegister">
+        <h1>WelfenHub Registrierung</h1>
+        <div class="input-box">
+            <input type="text" id="username" th:field="*{username}" required placeholder="Benutzername"/>
+            <i class='bx bxs-user'></i>
+        </div>
+        <div class="input-box">
+            <input type="password" id="password" th:field="*{password}" required placeholder="Passwort"/>
+            <i class='bx bx-show toggle-password' id='togglePassword'></i>
+        </div>
+        <div class="input-box">
+            <input type="password" id="confirmPassword" name="confirmPassword" required
+                   placeholder="Passwort wiederholen"/>
+        </div>
+        <div class="input-box">
+            <input type="email" id="email" th:field="*{email}" required placeholder="E-Mail"/>
+            <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+            <input type="text" id="fullName" th:field="*{fullName}" placeholder="Vollständiger Name"/>
+            <i class='bx bxs-user-detail'></i>
+        </div>
+        <div>
+            <button type="submit" id="submitButton">Registrieren</button>
+        </div>
+        <div class="login-link">
+            <p>Oder zum login?
+                <a href="/login" id="loginLink">Login</a>
+            </p>
+        </div>
+        <div th:if="${error}" th:text="${error}" id="errorText" class="errorMessage"></div>
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="errorMessage">Email Error</div>
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="errorMessage">Password Error</div>
+        <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="errorMessage">Username Error</div>
+    </form>
+</div>
+
+<footer>
+    <p>Kontakt:<br>Salzdahlumer Straße 160, 38126 Braunschweig<br><a href="mailto:info@welfenakademie.de">info@welfenakademie.de</a></p>
+    <img th:src="@{images/logo_white.png}" alt="WelfenHub Logo">
+</footer>
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        var passwordField = document.getElementById('password');
+        var icon = this;
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('bx-show');
+            icon.classList.add('bx-hide');
+        } else {
+            passwordField.type = 'password';
+            icon.classList.remove('bx-hide');
+            icon.classList.add('bx-show');
+
+        }
+    });
+</script>
+</body>
+</html>

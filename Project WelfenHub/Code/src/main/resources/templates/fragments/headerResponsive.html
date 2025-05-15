@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startseite</title>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav class="navbar">
+        <div class="navdiv">
+            <a class="name" id="titleHeader" th:href="@{/}">
+                   WelfenHUB - wenn Welfen helfen
+            </a>
+            <ul>
+                <li><a th:href="@{/dozenten_bewertung}" class="active">Evaluation</a></li>
+                <li><a th:href="@{/forum}">Forum</a></li>
+                <li><a th:href="@{/ereignisse}">Ereignisse</a></li>
+                <li><a th:href="@{/feedback}">Feedback</a></li>
+                <li><a th:href="@{/jobs}">Jobs</a></li>
+                <li sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/AdminDashboard}" class="btn">Admin</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <form th:action="@{/logout}" method="post" id="formLogout">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit">Abmelden</button>
+                    </form>
+                </li>
+            </ul>
+            <div id="burgerMenu">
+                <label for="toggleNav">
+                    <div class="white"></div>
+                    <div class="transparent"></div>
+                    <div class="white"></div>
+                    <div class="transparent"></div>
+                    <div class="white"></div>
+                </label>
+            </div>
+        </div>
+    </nav>
+    <input type="checkbox" id="toggleNav">
+    <div class="navResponsive" id="navResp">
+        <ul>
+            <li><a th:href="@{/dozenten_bewertung}" class="active">Dozenten Evaluation</a></li>
+            <li><a th:href="@{/forum}">Forum</a></li>
+            <li><a th:href="@{/ereignisse}">Ereignisse</a></li>
+            <li><a th:href="@{/feedback}">Feedback</a></li>
+            <li><a th:href="@{/jobs}">Job-Börse</a></li>
+            <li sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin/AdminDashboard}" class="btn">Admin Dashboard</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                    <button type="submit">Abmelden</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</header>
+</body>
+<script>
+const headerTitle = document.getElementById('titleHeader');
+
+/**
+ * updates the title if the screen width has certain conditions
+ */
+
+function updateTitle() {
+    if (window.innerWidth <= 1400 && window.innerWidth > 960) {
+        headerTitle.innerHTML = "WelfenHUB"
+    } else if (window.innerWidth <= 960 && window.innerWidth > 720) {
+        headerTitle.innerHTML = "WelfenHUB - wenn Welfen helfen"
+    } else if (window.innerWidth <= 720) {
+        headerTitle.innerHTML = "WelfenHUB"
+    }
+}
+
+addEventListener("resize", updateTitle)
+
+updateTitle();
+
+</script>

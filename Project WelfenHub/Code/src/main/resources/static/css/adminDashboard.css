@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f4f9;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Stats Box */
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.stat-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 30%;
+}
+
+.stat-box h3 {
+    margin-bottom: 10px;
+    color: #00274d;
+}
+
+.stat-box p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Tabelle */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background: #00274d;
+    color: white;
+}
+
+/* Buttons */
+button {
+    background-color: #00274d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.time-selector {
+    margin-bottom: 20px;
+}
+
+#statsChart {
+    max-width: 80%; /* reduziert Breite auf 80% */
+    height: 300px;  /* verringert Höhe auf 300px */
+    margin: 20px auto; /* zentriert Diagramm */
+}
+

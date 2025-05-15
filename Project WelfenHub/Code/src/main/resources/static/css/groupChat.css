@@ -1,0 +1,575 @@
+/************************************************
+ *  Grundlegendes Layout
+ ************************************************/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /* overflow: hidden; /* Scrollen innerhalb des Chatbereichs ermöglichen */
+}
+
+#chatMainContainer {
+    margin: 0;
+    padding: 0;
+    height: calc(100vh - 100px);
+    display: grid;
+    grid-template-columns: 280px 1fr; /* Vereinfacht */
+    grid-template-areas: "sidebar main";
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    position: relative;
+    top: 0px;
+}
+
+label{
+    padding: 5px;
+}
+
+h2{
+    text-align:center;
+}
+
+input::placeholder{
+    text-align:center;
+    font-family: Arial, sans-serif;
+}
+
+input{
+    border: 2px solid #00274d9e;
+}
+
+/* Letzte Stelle für neue Regeln, damit sie nichts überschreibt */
+
+.modal {
+    position: fixed; /* unbedingt fixed, damit es nichts verschiebt */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.modal-content {
+    background: #ffffff;
+    border: 3px solid #ccc; /* Tippfehler bei "solid" korrigiert */
+    width: 450px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 16px 12px rgba(0,0,0,0.25);
+    animation: scaleIn 0.3s ease-out;
+    font-family: Arial, sans-serif;
+    position: relative; /* relative reicht hier vollkommen */
+}
+
+.button{
+    margin-top: 10px;
+    border-radius: 5px;
+    padding: 10px 20px;
+    width: 450px;
+    transition: transform 0.1s, box-shadow 0.1s;
+    position: relative;
+    background: #00274d;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    color:white;
+}
+
+.GruppeTitel{
+    background-color:#00274d;
+    color:white;
+    font-weight:bold;
+    text-align:center;
+    padding:15px;
+    font-size: 20px;
+    border-radius: 2px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+    background-color: #abadb0;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.Groupname{
+    padding: 10px;
+    margin: 10px 0px;
+    border-radius: 2px;
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.modal-content .close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes scaleIn {
+    0%   { transform: scale(0.7); opacity: 0; }
+    100% { transform: scale(1);   opacity: 1; }
+}
+
+/************************************************
+ *  Seitenleiste (Gruppen)
+ ************************************************/
+/* Feste Breite, damit die Suchleiste nicht breiter werden kann */
+.groupSidebar {
+    background-color: #00274d9e;
+    margin: 0;
+    padding: 0;
+    width: 280px;
+    height: 100%;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Ermöglicht Scrollen, falls der Inhalt zu lang ist */
+}
+
+
+.sidebarHeader {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sidebarHeader h2 {
+    margin: 0;
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* Button zum Erstellen einer Gruppe */
+.createGroupBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffae00;
+    color: #333;
+    border: none;
+    border-radius: 3px;
+    width: 240px;
+    height: 32px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.createGroupBtn i {
+    margin: 8px;
+}
+
+.createGroupBtn:hover {
+    background-color: #ffc847;
+    transform: scale(1.05);
+}
+
+.groupSearch {
+    position: relative;
+    width: 100%;
+    margin-top: 10px; /* Fügt etwas Abstand hinzu */
+}
+
+.groupSearch input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 35px 8px 10px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    font-size: 14px;
+    color: #333;
+    background-color: #ffffff; /* Stellt sicher, dass der Hintergrund weiß ist */
+}
+
+.groupSearch i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #333; /* Ändert die Farbe zu einem dunkleren Ton für bessere Sichtbarkeit */
+    cursor: pointer;
+}
+
+.groupList {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.groupItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: background-color 0.2s;
+}
+
+.groupItem:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.groupItem.active {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.groupName {
+    font-size: 16px;
+}
+
+.groupBadge {
+    background-color: #FFAE00;
+    color: #333;
+    padding: 5px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/************************************************
+ *  Chat-Bereich
+ ************************************************/
+.chatArea {
+    grid-area: main;
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header, Messages, Input */
+    /*height: 100%; */
+    background-color: #f2f2f2;
+     min-height: 0; /* Wichtig für korrektes Scrolling */
+}
+
+.chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #37445d;
+    color: white;
+    padding: 15px 20px;
+    grid-row: 1;
+    box-shadow: 0px 15px 10px -15px #111;
+}
+
+.chatTitle {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.chatHeaderIcons i {
+    font-size: 24px;
+    margin-left: 15px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.chatHeaderIcons i:hover {
+    color: #FFAE00;
+}
+
+/************************************************
+ *  Nachrichtenliste
+ ************************************************/
+.chatMessages {
+    display: flex;
+    flex-direction: column;
+    grid-row: 2;
+    overflow-y: auto;
+    padding: 20px;
+    margin-bottom: 0; /* Entfernt */
+    min-height: 0; /* Wichtig für korrektes Scrolling */
+    scrollbar-color: linear-gradient(to bottom, #001a44, #3c6dae, #7ea6f2); /* Design Scrollbar im Chat */
+    scrollbar-width: thin; /* Design Scrollbar im Chat */
+}
+
+/* Grund-Styles für eine einzelne Nachricht */
+.message {
+    max-width: 60%;
+    margin-bottom: 15px;
+    display: block;
+    position: relative;
+}
+
+.senderName {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 3px;
+    display: block;
+}
+
+.timestamp {
+    font-size: 10px;
+    color: #555;
+    margin-left: 8px;
+}
+
+.textBubble {
+    background-color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    font-size: 14px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    text-align: left;
+
+
+}
+
+/************************************************
+ *  Eingehende Nachrichten (von anderen)
+ ************************************************/
+.incoming {
+    align-self: flex-start;    /* linksbündig */
+    text-align: left;
+}
+
+.incoming .textBubble {
+    background-color: #f1f0f0; /* hellgrauer Hintergrund */
+    color: #333;
+}
+
+/************************************************
+ *  Ausgehende Nachrichten (aktuell eingeloggter User)
+ ************************************************/
+.outgoing {
+    align-self: flex-end;      /* rechtsbündig */
+    text-align: right;
+}
+
+.outgoing .textBubble {
+    background-color: #3f51b5; /* z.B. dunkleres Blau */
+    color: #ffffff;
+}
+
+/************************************************
+ *  Optional: Abstände / Rundung / Pfeile
+ ************************************************/
+/* Hier könnte man z.B. leichte "Pfeile" an der Seite hinzufügen. Beispiel: */
+.incoming .textBubble {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px; /* oder 0, falls du eine Ecke willst */
+}
+
+.outgoing .textBubble {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 2px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/************************************************
+ *  (Optional) Abstände anpassen, um Abgrenzung
+ ************************************************/
+.incoming {
+    margin-right: auto;
+    /* Du könntest z.B. margin-left: 10px; */
+}
+
+.outgoing {
+    margin-left: auto;
+    /* Du könntest z.B. margin-right: 10px; */
+}
+
+/************************************************
+ *  Name + Timestamp
+ ************************************************/
+/* Der Sendername ist schon in .senderName, Timestamp in .timestamp */
+.senderName {
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.timestamp {
+    display: block;  /* oder inline-block, je nach Geschmack */
+    font-size: 10px;
+    margin-top: 3px;
+    color: #666;
+}
+
+/************************************************
+ *  Nachrichteneingabe
+ ************************************************/
+.chatInput {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: white;
+    border-top: 2px solid #ccc;
+    position: relative;
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex-grow: 1;
+}
+
+.chatInput textarea#messageInput {
+    flex: 1;
+    min-height: 60px;
+    max-height: 150px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 2px solid #00274d9e;
+    font-family: Arial, sans-serif;
+    resize: none;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.chatInput input {
+    flex: 1;
+    height: 40px; /* Definierte Höhe */
+    border: 2px solid #FFAE00;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 14px;
+    outline: none;
+}
+
+.chatInput button {
+    height: 40px; /* Gleiche Höhe wie Input */
+    padding: 0 20px;
+    background-color: #00274d;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.chatInput button:hover {
+    background-color: #04488b;
+}
+
+#messageInput {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #00274d9e;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    resize: none;
+}
+
+
+/************************************************
+ *  Responsive Design
+ ************************************************/
+@media (max-width: 768px) {
+    #chatMainContainer {
+        grid-template-columns: 1fr;
+    }
+
+    .groupSidebar {
+        /* Auf kleinen Screens Sidebar oben */
+        width: 100%;
+        height: 200px;
+        overflow-y: auto;
+        border-right: none;
+        border-bottom: 2px solid #00274d;
+    }
+
+
+    .message {
+        max-width: 80%;
+    }
+
+}
+
+    /* Einfaches Modal-Styling */
+    .modal {
+        display: none; /* Versteckt standardmäßig */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto; /* Zentriert das Modal */
+        padding: 20px;
+        border: 1px solid #888;
+        max-width: 500px;
+    }
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .close:hover,
+    .close:focus {
+        color: black;
+    }
+    /* Unread Badge */
+    .unreadBadge {
+        background-color: #ff3b30;
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.8em;
+        margin-left: 8px;
+    }
+
+.emoji-picker-container {
+    position: absolute;
+    bottom: 60px;
+    left: 10px;
+    z-index: 999;
+    background: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 5px;
+    visibility: hidden; /* Statt display: none */
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s;
+    width: 300px;  /* Emoji-Picker größer machen */
+    height: 400px; /* Falls zu klein */
+}
+
+.emoji-picker-container.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+
+  #emojiBtn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      margin-right: 5px;
+  }
+

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Semester Übersicht</title>
+    <link rel="stylesheet" th:href="@{/css/Semesteroverview.css}" />
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+</head>
+<body>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+
+<div class="semester-overview-container">
+
+    <!-- Zurück-Button + Titel in einer Zeile -->
+    <div class="semester-header-row">
+        <a class="zurueck-button" href="/forum">⬅</a>
+        <h1 class="semester-title"
+            th:text="${subject.equalsIgnoreCase('bwl') ? 'BWL' :
+                      (subject.equalsIgnoreCase('wirtschaftsinformatik') ? 'Wirtschaftsinformatik' :
+                      (subject.equalsIgnoreCase('sonstiges') ? 'Sonstiges' : #strings.capitalize(subject)))}">
+        </h1>
+    </div>
+
+    <!-- Dynamische Anzeige für jedes Semester -->
+    <div th:each="entry : ${coursesBySemester}">
+        <div class="semester-section">
+            <h2 th:text="'Semester ' + ${entry.key}"></h2>
+            <div class="course-list">
+                <ul>
+                    <li th:each="course : ${entry.value}">
+                        <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${entry.key}, course=${course})}"
+                           th:text="${course}">Course Name</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="fragments/footerResponsive.html"></div>
+</body>
+</html>

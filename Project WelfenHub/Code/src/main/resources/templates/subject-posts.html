@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="'Alle Posts zu ' + ${currentSubject}">Alle Posts</title>
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/subject-posts.css}" />
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+</head>
+<body>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+
+<h1 th:text="'Alle Posts in ' + ${currentSubject} ">Alle Posts</h1>
+
+<!-- Container für alle Posts -->
+<div class="posts-container">
+    <div th:each="post : ${posts}" class="post-item">
+
+        <!-- Titel -->
+        <h2 th:text="${post.title}">Titel</h2>
+
+        <!-- Inhalt -->
+        <p th:text="${post.content}">Beispiel-Inhalt</p>
+
+        <!-- Ersteller -->
+        <p>
+            Erstellt von:
+            <span th:text="${post.user.username}">Username</span>
+        </p>
+
+        <!-- Datum -->
+        <small>
+            Erstellt am:
+            <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
+        </small>
+
+        <!-- Link führt zur Kursseite des Posts -->
+        <br/>
+        <a class="details-link"
+           th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${post.subject}, semester=${post.semester}, course=${post.course})}">
+            Zum Post
+        </a>
+    </div>
+</div>
+
+<footer>
+    <div th:insert="fragments/footerResponsive.html"></div>
+</footer>
+</body>
+</html>

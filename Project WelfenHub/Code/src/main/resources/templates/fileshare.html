@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>WelfenHUB - Fileshare</title>
+    <link rel="stylesheet" href="/css/fileshareStyle.css">
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+</head>
+<body>
+
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+
+<div class="container">
+
+    <h1>Fileshare</h1>
+    <div class="drop_zone" id="drop_zone">
+        <p>Drag & Drop Deine Dateien hier</p>
+        <input type="file" id="file-input" name="file" accept=".pdf" multiple/>
+    </div>
+
+    <div class="chooseProps">
+        <select name="fachrichtung" id="fachrichtung" required>
+            <option hidden selected value="blocked">Studiengang</option>
+            <option value="bwl">Betriebswirtschaftslehre</option>
+            <option value="winf">Wirtschaftsinformatik</option>
+        </select>
+        <select name="semester" id="semesterDropDown" required>
+            <option hidden selected value="blocked">Semester</option>
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+        </select>
+        <select name="module" id="moduleDropDown" required>
+            <option hidden selected value="blocked">Modul</option>
+            <option value="" disabled>Grundlagen der Computertechnik</option>
+            <option value="informatik">Grundlagen der Informatik</option>
+            <option value="winfUnternehmen">Wirtschaftsinformatik im Unternehmen</option>
+            <option disabled>Grundlagen der Mathematik</option>
+            <option value="linAlgebra">Lineare Algebra</option>
+            <option value="analysis">Analysis</option>
+            <option disabled>Technische Kommunikation</option>
+            <option value="techEnglisch">Technisches Englisch</option>
+            <option value="softskills_kreativ_gruppen">Soft Skills - Kreativität & Gruppenarbeit</option>
+            <option value="" disabled>Engineering Management</option>
+            <option value="softwareEng">Software Engineering</option>
+            <option value="reqEng">Requirements Engineering</option>
+            <option value="" disabled>Soft Skills</option>
+            <option value="gespraechsfuehrung">Gesprächsführung und Rhetorik im beruflichen Kontext</option>
+            <option value="" disabled>Grundlagen sicherer Programmierung</option>
+            <option value="grundlagen_programmierung">Grundlagen der Programmierung (Python)</option>
+            <option value="netzwerkmanagement_systemintegration">Netzwerkmanagement in der Systemintegration</option>
+            <option value="transaction">Transaktion und Datensicherheit</option>
+            <option value="" disabled>Einstieg in die Projektarbeit</option>
+            <option value="controlling">Anwendung IT-Projektcontrolling</option>
+            <option value="praktisches_management_projekten">Praktisches Management von Projekten</option>
+            <option value="" disabled>Betriebswirtschaftslehre I</option>
+            <option value="buchfuehrung">Buchführung</option>
+            <option value="internes_rewe">Internes Rechnungswesen</option>
+            <option value="grundlagen_bwl">Grundlagen der BWL</option>
+            <option value="" disabled>Programmstrukturen</option>
+            <option value="algorithmen">Algorithmen und Datenstrukturen</option>
+            <option value="oo_programmierung">Einführung in die objektorientierte Programmierung (Java)</option>
+            <option value="" disabled>Spezielle Mathematik</option>
+            <option value="statistik">Angewandte Statistik</option>
+            <option value="or">Operations Research</option>
+            <option value="finanzmathe">Finanzmathematik</option>
+            <option value="" disabled>SW-Anwendungsrealisierung</option>
+            <option value="anwendung_programmierung">Anwendung der Programmierung</option>
+            <option value="datenkommunikation">Datenkommunikation</option>
+            <option value="" disabled>Sonstiges</option>
+            <option value="sonstiges">Sonstiges</option>
+            <!-- hier weitere Module einfügen, vor allem BWL -->
+        </select>
+        <select name="tag" id="tag" required>
+            <option hidden selected value="blocked">Dokumenttyp</option>
+            <option value="script">Skript</option>
+            <option value="studyNotes">Lernzettel</option>
+            <option value="conclusion">Zusammenfassung</option>
+            <option value="altklausur">Altklausur</option>
+            <option value="sonstiges">Sonstiges</option>
+        </select>
+    </div>
+
+
+    <h3>Ausgewählte Dateien</h3>
+    <div class="file-list" id="file-list"></div>
+
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" id="file-upload-input" style="display:none" multiple/>
+        <button type="submit" id="upButton">Hochladen</button>
+    </form>
+
+    <div class="progress-bar-container" id="progress-bar-container">
+        <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <div class="searchFunc" style="display: none;" id="searchBar">
+        <input type="text" id="searchQuery" placeholder="Dateinamen eingeben...">
+    </div>
+    <ul id="fileList">
+
+    </ul>
+
+    <div id="previewModal" class="modal">
+        <div class="modal-content" id="modalContent">
+            <span class="close">&times;</span>
+        </div>
+    </div>
+</div>
+
+<div th:insert="fragments/footerResponsive.html"></div>
+
+<script src="/js/scriptDataTransfer.js"></script>
+</body>
+</html>

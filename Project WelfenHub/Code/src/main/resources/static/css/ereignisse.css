@@ -1,0 +1,296 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+main {
+    margin: 1% 1% 1% 1%;
+    height: fit-content;
+    min-height: 1100px;
+}
+
+h1 {
+    letter-spacing: 1px;
+    font-size: 50px;
+    color: #00274d;
+    border: 2px ridge #0181a0;
+    padding: 10px;
+    text-transform: uppercase;
+    border-radius: 10px;
+    justify-self: center;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    color: #fff;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.1s;
+}
+
+#newEventButton {
+    display: block;
+    margin-bottom: 1%;
+    margin-left: 25%;
+}
+
+#editEventButton {
+    margin-bottom: 2%;
+}
+
+#removeEvent {
+    display: block;
+    margin-bottom: 2%;
+    margin-right: 25%;
+}
+
+#removeEvent:hover, #removeEvent:focus {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+h3 {
+    color: #0181a0;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.newsDiv * {
+    text-align: center;
+    margin-left: 3%;
+    margin-right: 3%;
+    word-wrap: break-word;
+}
+
+button:hover, button:focus {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#buttons {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+}
+
+#createEventPopUp, #removeEventPopUp, #editEventPopUp, #editSelectedEventPopUp {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    justify-self: anchor-center;
+    background-color: #fff;
+    width: 70%;
+    height: fit-content;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    top: 160px;
+}
+
+#editSelectedEventPopUp .close-button {
+    display: inline-block;
+    left: 1%;
+}
+
+#editSelectedEventPopUp span {
+    margin-left: 1%;
+}
+
+input {
+    outline: none;
+    height: 2.5rem;
+    padding-left: 0.8em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+input:hover, input:focus {
+    box-shadow: rgba(74, 157, 236, 0.2) 0px 0px 0px 7px;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 39, 77);
+    border-image: initial;
+}
+
+textarea {
+    outline: none;
+    height: 100px;
+    padding: 0.8em 0.4em 0.8em 0.4em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+textarea:hover, textarea:focus {
+    box-shadow: rgba(74, 157, 236, 0.2) 0px 0px 0px 7px;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 39, 77);
+    border-image: initial;
+}
+
+.headerPopUp {
+    font-weight: bold;
+}
+
+h4 {
+    text-align: center;
+}
+
+#createEventPopUp input, #createEventPopUp textarea, #editSelectedEventPopUp input, #editSelectedEventPopUp textarea {
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-top: 10px;
+    margin-right: auto;
+}
+
+#createEventPopUp input, #editSelectedEventPopUp input {
+    height: 40px;
+}
+
+#createEventPopUp textarea, #editSelectedEventPopUp textarea {
+    min-height: 200px;
+}
+
+#createEventPopUp form button, #editSelectedEventPopUp button {
+    display: block;
+    margin: 10px auto 10px auto;
+}
+
+#publishButton {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#status {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#toEditList, #toRemoveList {
+    padding: 0;
+}
+
+#toRemoveList span, #toEditList span {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: fit-content;
+    justify-self: center;
+}
+
+#toRemoveList span:hover, #toRemoveList span:focus {
+    color: red;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+#toEditList span:hover, #toEditList span:focus {
+    color: orange;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.close-button {
+    margin-top: 1%;
+    margin-left: 1%;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover, .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.newsDiv {
+    width: 70%;
+    height: fit-content;
+    min-height: 150px;
+    background-color: #fff;
+    border-radius: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-right: auto;
+    margin-left: auto;
+    box-sizing: border-box;
+    padding: 1px 5px 1px 5px;
+    margin-bottom: 1.5%;
+}
+
+.newsDiv span {
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
+.newsDiv div {
+    color: #00000080;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.newsDiv p {
+    color: #000000b3;
+    font-size: 1.2rem;
+}
+
+#page {
+    text-align: center;
+    font-size: 1.7rem;
+}
+
+.page:hover, .page:focus, .page:target, .page:active {
+    color: rgb(57, 117, 173);
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+@media (max-width: 650px) {
+    #buttons {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        place-items: center;
+    }
+
+    #removeEvent, #newEventButton, #editEventButton {
+        margin: 0;
+        margin-bottom: 2%;
+        width: 60%;
+    }
+}
+

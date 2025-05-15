@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="/css/ereignisse.css"/>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Ereignisse</title>
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+</head>
+<body>
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+<main>
+    <h1>Anstehende Ereignisse</h1>
+    <div id="buttons" sec:authorize="hasRole('MODERATOR')">
+        <button id="newEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showAddEvent()">Ereignis erstellen</button>
+        <button id="editEventButton" sec:authorize="hasRole('MODERATOR')" onclick="showEditEvent()">Ereignis bearbeiten</button>
+        <button id="removeEvent" sec:authorize="hasRole('MODERATOR')" onclick="showRemoveEvent()">Ereignis löschen</button>
+    </div>
+    <div id="createEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <span class="close-button" onclick="showAddEvent()">&times;</span>
+        <h4 class="headerPopUp">Ereignis hinzufügen</h4>
+        <input type="text" maxlength="100" placeholder="Dein Name" id="eventName">
+        <input type="text" maxlength="100" placeholder="Titel" id="title">
+        <textarea maxlength="1200" placeholder="Inhalt" id="content"></textarea>
+        <button onclick="publishEvent()" id="publishButton">Veröffentlichen</button>
+        <p id="status"></p>
+    </div>
+    <div id="editEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <span class="close-button" onclick="showEditEvent()">&times;</span>
+        <h4 class="headerPopUp">Ereignis bearbeiten</h4>
+        <ul id="toEditList"></ul>
+    </div>
+    <div id="editSelectedEventPopUp" sec:authorize="hasRole('MODERATOR')">
+        <span class="close-button" onclick="showEventToEdit()">&times;</span>
+        <h4 class="headerPopUp">Ereignis bearbeiten</h4>
+        <input id="editInput" disabled>
+        <textarea id="editTextarea"></textarea>
+        <button id="submitUpdate" onclick="submitUpdate()">Abschicken</button>
+    </div>
+    <div id="removeEventPopUp" sec:authorize="hasRole('MODERATOR')" >
+        <span class="close-button" onclick="showRemoveEvent()">&times;</span>
+        <h4 class="headerPopUp">Ereignis löschen</h4>
+        <ul id="toRemoveList"></ul>
+    </div>
+    <div id="newsArea"></div>
+    <div id="page"></div>
+</main>
+<div th:insert="fragments/footerResponsive.html"></div>
+<script src="/js/scriptEreignisse.js"></script>
+</body>
+</html>

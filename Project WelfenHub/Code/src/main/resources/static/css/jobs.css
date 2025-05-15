@@ -1,0 +1,300 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+main {
+    margin: 1% 1% 1% 1%;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-top: -10px;
+    color: #fff;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.1s;
+    float: right;
+}
+
+button:hover, button:focus {
+    outline: none;
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+#removeStelle {
+    margin-right: 7px;
+}
+
+#createPopUp, #removePopUp {
+    display: none;
+    z-index: 1000;
+    position: fixed;
+    justify-self: anchor-center;
+    background-color: #fff;
+    width: 70%;
+    height: fit-content;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#createPopUp input, #createPopUp textarea {
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+}
+
+#createPopUp button {
+    display: block;
+    float: none;
+    margin: 10px auto 10px auto;
+}
+
+#createPopUp p {
+    text-align: center;
+}
+
+.close-button {
+    margin-top: 1%;
+    margin-left: 1%;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover, .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+textarea {
+    outline: none;
+    height: 100px;
+    padding: 0.8em 0.4em 0.8em 0.4em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+    font-family: Arial, sans-serif;
+    resize: vertical;
+}
+
+input {
+    outline: none;
+    height: 2.5rem;
+    padding-left: 0.8em;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 4px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: transparent;
+    border-image: initial;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: 0.5s;
+}
+
+input:hover, input:focus {
+    box-shadow: rgba(74, 157, 236, 0.2) 0px 0px 0px 7px;
+    background-color: white;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(0, 39, 77);
+    border-image: initial;
+}
+
+h4 {
+    text-align: center;
+}
+
+#jobArea {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    place-items: center;
+    margin-top: 50px;
+}
+
+.jobContainer {
+    margin: 20px 10px;
+    width: 380px;
+    height: 450px;
+    border-radius: 1rem;
+    background-color: #fff;
+    text-align: left;
+    padding: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-top: 10px solid #ccc; /* wird dynamisch überschrieben */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.jobContainer:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.jobTitle {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+
+.divContent {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    max-height: 250px; /* 👈 Beschränkt die Höhe des Texts */
+    overflow-y: auto;
+    padding-right: 8px;
+    padding-left: 8px;
+    scrollbar-width: thin; /* für Firefox */
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.divUrl {
+    color: #0056b3;
+    text-decoration: underline;
+    word-break: break-word;
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+
+.divUrl:hover {
+    color: #003d80;
+}
+
+
+h5 {
+    font-size: 1.5rem;
+}
+
+.divContent {
+    word-wrap: break-word;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.divContent::-webkit-scrollbar {
+    width: 6px;
+}
+
+.divContent::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#toRemoveList {
+    padding: 0;
+}
+
+.removeJobTitle {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    width: fit-content;
+    justify-self: center;
+}
+
+.removeJobTitle:hover, .removeJobTitle:focus {
+    color: red;
+    cursor: pointer;
+}
+
+footer {
+    margin-top: 550px !important;
+}
+
+@Media (max-width: 1250px) {
+    .jobContainer {
+        width: 350px;
+    }
+}
+
+@Media (max-width: 1100px) {
+    #jobArea {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    #createStelle, #removeStelle {
+        margin-top: 30px;
+        float: none;
+    }
+
+    #buttonP {
+        text-align: center;
+    }
+}
+
+@Media (max-width: 750px) {
+    h1 {
+        text-align: center;
+    }
+
+    #startDesc {
+        text-align: center;
+    }
+
+    #jobArea {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .jobContainer {
+        width: 400px;
+    }
+}
+
+@Media (max-width: 470px) {
+    h1 {
+        text-align: center;
+    }
+
+    #startDesc {
+        text-align: center;
+    }
+
+    #buttonP {
+        text-align: center;
+    }
+
+    #createStelle, #removeStelle {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .jobContainer {
+        width: 350px;
+    }
+}
+
+@Media (max-width: 370px) {
+    .jobContainer {
+        width: 320px;
+    }
+}

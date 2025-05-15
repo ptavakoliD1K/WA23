@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/adminDashboard.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<!-- Statistiken -->
+<div class="stats-container">
+    <div class="stat-box">
+        <h3>👥 Gesamtanzahl der Nutzer</h3>
+        <p th:text="${userCount}"></p>
+    </div>
+    <div class="stat-box">
+        <h3>🟢 Nutzer aktuell online</h3>
+        <p th:text="${onlineUsers}"></p>
+    </div>
+    <div class="stat-box">
+        <h3>📝 Beiträge im Forum</h3>
+        <p th:text="${postCount}"></p>
+    </div>
+</div>
+
+<h2>User Management</h2>
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Current Role</th>
+        <th>Action</th>
+        <th>Löschen</th>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+            <form th:action="@{/admin/updateRole}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}" />
+                <select name="role">
+                    <option value="ROLE_ADMIN">Admin</option>
+                    <option value="ROLE_MODERATOR">Moderator</option>
+                    <option value="ROLE_USER">User</option>
+                    <option value="ROLE_GOMMEMODE">Gommemode</option>
+                </select>
+                <button type="submit">Update Role</button>
+            </form>
+        </td>
+        <td>
+            <form th:action="@{/admin/deleteUser}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}" />
+                <button type="submit">Löschen</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+<!-- Zeitraumauswahl -->
+<div class="time-selector">
+    <select id="periodSelect">
+        <option value="day">Heute (Stunden)</option>
+        <option value="week">Letzte 7 Tage</option>
+        <option value="month">Letzte 30 Tage</option>
+        <option value="year">Letzte 12 Monate</option>
+    </select>
+</div>
+
+<!-- Diagramm -->
+<canvas id="statsChart"></canvas>
+
+<script>
+    let myChart;
+
+    async function fetchStats(period) {
+        const response = await fetch(`/admin/posts/stats?period=${period}`);
+        return await response.json();
+    }
+
+    async function updateChart(period) {
+        const rawData = await fetchStats(period);
+
+        let labels;
+        if(period === 'year') {
+            labels = rawData.map(item => `${item[1]}/${item[0]}`); // Monat/Jahr
+        } else if(period === 'day' || period === 'week' || period === 'month') {
+            labels = rawData.map(item => `${item[2]}.${item[1]}.${item[0]}`); // Tag.Monat.Jahr
+            if(period === 'day') {
+                labels = rawData.map(item => `${item[0]} Uhr`);
+            }
+        }
+
+        const data = rawData.map(item => item[item.length - 1]);
+
+        const ctx = document.getElementById('statsChart').getContext('2d');
+
+        if(myChart) myChart.destroy();
+
+        myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Anzahl Beiträge',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // initialer Aufruf (heutiger Tag)
+    updateChart('day');
+
+    // Eventlistener für Auswahl
+    document.getElementById('periodSelect').addEventListener('change', (e) => {
+        updateChart(e.target.value);
+    });
+</script>
+
+</body>
+</html>

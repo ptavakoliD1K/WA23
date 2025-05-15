@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="Gruppenchat erstellen Box">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileTransfer/src/main/resources/static/js/scriptDataTransfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/FileTransfer/src/main/resources/static/js/scriptDataTransfer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FileTransfer/target/classes/static/js/scriptDataTransfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/FileTransfer/target/classes/static/js/scriptDataTransfer.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$/WA23" value="developement" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Eikmans&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="developement" />
+                    <option name="lastUsedInstant" value="1734592644" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1734592643" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ptavakoliD1K/WA23.git&quot;,
+    &quot;accountId&quot;: &quot;0887fb6b-2ec1-4a88-a223-45a7f1339c8b&quot;
+  }
+}</component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2o42BOKYp746F5BVONz2mxTQGea" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.DatabaseInitializer.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PasswordResetLinkService.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Welfenhub.executor&quot;: &quot;Run&quot;,
+    &quot;Attach to process.pid 3108.executor&quot;: &quot;ProcessAttachDebug&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#3 on developement&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/PorjektFH/Welfenhub2/Project WelfenHub&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\database" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\database" />
+      <recent name="C:\PorjektFH\Welfenhub2\Project WelfenHub\Code\src\main\java\com\WelfenHub" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Welfenhub">
+    <configuration name="PasswordResetLinkService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.WelfenHub.services.PasswordResetLinkService" />
+      <module name="WelfenHub" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.WelfenHub.services.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Welfenhub" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="corretto-17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.WelfenHub.MyprojectApplication" />
+      <module name="WelfenHub" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/Project WelfenHub" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="maventestneu" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyprojectApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="WelfenHub" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.WelfenHub.MyprojectApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.Welfenhub" />
+      <item itemvalue="Application.PasswordResetLinkService" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PasswordResetLinkService" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ee23beb9-6419-4741-8727-f7e6649653eb" name="Changes" comment="" />
+      <created>1730114390440</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730114390440</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Added FileSharing to Main Project">
+      <option name="closed" value="true" />
+      <created>1730126037314</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1730126037314</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed Filesharing with CSRF">
+      <option name="closed" value="true" />
+      <created>1730200142005</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730200142005</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1734595396913</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734595396913</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740751114628</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1740751114628</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740751361326</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1740751361330</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Final improvements of FileShare">
+      <option name="closed" value="true" />
+      <created>1740994420218</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1740994420218</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added FileSharing to Main Project" />
+    <MESSAGE value="Fixed Filesharing with CSRF" />
+    <MESSAGE value="Test" />
+    <MESSAGE value="Final improvements of FileShare" />
+    <MESSAGE value="Gruppenchat erstellen Box" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gruppenchat erstellen Box" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.ClassCastException" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

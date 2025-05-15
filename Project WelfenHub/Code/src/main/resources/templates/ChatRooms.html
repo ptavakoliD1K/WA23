@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gruppenchat</title>
+    <!-- Dein Header-CSS -->
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <!-- Dein Chat-CSS -->
+    <link rel="stylesheet" th:href="@{/css/groupChat.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <!-- Boxicons (Icons) -->
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <!-- Emoji Picker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@1.21.2/dist/emoji-picker-element.min.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<!-- Dein Header -->
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+
+<!-- Hauptcontainer für den Chat -->
+<main id="chatMainContainer">
+    <!-- Linke Spalte: Sidebar -->
+    <section class="groupSidebar">
+        <div class="sidebarHeader">
+            <h2>Deine Chats</h2>
+            <button class="createGroupBtn" onclick="openCreateGroupModal()">
+                <i class="fa-regular fa-user"></i>
+                Gruppe erstellen
+            </button>
+            <div class="groupSearch">
+                <input type="text" placeholder="Suchen...">
+                <i class='bx bx-search'></i>
+            </div>
+        </div>
+        <div class="groupList">
+            <!-- Gruppenliste -->
+            <div class="groupItem"
+                 th:each="room : ${chatRooms}"
+                 th:id="'chatRoom_' + ${room.id}"
+                 th:attr="data-id=${room.id}, data-name=${room.name}"
+                 onclick="onRoomClicked(this)">
+                <div class="groupName">
+                    <span th:text="${room.name}"></span>
+                    <span class="unreadBadge" th:if="${room.unreadCount > 0}" th:text="${room.unreadCount}"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rechte Spalte: Chatbereich -->
+    <section class="chatArea">
+        <div class="chatHeader">
+            <h2 class="chatTitle" id="currentChatTitle">Bitte wähle einen Chat</h2>
+            <div class="chatHeaderIcons">
+                <!-- Nutzer hinzufügen -->
+                <i class='bx bx-user-plus' title="Nutzer hinzufügen" onclick="openAddUsersModal()"></i>
+                <!-- Einstellungen (Zahnrad) -->
+                <i class='bx bx-cog' title="Einstellungen" onclick="onSettingsClicked()"></i>
+            </div>
+        </div>
+
+        <!-- Chat-Messages -->
+        <div class="chatMessages" id="chatMessagesContainer"></div>
+
+        <!-- Eingabebereich -->
+        <div class="chatInput">
+            <div class="inputContainer">
+                <button id="emojiBtn" type="button">😊</button>
+                <textarea id="messageInput" placeholder="Nachricht eingeben..."></textarea>
+            </div>
+            <div id="emojiPickerContainer" class="emoji-picker-container">
+                <emoji-picker id="emojiPicker"></emoji-picker>
+            </div>
+            <button type="button" id="sendMessageBtn" onclick="sendMessage()">Senden</button>
+        </div>
+    </section>
+</main>
+
+<!-- ==============================================
+     MODALS
+   ============================================== -->
+
+<!-- Modal: Gruppenmitglieder anzeigen -->
+<div id="groupMembersModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeGroupMembersModal()">&times;</span>
+        <h2>Mitglieder der Gruppe</h2>
+        <ul id="groupMembersList">
+            <!-- Wird per JS befüllt -->
+        </ul>
+    </div>
+</div>
+
+<!-- Modal: Nutzer hinzufügen -->
+<div id="addUsersModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeAddUsersModal()">&times;</span>
+        <h2>Nutzer zu Gruppe hinzufügen</h2>
+        <div>
+            <h4>Mitglieder auswählen</h4>
+            <div id="addUsersCheckboxList"></div>
+        </div>
+        <button type="button" class="button" onclick="submitAddUsers()">Hinzufügen</button>
+    </div>
+</div>
+
+<!-- Modal: Gruppe erstellen -->
+<div id="createGroupModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeCreateGroupModal()">&times;</span>
+        <p class="GruppeTitel">Neue Gruppe erstellen</p>
+        <div class="Groupname">
+            <label for="groupNameInput" class="label">Gib deiner Gruppe einen Namen: </label>
+            <input type="text" id="groupNameInput" class="groupNameInput" placeholder="z.B. Projektteam A">
+        </div>
+        <div class="Groupname">
+            <p style="margin:5px 0px;"> <strong>Mitglieder auswählen </strong></p>
+            <div id="groupUsersCheckboxList"></div>
+        </div>
+        <button type="button" class="button" onclick="createGroup()">Gruppe erstellen</button>
+    </div>
+</div>
+
+<!-- Modal: Einstellungen -->
+<div id="settingsModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeSettingsModal()">&times;</span>
+        <h2>Einstellungen</h2>
+        <div class="settingsContainer">
+            <button type="button" class="button" onclick="openGroupMembersModal(currentChatRoomId)">
+                Mitglieder anzeigen
+            </button>
+            <button type="button" class="button" onclick="openRenameGroupModal()">
+                Gruppennamen ändern
+            </button>
+            <button type="button" class="button" style="background-color: #f44336; color: #fff;"
+                    onclick="leaveGroup(currentChatRoomId)">
+                Gruppe verlassen
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Gruppennamen ändern -->
+<div id="renameGroupModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <span class="close" onclick="closeRenameGroupModal()">&times;</span>
+        <h2>Gruppennamen ändern</h2>
+        <input type="text" id="newGroupNameInput" placeholder="Neuer Gruppenname" name="Gruppenname_Input" />
+        <button type="button" class="button" onclick="submitGroupRename()">Speichern</button>
+    </div>
+</div>
+
+<!-- ==============================================
+     JavaScript: SockJS & STOMP
+   ============================================== -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.0/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<!-- Wichtig: th:inline="javascript", damit Thymeleaf den Wert korrekt einfügt -->
+<script th:inline="javascript">
+
+    let csrfToken = getCsrfToken();
+
+    /* ==============================================
+       GLOBALE VARIABLEN
+       ============================================== */
+
+    // Hier kommt der echte Username vom Server
+    let loggedInUsername = /*[[${#authentication.principal.username}]]*/;
+
+    console.log("Aktueller User:", loggedInUsername);
+
+    let stompClient = null;
+    let currentChatRoomId = null;
+    let currentChatRoomName = null;
+    let currentSubscription = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        connectWebSocket();
+        initSearchFilter();
+        initEmojiPicker();
+    });
+
+    /* ==============================================
+       WEBSOCKET / STOMP KONFIG
+       ============================================== */
+    function connectWebSocket() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function(frame) {
+            console.log("✅ WebSocket verbunden: " + frame);
+
+            // Abo für neu erstellte Gruppen
+            stompClient.subscribe('/topic/new-group', (message) => {
+                const newGroup = JSON.parse(message.body);
+                addNewGroupToList(newGroup);
+            });
+
+            // Abo für Ungelesen-Benachrichtigungen
+            stompClient.subscribe('/user/queue/unread', (message) => {
+                const unreadInfo = JSON.parse(message.body);
+                console.log("✅ WebSocket Nachricht erhalten (Unread Info): ", unreadInfo);
+                onUnreadNotification(unreadInfo);
+            });
+        });
+    }
+
+    function onUnreadNotification(unreadInfo) {
+    const chatRoomId = unreadInfo.chatRoomId;
+    const unreadCount = unreadInfo.unreadCount;
+
+    const badgeElement = document.querySelector(`#chatRoom_${chatRoomId} .unreadBadge`);
+
+    if (badgeElement) {
+        badgeElement.textContent = unreadCount;
+        badgeElement.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    } else {
+        console.warn(`⚠️ Kein Badge-Element gefunden für ChatRoom ID: ${chatRoomId}`);
+    }
+}
+
+
+
+function updateUnreadBadge(chatRoomId, unreadCount) {
+    const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+    if (chatRoomElement) {
+        const badge = chatRoomElement.querySelector('.unreadBadge');
+        if (badge) {
+            badge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            badge.textContent = unreadCount;
+        }
+    }
+}
+
+
+
+    function subscribeToChatRoom(chatRoomId) {
+    if (currentSubscription) {
+        currentSubscription.unsubscribe();
+        currentSubscription = null;
+    }
+
+    currentSubscription = stompClient.subscribe('/topic/messages/' + chatRoomId, (message) => {
+        const msgDTO = JSON.parse(message.body);
+        addMessageToChat(msgDTO);
+
+        if (currentChatRoomId === chatRoomId) {
+            fetch(`/chat/${chatRoomId}/markAsRead`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': csrfToken
+                },
+            })
+            .then(() => {
+                updateUnreadBadge(chatRoomId, 0);
+            })
+            .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+        }
+    });
+}
+
+
+    /* ==============================================
+       GRUPPENLISTE – RAUM AUSWÄHLEN
+       ============================================== */
+    function onRoomClicked(element) {
+        const chatRoomId = element.dataset.id;
+        const chatRoomName = element.dataset.name;
+        selectChatRoom(chatRoomId, chatRoomName);
+    }
+
+    function selectChatRoom(chatRoomId, chatRoomName) {
+        currentChatRoomId = chatRoomId;
+        currentChatRoomName = chatRoomName;
+        document.getElementById('currentChatTitle').innerText = chatRoomName;
+        document.getElementById('messageInput').disabled = false;
+        document.getElementById('sendMessageBtn').disabled = false;
+
+        // Alte Nachrichten löschen
+        const messagesContainer = document.getElementById('chatMessagesContainer');
+        messagesContainer.innerHTML = '';
+
+        // Nachrichten per REST laden
+        fetchMessages(chatRoomId);
+
+        // Nachrichten als gelesen markieren
+        fetch(`/chat/${chatRoomId}/markAsRead`, {
+            method: 'POST',
+            headers: {
+                'X-XSRF-TOKEN': csrfToken
+            },
+        })
+            .then(() => {
+                const chatRoomElement = document.getElementById('chatRoom_' + chatRoomId);
+                if (chatRoomElement) {
+                    const badge = chatRoomElement.querySelector('.unreadBadge');
+                    if (badge) badge.style.display = 'none';
+                }
+            })
+            .catch(err => console.error("Fehler beim Markieren als gelesen:", err));
+
+        // WebSocket-Subscription
+        subscribeToChatRoom(chatRoomId);
+    }
+
+    function fetchMessages(chatRoomId) {
+        fetch('/chat/' + chatRoomId + '/messages', {
+            headers: {
+                'X-XSRF-TOKEN': csrfToken
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(msg => {
+                    addMessageToChat(msg);
+                });
+            })
+            .catch(error => console.error('Fehler beim Laden der Nachrichten:', error));
+    }
+
+    /* ==============================================
+       NACHRICHT SENDEN
+       ============================================== */
+    function sendMessage() {
+        if (!currentChatRoomId) return;
+
+        const messageInput = document.getElementById('messageInput');
+        const content = messageInput.value.trim();
+        if (content !== '') {
+            const msg = { content: content };
+            stompClient.send(`/app/chat/${currentChatRoomId}`, {}, JSON.stringify(msg));
+            messageInput.value = '';
+        }
+    }
+
+    /* ==============================================
+       NACHRICHT INS UI EINFÜGEN
+       ============================================== */
+    function addMessageToChat(messageDTO) {
+        const container = document.getElementById('chatMessagesContainer');
+
+        // Hier nutzen wir loggedInUsername anstelle von "Du"
+        let msgClass = (messageDTO.username === loggedInUsername)
+            ? 'message outgoing'
+            : 'message incoming';
+
+        if (messageDTO.isNew === true) {
+            msgClass += ' highlight-new';
+        }
+
+        const wrapperDiv = document.createElement('div');
+        wrapperDiv.className = msgClass;
+
+        const senderSpan = document.createElement('span');
+        senderSpan.className = 'senderName';
+        senderSpan.textContent = messageDTO.username;
+
+        const textDiv = document.createElement('div');
+        textDiv.className = 'textBubble';
+        textDiv.textContent = messageDTO.content;
+
+        const timestampSpan = document.createElement('span');
+        timestampSpan.className = 'timestamp';
+        const date = new Date(messageDTO.createdAt);
+        timestampSpan.textContent = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        wrapperDiv.appendChild(senderSpan);
+        wrapperDiv.appendChild(textDiv);
+        wrapperDiv.appendChild(timestampSpan);
+
+        container.appendChild(wrapperDiv);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    /* ==============================================
+       MODALS & EINSTELLUNGEN
+       ============================================== */
+    function onSettingsClicked() {
+        if (!currentChatRoomId) {
+            alert("Bitte wähle zuerst einen Chat aus.");
+            return;
+        }
+        document.getElementById('settingsModal').style.display = 'block';
+    }
+
+    function closeSettingsModal() {
+        document.getElementById('settingsModal').style.display = 'none';
+    }
+
+    function openGroupMembersModal(chatRoomId) {
+        closeSettingsModal();
+        if (!chatRoomId) {
+            alert("Bitte wähle zuerst eine Gruppe aus.");
+            return;
+        }
+        fetch(`/chat/${chatRoomId}/members/json`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': csrfToken
+            },
+        })
+            .then(response => response.json())
+            .then(members => {
+                const listContainer = document.getElementById('groupMembersList');
+                listContainer.innerHTML = '';
+                members.forEach(member => {
+                    const li = document.createElement('li');
+                    li.textContent = `${member.username} (${member.fullName})`;
+                    listContainer.appendChild(li);
+                });
+                document.getElementById('groupMembersModal').style.display = 'block';
+            })
+            .catch(error => console.error("Fehler beim Laden der Mitglieder:", error));
+    }
+
+    function closeGroupMembersModal() {
+        document.getElementById('groupMembersModal').style.display = 'none';
+    }
+
+    /* ==============================================
+       GRUPPENNAMEN ÄNDERN
+       ============================================== */
+    function openRenameGroupModal() {
+        closeSettingsModal();
+        if (!currentChatRoomId) {
+            alert("Keine Gruppe ausgewählt.");
+            return;
+        }
+        const input = document.getElementById('newGroupNameInput');
+        input.value = currentChatRoomName || "";
+        document.getElementById('renameGroupModal').style.display = 'block';
+    }
+
+    function closeRenameGroupModal() {
+        document.getElementById('renameGroupModal').style.display = 'none';
+    }
+
+    function submitGroupRename() {
+        const newName = document.getElementById('newGroupNameInput').value.trim();
+        if (!newName) {
+            alert("Bitte einen neuen Gruppennamen eingeben.");
+            return;
+        }
+        fetch(`/chat/${currentChatRoomId}/rename`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ newName: newName })
+        })
+        .then(response => {
+            if (response.redirected) {
+                // Falls der Controller "redirect:/chat" liefert
+                window.location.href = response.url;
+            } else if (response.ok) {
+                // Falls er z.B. 200 OK gibt, ohne Redirect
+                alert("Gruppenname geändert (ohne Redirect)!");
+                window.location.reload();
+            } else {
+                alert("Fehler beim Umbenennen der Gruppe (Status: " + response.status + ").");
+            }
+        })
+        .catch(error => console.error("Fehler beim Umbennen:", error));
+    }
+
+    /* ==============================================
+       GRUPPE VERLASSEN
+       ============================================== */
+    function leaveGroup(chatRoomId) {
+        if (!chatRoomId) return;
+
+        if (!confirm("Möchtest du diese Gruppe wirklich verlassen?")) {
+            return;
+        }
+        fetch(`/chat/${chatRoomId}/leave`, {
+            method: 'POST',
+            headers: {
+                'X-XSRF-TOKEN': csrfToken
+            },
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Du hast die Gruppe verlassen.");
+                    window.location.reload();
+                } else {
+                    alert("Fehler beim Verlassen der Gruppe.");
+                }
+            })
+            .catch(err => console.error("Fehler beim Verlassen:", err));
+    }
+
+    /* ==============================================
+       NUTZER HINZUFÜGEN
+       ============================================== */
+    function openAddUsersModal() {
+        if (!currentChatRoomId) {
+            alert("Bitte zuerst eine Gruppe auswählen.");
+            return;
+        }
+        fetch(`/chat/${currentChatRoomId}/non-members`, {
+            headers: {
+                'X-XSRF-TOKEN': csrfToken
+            },
+        })
+            .then(response => response.json())
+            .then(users => {
+                const container = document.getElementById('addUsersCheckboxList');
+                container.innerHTML = '';
+                users.forEach(user => {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = user.username;
+                    checkbox.id = `userCheckbox_${user.username}`;
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `userCheckbox_${user.username}`;
+                    label.textContent = `${user.username} (${user.fullName})`;
+
+                    const div = document.createElement('div');
+                    div.appendChild(checkbox);
+                    div.appendChild(label);
+
+                    container.appendChild(div);
+                });
+                document.getElementById('addUsersModal').style.display = 'block';
+            })
+            .catch(error => console.error("Fehler beim Laden der Nutzer:", error));
+    }
+
+    function closeAddUsersModal() {
+        document.getElementById('addUsersModal').style.display = 'none';
+    }
+
+    function submitAddUsers() {
+        const checkboxes = document.querySelectorAll('#addUsersCheckboxList input[type="checkbox"]:checked');
+        const usernames = Array.from(checkboxes).map(checkbox => checkbox.value);
+        if (usernames.length === 0) {
+            alert("Bitte mindestens einen Nutzer auswählen.");
+            return;
+        }
+        fetch(`/chat/${currentChatRoomId}/addUsers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ usernames: usernames })
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Nutzer wurden hinzugefügt!");
+                closeAddUsersModal();
+                window.location.reload();
+            } else {
+                alert("Fehler beim Hinzufügen der Nutzer.");
+            }
+        })
+        .catch(err => console.error("Fehler beim Nutzer hinzufügen:", err));
+    }
+
+    /* ==============================================
+       GRUPPE ERSTELLEN
+       ============================================== */
+    function openCreateGroupModal() {
+        document.getElementById('groupNameInput').value = '';
+        document.getElementById('groupUsersCheckboxList').innerHTML = '';
+        document.getElementById('createGroupModal').style.display = 'block';
+        loadAllUsersForGroup();
+    }
+
+    function closeCreateGroupModal() {
+        document.getElementById('createGroupModal').style.display = 'none';
+    }
+
+    function loadAllUsersForGroup() {
+        fetch('/chat/users', {
+            headers: {
+                'X-XSRF-TOKEN': csrfToken
+            },
+        })
+            .then(response => response.json())
+            .then(users => {
+                // Eingeloggter User als "Du"? -> NEIN, wir haben loggedInUsername
+                const filteredUsers = users.filter(u => u.username !== loggedInUsername);
+
+                const container = document.getElementById('groupUsersCheckboxList');
+                container.innerHTML = '';
+                filteredUsers.forEach(user => {
+                    const label = document.createElement('label');
+                    label.style.display = 'block';
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.value = user.username;
+                    label.appendChild(checkbox);
+                    label.append(' ' + user.username);
+                    container.appendChild(label);
+                });
+            })
+            .catch(error => console.error("Fehler beim Laden der Benutzer:", error));
+    }
+
+    function createGroup() {
+        const groupName = document.getElementById('groupNameInput').value.trim();
+        if (!groupName) {
+            alert("Bitte Gruppenname eingeben.");
+            return;
+        }
+        const checkboxes = document.querySelectorAll('#groupUsersCheckboxList input[type="checkbox"]:checked');
+        const selectedUsernames = Array.from(checkboxes).map(cb => cb.value);
+
+        const formData = new FormData();
+        formData.append("name", groupName);
+        selectedUsernames.forEach(username => {
+            formData.append("usernames", username);
+        });
+
+        fetch('/chat/group', {
+            method: 'POST',
+            headers: {
+                'X-XSRF-TOKEN': csrfToken
+            },
+            body: formData
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.text();
+            }
+        })
+        .then(() => {
+            closeCreateGroupModal();
+        })
+        .catch(error => {
+            console.error("Fehler beim Erstellen der Gruppe:", error);
+            alert("Fehler: " + error);
+        });
+    }
+
+    /* ==============================================
+       NEUE GRUPPE IN LISTE EINTRAGEN
+       ============================================== */
+    function addNewGroupToList(newGroup) {
+        const container = document.querySelector('.groupList');
+        if (document.getElementById(`chatRoom_${newGroup.id}`)) {
+            console.log("⚠️ Gruppe existiert bereits:", newGroup.name);
+            return;
+        }
+        const div = document.createElement('div');
+        div.className = "groupItem";
+        div.setAttribute("id", "chatRoom_" + newGroup.id);
+        div.setAttribute("data-id", newGroup.id);
+        div.setAttribute("data-name", newGroup.name);
+        div.setAttribute("onclick", "onRoomClicked(this)");
+
+        const groupNameSpan = document.createElement('span');
+        groupNameSpan.textContent = newGroup.name;
+
+        div.appendChild(groupNameSpan);
+        container.appendChild(div);
+        console.log("🚀 Neue Gruppe hinzugefügt:", newGroup.name);
+    }
+
+    /* ==============================================
+       SUCHE: GRUPPENLISTE FILTERN
+       ============================================== */
+    function initSearchFilter() {
+        const searchInput = document.querySelector('.groupSearch input');
+        const groupItems = document.querySelectorAll('.groupItem');
+        if (!searchInput || !groupItems.length) return;
+
+        searchInput.addEventListener('input', function() {
+            const filter = this.value.toLowerCase();
+            groupItems.forEach(function(item) {
+                const groupName = item.dataset.name.toLowerCase();
+                if (groupName.includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    /* ==============================================
+       EMOJI-PICKER INITIALISIEREN
+       ============================================== */
+    function initEmojiPicker() {
+        console.log("✅ initEmojiPicker aufgerufen");
+
+        const emojiBtn = document.getElementById('emojiBtn');
+        const emojiPickerContainer = document.getElementById('emojiPickerContainer');
+        const messageInput = document.getElementById('messageInput');
+
+        if (!emojiBtn || !emojiPickerContainer || !messageInput) {
+            console.error("❌ Fehler: Notwendige HTML-Elemente nicht gefunden!");
+            return;
+        }
+
+        // Falls bereits ein Emoji-Picker existiert, löschen
+        emojiPickerContainer.innerHTML = '';
+        let emojiPicker = document.createElement('emoji-picker');
+        emojiPickerContainer.appendChild(emojiPicker);
+
+        // Button klick → Picker anzeigen/verstecken
+        emojiBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            emojiPickerContainer.classList.toggle('show');
+        });
+
+        // Emoji geklickt
+        emojiPicker.addEventListener('emoji-click', event => {
+            messageInput.value += event.detail.unicode;
+            emojiPickerContainer.classList.remove('show');
+            messageInput.focus();
+        });
+
+        // Klick außerhalb → Picker schließen
+        document.addEventListener('click', function (e) {
+            if (!emojiBtn.contains(e.target) && !emojiPickerContainer.contains(e.target)) {
+                emojiPickerContainer.classList.remove('show');
+            }
+        });
+
+        // Enter-Taste zum Senden
+        messageInput.addEventListener("keydown", function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }
+
+    function getCsrfToken() {
+        const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+        const token = match ? match[1] : null;
+        return token;
+    }
+</script>
+
+<div th:insert="fragments/footerResponsive.html"></div>
+</body>
+</html>

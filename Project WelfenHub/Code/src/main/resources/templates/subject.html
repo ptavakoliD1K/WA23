@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Diskussionsforum</title>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/subject.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+
+<main id="forumMainContainer">
+
+    <section class="forumSidebar">
+        <div class="sidebarHeader">
+            <h2 th:text="${subject}">Fachbereich</h2>
+        </div>
+        <div th:each="entry : ${coursesBySemester}" class="semester-section">
+            <h3 th:text="'Semester ' + ${entry.key}">Semester X</h3>
+            <ul>
+                <li th:each="course : ${entry.value}">
+                    <a th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${entry.key}, course=${course})}"
+                       th:text="${course}">Kursname</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="ForumBeitrag">
+        <div class="forumHeader">
+            <a class="zurueck-button" th:href="@{/forum/{subject}(subject=${subject})}">
+                ⬅
+            </a>
+            <h2 class="forumTitle" id="currentforumTitle" th:text="${course}">Kursname</h2>
+
+
+            <div class="forumHeaderIcons">
+                <div class="sort-container">
+                    <select id="sortSelect" onchange="changeSortOrder()">
+                        <option th:value="'created'" th:selected="${sort == 'created'}">Neueste zuerst</option>
+                        <option th:value="'likes'" th:selected="${sort == 'likes'}">Meiste Likes</option>
+                    </select>
+                </div>
+                <i class="fa-solid fa-magnifying-glass" title="Beitrag suchen" onclick="toggleSearch()"></i>
+                <i class="fa-solid fa-plus" title="Beitrag erstellen" onclick="openModal()"></i>
+                <div id="searchBar" class="styled-search-container" style="display: none;">
+                    <form class="styled-search-form"
+                          th:action="@{/forum/{subject}/{semester}/course/{course}/search(subject=${subject}, semester=${semester}, course=${course})}" method="get">
+                        <input type="text" name="query" placeholder="Nach Titel suchen..." required />
+                        <input type="hidden" name="subject" th:value="${subject}" />
+                        <input type="hidden" name="semester" th:value="${semester}" />
+                        <input type="hidden" name="course" th:value="${course}" />
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                    <a class="reset-search-button"
+                       th:href="@{/forum/{subject}/{semester}/course/{course}(subject=${subject}, semester=${semester}, course=${course})}">
+                        Suche zurücksetzen
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="posts-list">
+            <ul id="post-list">
+                <li th:each="post : ${posts}" class="post-item" th:id="'post-' + ${post.id}">
+
+
+                    <h2 th:text="${post.title}">Post Title</h2>
+                    <p th:text="${post.content}">Post Content</p>
+                    <p>Gepostet von <span th:text="${post.user.username}">User</span> am <span th:text="${#strings.substringBefore(post.createdAt, 'T')}">Datum</span></p>
+
+                    <button class="actionButton likeButton" th:onclick="'toggleReaction(' + ${post.id} + ')'">
+                        <i class="fa-solid fa-heart"
+                           th:id="'heart-icon-' + ${post.id}"
+                           th:classappend="${post.likedByUser} ? ' liked-heart' : ''"></i>
+                        <span th:id="'reaction-count-' + ${post.id}" th:text="${post.reactionCount}">0</span>
+                    </button>
+
+                    <button type="button" class="comment-toggle" onclick="toggleComments(this)">▼</button>
+                    <div class="comments-section" style="display: none;">
+                        <h3>Kommentare:</h3>
+                        <ul th:id="'comments-' + ${post.id}">
+                            <li class="comment-item"
+                                th:each="comment, iterStat : ${post.sortedComments}"
+                                th:id="'comment-' + ${comment.id}"
+                                th:classappend="${iterStat.index >= 3} ? 'hidden-comment'">
+                                <div class="comment-header">
+                                    <span class="comment-author" th:text="${comment.user.username}">User</span>
+                                    <span class="comment-date" th:text="${#strings.substringBefore(comment.createdDate, 'T')}">Datum</span>
+                                </div>
+                                <div class="comment-body" th:text="${comment.content}">Kommentar-Inhalt</div>
+                            </li>
+                        </ul>
+
+                        <div th:if="${#lists.size(post.comments) > 3}">
+                            <button class="load-more-comments-button" onclick="showAllComments(this)">Ältere Kommentare anzeigen</button>
+                        </div>
+
+                        <div class="comment-form">
+                            <form th:id="'commentForm_' + ${post.id}" th:onsubmit="'postComment(event, ' + ${post.id} + ');'">
+                                <input type="hidden" name="postId" th:value="${post.id}" />
+                                <label>Dein Kommentar:</label>
+                                <textarea th:id="'comment-content-' + ${post.id}" name="content" rows="3" placeholder="Schreib deinen Kommentar..." required></textarea>
+                                <button id="kommentierenButton" type="submit">Kommentieren</button>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+</main>
+
+<!-- Modal für neuen Post -->
+<div id="newPostModal" class="modal">
+    <div id="postModalContent" class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitel">Neuen Post erstellen</h2>
+        <form onsubmit="postNewPost(event)">
+            <input type="hidden" name="subject" th:value="${subject}"/>
+            <input type="hidden" name="semester" th:value="${semester}"/>
+            <input type="hidden" name="course" th:value="${course}"/>
+            <input type="text" id="newPostTitle" placeholder="Titel" required/><br/>
+            <textarea id="newPostContent" placeholder="Inhalt" required></textarea><br/>
+            <div class="modal-button-group">
+                <button type="submit" class="modal-button save">Post erstellen</button>
+                <button type="button" class="modal-button cancel" onclick="closeModal()">Abbrechen</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div th:insert="fragments/footerResponsive.html"></div>
+
+<!-- WebSocket + Haupt-JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/js/forum.js"></script>
+<script src="/js/scriptAddReaction.js"></script>
+
+
+
+
+</body>
+</html>

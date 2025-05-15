@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Impressum</title>
+    <link rel="stylesheet" href="/css/feedbackStyle.css"/>
+    <link rel="stylesheet" th:href="@{/css/headerResponsive.css}">
+    <link rel="stylesheet" th:href="@{/css/footerResponsive.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/impressum.css}"/>
+    <link rel="icon" type="image/png" href="/images/welfenHUB_favicon.png">
+</head>
+<body>
+<!-- Include Header -->
+<header id="responsive-header">
+    <nav>
+        <div th:insert="fragments/headerResponsive.html"></div>
+    </nav>
+</header>
+<main>
+    <div class="center-image">
+        <a th:href="@{/}" class="active">
+            <img th:src="@{/images/WelfenHUB_Logo_3.png}" alt="WelfenHUB Logo" class="fade-in">
+        </a>
+    </div>
+    <hr>
+    <h1>Impressum</h1>
+    <hr>
+    <br>
+    <p style="text-align: center">Hier finden Sie unser Impressum nach §6 MDStV & 6 TDG.</p>
+    <div class="card-container">
+
+
+        <div class="left-column">
+            <div class="card">
+                <div class="card-content">
+                    <p><h4>Keine Haftung:</h4>
+                    Die Inhalte dieses Webprojektes wurden sorgfältig geprüft und nach bestem Wissen erstellt. Aber für
+                    die hier dargebotenen Informationen wird kein Anspruch auf Vollständigkeit, Aktualität, Qualität und
+                    Richtigkeit erhoben. Es kann keine Verantwortung für Schäden übernommen werden, die durch das
+                    Vertrauen auf die Inhalte dieser Website oder deren Gebrauch entstehen.
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <p>
+                    <h4>Abgrenzung:</h4>
+                    Die Web-Präsenz ist Teil des WWW und dementsprechend mit fremden, sich jederzeit wandeln könnenden
+                    Web-Sites verknüpft, die folglich auch nicht diesem Verantwortungsbereich unterliegen und für die
+                    nachfolgende Informationen nicht gelten. Dass die Links weder gegen Sitten noch Gesetze verstoßen,
+                    wurde genau ein mal geprüft: bevor sie hier aufgenommen wurden. Solche Links, die zu fremden
+                    Webprojekten führen, erkennen Sie daran, dass sich ein neues Browserfenster öffnet.
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <p>
+                    <h4>Urheberschutz und Nutzung:</h4>
+                    Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem
+                    deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet. Die Vervielfältigung,
+                    Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes
+                    bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien
+                    dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.
+                    <br><br>
+                    Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte
+                    Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie
+                    trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden
+                    Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="right-column">
+            <div class="card">
+                <div class="card-content">
+                    <h3>Anschrift</h3>
+                    <h4><p>WelfenAkademie e. V.</p></h4>
+                    <br>
+                    <p>Berufsakademie
+                        <br><br>
+                        Salzdahlumer Straße 160<br>
+                        38126 Braunschweig
+                        <br><br>
+                        Telefon: +49 531 214880<br>
+                        Telefax: +49 531 2148888
+                        <br><br>
+                        E-Mail: info@welfenakademie.de<br>
+                        Internet: <a href="https://welfenakademie.de/">www.welfenakademie.de</a>
+                    </p><br>
+                    <h4><p>Verantwortlich</p></h4>
+                    <br>
+
+                    <p>Jahrgang 2023 WINF </p><br>
+
+
+                    <p>
+                        <a href="https://welfenakademie.de/datenschutz/">Datenschutzerklärung Welfenakademie </a></p>
+                    <br>
+
+                    <p>© 2022 WelfenAkademie e. V., Braunschweig</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:insert="fragments/footerResponsive.html"></div>
+</body>
+</html>
