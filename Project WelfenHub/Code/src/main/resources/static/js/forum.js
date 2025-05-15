@@ -121,19 +121,7 @@ function addPostToPage(post) {
     newPostItem.id = `post-${post.id}`;
 
     newPostItem.innerHTML = `
-        <div class="post-menu">
-            <button class="options-button" onclick="toggleDropdown(this)">
-              <i class="fas fa-ellipsis-v"></i>
-            </button>
-            <div class="dropdown-menu">
-                <button class="actionButton editButton" onclick="editPost(${post.id})">
-                    <i class="fas fa-edit"></i> Bearbeiten
-                </button>
-                <button class="actionButton deleteButton" onclick="deletePost(${post.id})">
-                    <i class="fas fa-trash-alt"></i> Löschen
-                </button>
-            </div>
-        </div>
+
 
         <h2>${post.title}</h2>
         <p>${post.content}</p>
