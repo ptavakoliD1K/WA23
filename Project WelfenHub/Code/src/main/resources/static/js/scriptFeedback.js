@@ -34,7 +34,7 @@ feedbackForm.addEventListener("submit", (e) => {
     formData.append('message', message);
 
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', '8080/feedbackMessage')
+    xhr.open('POST', '/feedbackMessage')
 
     const csrfToken = getCsrfToken();
     xhr.setRequestHeader('X-XSRF-TOKEN', csrfToken);

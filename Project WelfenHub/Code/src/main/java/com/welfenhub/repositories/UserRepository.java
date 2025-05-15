@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE user SET password = :newPassword WHERE id = (SELECT UserID FROM password_reset_tokens WHERE token = :token)", nativeQuery = true)
+    @Query(value = "UPDATE users SET password = :newPassword WHERE id = (SELECT UserID FROM password_reset_tokens WHERE token = :token)", nativeQuery = true)
     void updateUserPassword(@Param("token") String token, @Param("newPassword") String newPassword);
 
 
