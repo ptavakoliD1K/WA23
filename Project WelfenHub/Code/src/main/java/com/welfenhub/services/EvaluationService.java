@@ -38,7 +38,7 @@ public class EvaluationService {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> mapValues = objectMapper.readValue(valueJson, Map.class);
 
-        String htmlTemplate = new String(Files.readAllBytes(Path.of("C:/git_repos/Welfenhub/WA23/Project WelfenHub/Code/src/main/resources/templates/fragments/dozentenEvaluationWADokument.html")));
+        String htmlTemplate = new String(Files.readAllBytes(Path.of("/templates/fragments/dozentenEvaluationWADokument.html")));
 
         String valueLehrveranstaltung = mapValues.get("Lehrveranstaltung");
         String valueDozent = mapValues.get("Dozent");
